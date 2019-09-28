@@ -1,6 +1,6 @@
-JFLEX=./packages/jflex-1.7.0/bin/flex
+JFLEX=./packages/jflex-1.7.0/bin/jflex
 
-program: compile run
+program: flex compile run
 
 compile:
 	javac -Xlint:unchecked ./src/*.java -d ./bin/
@@ -20,3 +20,6 @@ push:
 
 clean:
 	rm ./bin/*.class
+
+flex: src/dummy.flex
+	$(JFLEX) src/dummy.flex 
