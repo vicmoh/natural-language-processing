@@ -1,3 +1,5 @@
+JFLEX=./packages/jflex-1.7.0/bin/flex
+
 program: compile run
 
 compile:
