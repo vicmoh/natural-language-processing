@@ -6,7 +6,7 @@ compile:
 	javac -Xlint:unchecked ./src/*.java -d ./bin/
 
 run:
-	java -cp ./bin Main
+	java -cp ./bin Main "$(file)"
 
 git:
 	git add -A
