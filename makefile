@@ -1,12 +1,21 @@
 JFLEX=./packages/jflex-1.7.0/bin/jflex
 
-program: flex compile run
+run_program: flex compile run
+
+run_debug: flex compile debug
+
+#-------------------------------------------------
+# Below are sub commands
+#-------------------------------------------------
 
 compile:
 	javac -Xlint:unchecked ./src/*.java -d ./bin/
 
 run:
 	java -cp ./bin Main "$(file)"
+
+debug:
+	java -ea -cp ./bin Main "$(file)"
 
 git:
 	git add -A

@@ -12,9 +12,9 @@ then "make".
 
 Examples for testing the related programs:
 
-    java -cp ../opennlp-tools-1.9.1.jar:. SentenceDetectionME sample.txt > sample.splitted
+    java -cp ./opennlp-tools-1.9.1.jar:. SentenceDetectionME sample.txt > sample.splitted
 
-    java -cp ../opennlp-tools-1.9.1.jar:. POSTaggingMEDem sample.splitted > sample.tagged
+    java -cp ./opennlp-tools-1.9.1.jar:. POSTaggingMEDem sample.splitted > sample.tagged
  
-    java -cp ../opennlp-tools-1.9.1.jar:. TokenizerMEProbs sample.splitted > sample.stemmed
+    java -cp ./opennlp-tools-1.9.1.jar:. TokenizerMEProbs sample.splitted > sample.stemmed
  

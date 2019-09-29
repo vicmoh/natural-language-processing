@@ -28,11 +28,20 @@ public class Main {
 		} catch (Exception error) {
 			System.out.println(error);
 		}
+		System.out.println("Program exited.\n");
 	}
 
+	/**
+	 * Read the text file
+	 * 
+	 * @param fileName
+	 * @throws Exception string message
+	 */
 	private static void readFile(String fileName) throws Exception {
+		assert(fileName != null);
 		if (fileName == null)
 			throw new Exception("File name is not passed.");
-
+		Lexer lex = new Lexer(new InputStreamReader(fileName));
+		System.out.println(lex.toString());
 	}
 }
