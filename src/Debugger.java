@@ -32,10 +32,10 @@ public class Debugger {
     public void print(String value) {
         // Determine wether to show the class and function name
         String section = "";
-        if (!className.equalsIgnoreCase(""))
-            section = className + ": ";
-        else if (!className.equalsIgnoreCase("") && !functionName.equalsIgnoreCase(""))
+        if (!className.equalsIgnoreCase("") && !functionName.equalsIgnoreCase(""))
             section = className + "." + functionName + "(): ";
+        else if (!className.equalsIgnoreCase(""))
+            section = className + ": ";
         // Show the debug print
         if (showDebugPrints) {
             System.out.println("[DEBUG]: " + section + value);
@@ -49,7 +49,7 @@ public class Debugger {
      */
     public Debugger showDebugPrint(boolean value) {
         this.showDebugPrints = value;
-		return this;
+        return this;
     }
 
     /**
@@ -61,7 +61,7 @@ public class Debugger {
         if (value == null)
             value = "";
         this.className = value;
-		return this;
+        return this;
     }
 
     /**
@@ -72,7 +72,7 @@ public class Debugger {
     public Debugger setFunctionName(String value) {
         if (value == null)
             value = "";
-        this.functionName = value = "";
-		return this;
+        this.functionName = value;
+        return this;
     }
 }

@@ -47,6 +47,8 @@ public class SentenceDetectionME {
      * @throws Exception
      */
     public static void main(String args[]) throws Exception {
+        System.out.println();
+        debug.setFunctionName("main").print("Starting sentence detector...");
         // Load sentence detector model
         InputStream modelData = new FileInputStream(OPEN_NLP_MODELS_PATH);
         SentenceModel model = new SentenceModel(modelData);
