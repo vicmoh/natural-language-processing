@@ -1,4 +1,6 @@
-class Debugger {
+package src;
+
+public class Debugger {
     /**
      * The state wether the debugger should be print when it is called.
      */
@@ -33,7 +35,7 @@ class Debugger {
         if (!className.equalsIgnoreCase(""))
             section = className + ": ";
         else if (!className.equalsIgnoreCase("") && !functionName.equalsIgnoreCase(""))
-            section = className + "." + functionName + ": ";
+            section = className + "." + functionName + "(): ";
         // Show the debug print
         if (showDebugPrints) {
             System.out.println("[DEBUG]: " + section + value);
@@ -45,8 +47,9 @@ class Debugger {
      * 
      * @param value is true then show the debug print.
      */
-    public void showDebugPrint(boolean value) {
+    public Debugger showDebugPrint(boolean value) {
         this.showDebugPrints = value;
+		return this;
     }
 
     /**
@@ -54,10 +57,11 @@ class Debugger {
      * 
      * @param value of the class name string.
      */
-    public void setClassName(String value) {
+    public Debugger setClassName(String value) {
         if (value == null)
             value = "";
         this.className = value;
+		return this;
     }
 
     /**
@@ -65,9 +69,10 @@ class Debugger {
      * 
      * @param value of the function name string.
      */
-    public void setFunctionName(String value) {
+    public Debugger setFunctionName(String value) {
         if (value == null)
             value = "";
         this.functionName = value = "";
+		return this;
     }
 }

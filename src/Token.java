@@ -1,4 +1,4 @@
-class Token {
+public class Token {
 
   public final static int ERROR = 0;
   public final static int IF = 1;
