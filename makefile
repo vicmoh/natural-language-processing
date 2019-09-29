@@ -1,21 +1,19 @@
+NLP=./packages/opennlp-tools-1.9.1.jar:.
 JFLEX=./packages/jflex-1.7.0/bin/jflex
+SRC_PATH=./src/*.java ./src/lib/*.java ./src/flex/*.java
+INPUT=./assets/sample.txt
 
-run_program: flex compile run
-
-run_debug: flex compile debug
+run: flex compile sentence
 
 #-------------------------------------------------
 # Below are sub commands
 #-------------------------------------------------
 
 compile:
-	javac -Xlint:unchecked ./src/*.java -d ./bin/
+	javac -Xlint:unchecked -cp $(NLP) $(SRC_PATH) -d ./bin/
 
-run:
-	java -cp ./bin Main "$(file)"
-
-debug:
-	java -ea -cp ./bin Main "$(file)"
+sentence:
+	java -cp ./bin SentenceDetectionME $(INPUT) > ./out/output.splitted
 
 git:
 	git add -A
@@ -30,5 +28,5 @@ push:
 clean:
 	rm ./bin/*.class
 
-flex: src/dummy.flex
-	$(JFLEX) src/dummy.flex 
+flex: src/flex/dummy.flex
+	$(JFLEX) src/flex/dummy.flex 
