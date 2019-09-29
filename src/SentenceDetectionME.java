@@ -3,6 +3,9 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.IOException;
 
 import opennlp.tools.sentdetect.SentenceDetectorME;
 import opennlp.tools.sentdetect.SentenceModel;
@@ -19,25 +22,52 @@ public class SentenceDetectionME {
     private static Debugger debug = Debugger.init().showDebugPrint(true).setClassName("SentenceDetectionME");
 
     /**
-     * Read each arg string.
+     * Read the string and return whole file into one string, without new line.
      * 
-     * @param arg of the detected sentences.
+     * @param fileName to be read.
      * @return the string builder.
      * @throws Exception.
      */
-    public static String readString(String arg) throws Exception {
+    public static String readString(String fileName) throws Exception {
         debug.setFunctionName("readString").print("Invoked.");
-        // Read the input
-        InputStream inFile = new FileInputStream(arg);
-        BufferedReader buffer = new BufferedReader(new InputStreamReader(inFile));
-        StringBuilder sb = new StringBuilder();
-        String line = buffer.readLine();
-        while (line != null) {
-            sb.append(line + " ");
-            line = buffer.readLine();
+        // Try to read the whole string
+        try {
+            InputStream inFile = new FileInputStream(fileName);
+            BufferedReader buffer = new BufferedReader(new InputStreamReader(inFile));
+            StringBuilder sb = new StringBuilder();
+            String line = buffer.readLine();
+            while (line != null) {
+                sb.append(line + " ");
+                line = buffer.readLine();
+            }
+            buffer.close();
+            writeData(sb.toString());
+            return sb.toString();
+        } catch (Exception exception) {
+            throw Exception("Exception ocurred. Could not read file.");
         }
-        buffer.close();
-        return sb.toString();
+    }
+
+    /**
+     * Use Streams when you are dealing with raw data to write the data to
+     * <name>.splitted.
+     * 
+     * @param data is the data to written.
+     */
+    private static void writeData(String data) {
+        OutputStream os = null;
+        try {
+            os = new FileOutputStream("../out/output.splitted");
+            os.write(data.getBytes(), 0, data.length());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                os.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -47,7 +77,12 @@ public class SentenceDetectionME {
      * @throws Exception
      */
     public static void main(String args[]) throws Exception {
+        // Check if file exist in argument.
         System.out.println();
+        if (args.length <= 0) {
+            System.out.println("Sorry, no file detected.");
+            return;
+        }
         debug.setFunctionName("main").print("Starting sentence detector...");
         // Load sentence detector model
         InputStream modelData = new FileInputStream(OPEN_NLP_MODELS_PATH);

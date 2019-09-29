@@ -2,6 +2,7 @@ $DOC LA010190-0001
 $TITLE
 NEW YEAR'S DAY
 $TEXT
+Hello world?
 Today is New Year's Day. The following will be closed:
 MAIL: All post offices will be closed and no mail will be delivered.
 BANKS: Most banks and savings and loan institutions will be closed.
