@@ -38,7 +38,7 @@ public class Debugger {
             section = className + ": ";
         // Show the debug print
         if (showDebugPrints) {
-            System.out.println("[DEBUG]: " + section + value);
+            System.out.println("\t[DEBUG]: " + section + value);
         }
     }
 
