@@ -3,7 +3,7 @@ JFLEX=./packages/jflex-1.7.0/bin/jflex
 SRC_PATH=./src/*.java ./src/lib/*.java ./src/flex/*.java
 INPUT=./assets/samples.txt
 
-run: flex compile sentence
+run: flex compile bin
 
 #-------------------------------------------------
 # Below are sub commands
@@ -14,6 +14,9 @@ compile:
 
 sentence:
 	java  -cp bin.SentenceDetectionME $(INPUT) > ./out/output.splitted
+
+bin:
+	cd ./bin && java -cp ./opennlp-tools-1.9.1.jar:. SentenceDetectionME ../assets/sample.txt > ../out/sample.splitted
 
 git:
 	git add -A
