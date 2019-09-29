@@ -10,7 +10,12 @@ public class SentenceDetectionME {
    /**
     * The path for the OpenNLP models.
     */
-   private static final String OPEN_NLP_MODELS_PATH = "./packages/OpenNLP_models/en-sent.bin";
+   private static final String OPEN_NLP_MODELS_PATH = "../packages/OpenNLP_models/en-sent.bin";
+
+   /**
+    * Set up a debugger for debug printing.
+    */
+   // private static Debugger debug = Debugger.init().showDebugPrints(true).setClassName("SentenceDetectionME");
 
    /**
     * Read each arg string.
@@ -39,7 +44,7 @@ public class SentenceDetectionME {
     * @throws Exception
     */
    public static void main(String args[]) throws Exception {
-      // Load sentence detector model
+      // Load sentence detector modelÍ
       InputStream modelData = new FileInputStream(OPEN_NLP_MODELS_PATH);
       SentenceModel model = new SentenceModel(modelData);
 

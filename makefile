@@ -1,7 +1,7 @@
-NLP=./packages/opennlp-tools-1.9.1.jar:.
+NLP=.:./packages/opennlp-tools-1.9.1.jar
 JFLEX=./packages/jflex-1.7.0/bin/jflex
 SRC_PATH=./src/*.java ./src/lib/*.java ./src/flex/*.java
-INPUT=./assets/sample.txt
+INPUT=./assets/samples.txt
 
 run: flex compile sentence
 
@@ -10,10 +10,10 @@ run: flex compile sentence
 #-------------------------------------------------
 
 compile:
-	javac -Xlint:unchecked -cp $(NLP) $(SRC_PATH) -d ./bin/
+	javac -cp $(NLP) $(SRC_PATH) -d ./bin/
 
 sentence:
-	java -cp ./bin SentenceDetectionME $(INPUT) > ./out/output.splitted
+	java  -cp bin.SentenceDetectionME $(INPUT) > ./out/output.splitted
 
 git:
 	git add -A
