@@ -9,7 +9,7 @@ public class Document {
     // Debugger
     private static final Debugger debug = Debugger.init().showDebugPrint(true).setClassName("Document");
     // Data tag
-    private static final String[] TAG = { "$DOC", "$TITLE", "$TEXT" };
+    private static final String[] TAGS = { "$DOC", "$TITLE", "$TEXT" };
     // The attribute containing in the document.
     private String docId;
     private String title;
@@ -34,6 +34,34 @@ public class Document {
     }
 
     /**
+     * Check if the string is a tag.
+     * 
+     * @param tag to be checked.
+     * @return true if it is a tag, and false if it is not.
+     */
+    private static boolean isATag(String tag) {
+        for (int x = 0; x < TAGS.length; x++)
+            if (tag.equals(TAGS[x]))
+                return true;
+        return false;
+    }
+
+    /**
+     * Print the documents.
+     * 
+     * @param documents to be debugged and printed
+     */
+    private static void debugDocuments(LinkedList<Document> documents) {
+        debug.setFunctionName("debugDocuments").print("Invoked.");
+        // Documents debug print
+        ListIterator<Document> iter = documents.listIterator();
+        while (iter.hasNext()) {
+            Document doc = iter.next();
+            debug.print("------------------------------>\n" + doc.toString());
+        }
+    }
+
+    /**
      * Parse from one full string of the document data.
      * 
      * @param data string to be converted to list of documents
@@ -41,9 +69,9 @@ public class Document {
      */
     public static LinkedList<Document> parse(String data) throws Exception {
         debug.setFunctionName("parse").print("Invoked.");
-
         // Init needed vars
         LinkedList<Document> docs = new LinkedList<Document>();
+        boolean isPassedFirstDoc = false;
         String[] toBeParsed = data.split(" ");
         String lastTag = "";
         String docId = "";
@@ -53,47 +81,37 @@ public class Document {
         // Start parsing
         for (int x = 0; x < toBeParsed.length; x++) {
             String curWord = toBeParsed[x];
-
             // Case for the doc name.
-            if (curWord.equals(TAG[0]))
-                lastTag = TAG[0];
+            if (curWord.equals(TAGS[0]))
+                lastTag = TAGS[0];
             // Case for the title
-            if (curWord.equals(TAG[1]))
-                lastTag = TAG[1];
+            if (curWord.equals(TAGS[1]))
+                lastTag = TAGS[1];
             // Case for the text
-            if (curWord.equals(TAG[2]))
-                lastTag = TAG[2];
+            if (curWord.equals(TAGS[2]))
+                lastTag = TAGS[2];
             // Last case, assign and go to next
-            if (curWord.equals(TAG[0]) || curWord.equals(TAG[1]) || curWord.equals(TAG[2])) {
-                debug.print(docId);
-                debug.print(title);
-                debug.print(text);
-                if (curWord.equals(TAG[0]) || toBeParsed.length - 1 == x) {
-                    docs.push(new Document(docId, title, text));
+            if (isATag(curWord) && isPassedFirstDoc) {
+                if (curWord.equals(TAGS[0]) || toBeParsed.length - 1 == x) {
+                    docs.push(new Document(docId.trim(), title.trim(), text.trim()));
                     docId = "";
                     title = "";
                     text = "";
                 }
                 continue;
             }
-
+            isPassedFirstDoc = true;
             // Case for putting the data in document
-            if (lastTag.equals(TAG[0]))
+            if (lastTag.equals(TAGS[0]))
                 docId += curWord + " ";
-            if (lastTag.equals(TAG[1]))
+            if (lastTag.equals(TAGS[1]))
                 title += curWord + " ";
-            if (lastTag.equals(TAG[2]))
+            if (lastTag.equals(TAGS[2]))
                 text += curWord + " ";
         }
 
-        // Debug print
-        ListIterator<Document> iter = docs.listIterator();
-        while (iter.hasNext()) {
-            Document doc = iter.next();
-            debug.print("------------------------------>\n" + doc.toString());
-        }
-
         // Return Docs
+        debugDocuments(docs);
         return docs;
     }
 
