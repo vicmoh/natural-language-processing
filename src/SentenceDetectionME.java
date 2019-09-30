@@ -46,7 +46,11 @@ public class SentenceDetectionME {
         SentenceDetectorME detector = new SentenceDetectorME(model);
 
         // Run detector
-        Document.parse(Util.readFile(fileName));
+        try {
+            Document.parse(Util.readFile(fileName));
+        } catch (Exception err) {
+            System.out.print(err.getMessage());
+        }
 
         // for (String arg : args) {
         // String sentences[] = detector.sentDetect(Util.readFile(arg));

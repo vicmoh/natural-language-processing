@@ -79,35 +79,39 @@ public class Document {
         String text = "";
 
         // Start parsing
-        for (int x = 0; x < toBeParsed.length; x++) {
-            String curWord = toBeParsed[x];
-            // Case for the doc name.
-            if (curWord.equals(TAGS[0]))
-                lastTag = TAGS[0];
-            // Case for the title
-            if (curWord.equals(TAGS[1]))
-                lastTag = TAGS[1];
-            // Case for the text
-            if (curWord.equals(TAGS[2]))
-                lastTag = TAGS[2];
-            // Last case, assign and go to next
-            if (isATag(curWord) && isPassedFirstDoc) {
-                if (curWord.equals(TAGS[0]) || toBeParsed.length - 1 == x) {
-                    docs.push(new Document(docId.trim(), title.trim(), text.trim()));
-                    docId = "";
-                    title = "";
-                    text = "";
+        try {
+            for (int x = 0; x < toBeParsed.length; x++) {
+                String curWord = toBeParsed[x];
+                // Case for the doc name.
+                if (curWord.equals(TAGS[0]))
+                    lastTag = TAGS[0];
+                // Case for the title
+                if (curWord.equals(TAGS[1]))
+                    lastTag = TAGS[1];
+                // Case for the text
+                if (curWord.equals(TAGS[2]))
+                    lastTag = TAGS[2];
+                // Last case, assign and go to next
+                if (isATag(curWord) && isPassedFirstDoc) {
+                    if (curWord.equals(TAGS[0]) || toBeParsed.length - 1 == x) {
+                        docs.push(new Document(docId.trim(), title.trim(), text.trim()));
+                        docId = "";
+                        title = "";
+                        text = "";
+                    }
+                    continue;
                 }
-                continue;
+                isPassedFirstDoc = true;
+                // Case for putting the data in document
+                if (lastTag.equals(TAGS[0]))
+                    docId += curWord + " ";
+                if (lastTag.equals(TAGS[1]))
+                    title += curWord + " ";
+                if (lastTag.equals(TAGS[2]))
+                    text += curWord + " ";
             }
-            isPassedFirstDoc = true;
-            // Case for putting the data in document
-            if (lastTag.equals(TAGS[0]))
-                docId += curWord + " ";
-            if (lastTag.equals(TAGS[1]))
-                title += curWord + " ";
-            if (lastTag.equals(TAGS[2]))
-                text += curWord + " ";
+        } catch (Exception err) {
+            throw Exception("Could not parse file data. Invalid Format.");
         }
 
         // Return Docs
