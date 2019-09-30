@@ -6,7 +6,6 @@ import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.IOException;
-import java.lang.Exception;
 
 import opennlp.tools.sentdetect.SentenceDetectorME;
 import opennlp.tools.sentdetect.SentenceModel;
@@ -45,7 +44,7 @@ public class SentenceDetectionME {
             writeData(sb.toString());
             return sb.toString();
         } catch (Exception exception) {
-            throw Exception("Exception ocurred. Could not read file.");
+            throw new Exception("Exception ocurred. Could not read file.");
         }
     }
 

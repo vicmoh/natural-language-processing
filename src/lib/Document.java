@@ -1,6 +1,6 @@
 package lib;
 
-import java.lang.Exception;
+import java.lang.RuntimeException;
 
 public class Document {
     // The attribute containing in the document.
@@ -20,7 +20,7 @@ public class Document {
         assert (title != null);
         assert (text != null);
         if (docId == null || title == null || text == null)
-            throw Exception("Could not create document due to missing content.");
+            throw new Exception("Could not create document due to missing content.");
         this.docId = docId;
         this.title = title;
         this.text = text;
