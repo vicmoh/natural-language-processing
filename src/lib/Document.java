@@ -95,7 +95,7 @@ public class Document {
                     if (curWord.equals(TAGS[0]) || toBeParsed.length - 1 == x) {
                         if (body != null)
                             text = (String) body.callback(text);
-                        docs.push(new Document(docId.trim(), title.trim(), text.trim()));
+                        docs.addLast(new Document(docId.trim(), title.trim(), text.trim()));
                         docId = "";
                         title = "";
                         text = "";
