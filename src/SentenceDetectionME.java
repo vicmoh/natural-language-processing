@@ -60,11 +60,5 @@ public class SentenceDetectionME {
         } catch (Exception err) {
             System.out.print(err.getMessage());
         }
-
-        // for (String arg : args) {
-        // String sentences[] = detector.sentDetect(Util.readFile(arg));
-        // for (String sent : sentences)
-        // System.out.pSrintln(sent);
-        // }
     }
 }
