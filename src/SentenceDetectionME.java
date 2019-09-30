@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.IOException;
+import java.util.LinkedList;
 
 import opennlp.tools.sentdetect.SentenceDetectorME;
 import opennlp.tools.sentdetect.SentenceModel;
@@ -29,6 +30,7 @@ public class SentenceDetectionME {
      */
     public static void main(String args[]) throws Exception {
         // Check if file exist in argument.
+        final String FILE_OUTPUT_PATH = "../output/data.splitted";
         System.out.println();
         if (args.length <= 0) {
             System.out.println("Sorry, no file detected.");
@@ -45,9 +47,10 @@ public class SentenceDetectionME {
         // Instantiate SentenceDetectorME
         SentenceDetectorME detector = new SentenceDetectorME(model);
 
-        // Run detector
+        // Run detectorF
         try {
-            Document.parse(Util.readFile(fileName));
+            LinkedList<Document> docs = Document.parse(Util.readFile(fileName));
+            Util.writeFile(FILE_OUTPUT_PATH, Document.stringify(docs));
         } catch (Exception err) {
             System.out.print(err.getMessage());
         }

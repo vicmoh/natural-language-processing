@@ -11,9 +11,9 @@ public class Document {
     // Data tag
     private static final String[] TAGS = { "$DOC", "$TITLE", "$TEXT" };
     // The attribute containing in the document.
-    private String docId;
-    private String title;
-    private String text;
+    private String docId = "";
+    private String title = "";
+    private String text = "";
 
     /**
      * Create a document model object.
@@ -39,9 +39,9 @@ public class Document {
      * @param tag to be checked.
      * @return true if it is a tag, and false if it is not.
      */
-    private static boolean isATag(String tag) {
-        for (int x = 0; x < TAGS.length; x++)
-            if (tag.equals(TAGS[x]))
+    private static boolean isATag(String toBeChecked) {
+        for (String tag : TAGS)
+            if (toBeChecked.equals(tag))
                 return true;
         return false;
     }
@@ -51,14 +51,12 @@ public class Document {
      * 
      * @param documents to be debugged and printed
      */
-    private static void debugDocuments(LinkedList<Document> documents) {
-        debug.setFunctionName("debugDocuments").print("Invoked.");
-        // Documents debug print
-        ListIterator<Document> iter = documents.listIterator();
-        while (iter.hasNext()) {
-            Document doc = iter.next();
-            debug.print("------------------------------>\n" + doc.toString());
-        }
+    public static String stringify(LinkedList<Document> documents) {
+        debug.setFunctionName("stringify").print("Invoked.");
+        String docs = "";
+        for (Document doc : documents)
+            docs += doc.toString();
+        return docs;
     }
 
     /**
@@ -111,11 +109,11 @@ public class Document {
                     text += curWord + " ";
             }
         } catch (Exception err) {
-            throw Exception("Could not parse file data. Invalid Format.");
+            throw new Exception("Could not parse file data. Invalid Format.");
         }
 
         // Return Docs
-        debugDocuments(docs);
+        debug.print("---------------------------------->\n" + stringify(docs));
         return docs;
     }
 
@@ -124,9 +122,12 @@ public class Document {
      */
     @Override
     public String toString() {
-        this.docId = "$DOC " + docId + "\n";
-        this.title = "$TITLE\n" + title + "\n";
-        this.text = "$TEXT\n" + text;
-        return this.docId + this.title + this.text;
+        debug.setFunctionName("toString").print("Invoked.");
+        if (this.docId.equals("") || this.title.equals("") || this.text.equals(""))
+            return "";
+        String docId = "$DOC " + this.docId + "\n";
+        String title = "$TITLE\n" + this.title + "\n";
+        String text = "$TEXT\n" + this.text + "\n";
+        return docId + title + text;
     }
 }
