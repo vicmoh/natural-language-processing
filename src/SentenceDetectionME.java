@@ -34,7 +34,9 @@ public class SentenceDetectionME {
             System.out.println("Sorry, no file detected.");
             return;
         }
+        String fileName = args[0];
         debug.setFunctionName("main").print("Starting sentence detector...");
+        debug.print("File name is \"" + fileName + "\"");
 
         // Load sentence detector model
         InputStream modelData = new FileInputStream(OPEN_NLP_MODELS_PATH);
@@ -42,10 +44,14 @@ public class SentenceDetectionME {
 
         // Instantiate SentenceDetectorME
         SentenceDetectorME detector = new SentenceDetectorME(model);
-        for (String arg : args) {
-            String sentences[] = detector.sentDetect(Parser.readString(arg));
-            for (String sent : sentences)
-                System.out.println(sent);
-        }
+
+        // Run detector
+        Document.parse(Util.readFile(fileName));
+
+        // for (String arg : args) {
+        // String sentences[] = detector.sentDetect(Util.readFile(arg));
+        // for (String sent : sentences)
+        // System.out.pSrintln(sent);
+        // }
     }
 }

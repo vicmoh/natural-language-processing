@@ -9,7 +9,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.IOException;
 
-public class Parser {
+public class Util {
     /**
      * Setup debugger for debug printing.
      */
@@ -22,7 +22,7 @@ public class Parser {
      * @return the string builder.
      * @throws Exception.
      */
-    public static String readString(String fileName) throws Exception {
+    public static String readFile(String fileName) throws Exception {
         debug.setFunctionName("readString").print("Invoked.");
         // Try to read the whole string
         try {
@@ -35,7 +35,7 @@ public class Parser {
                 line = buffer.readLine();
             }
             buffer.close();
-            writeData(sb.toString());
+            writeFile(sb.toString());
             return sb.toString();
         } catch (Exception exception) {
             throw new Exception("Exception ocurred. Could not read file.");
@@ -48,7 +48,7 @@ public class Parser {
      * 
      * @param data is the data to written.
      */
-    private static void writeData(String data) {
+    private static void writeFile(String data) {
         OutputStream os = null;
         try {
             os = new FileOutputStream("../output/data.splitted");
