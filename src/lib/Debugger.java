@@ -2,6 +2,12 @@ package lib;
 
 public class Debugger {
     /**
+     * A global debug setting. If this is false All debugger initialize will not
+     * show any debug prints.
+     */
+    private static final boolean SHOW_DEBUG = true;
+
+    /**
      * The state wether the debugger should be print when it is called.
      */
     private boolean showDebugPrints = false;
@@ -30,6 +36,8 @@ public class Debugger {
      * @param value to be printed.
      */
     public void print(String value) {
+        if (!SHOW_DEBUG)
+            return;
         // Determine wether to show the class and function name
         String section = "";
         if (!className.equalsIgnoreCase("") && !functionName.equalsIgnoreCase(""))
