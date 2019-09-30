@@ -49,7 +49,13 @@ public class SentenceDetectionME {
 
         // Run detectorF
         try {
-            LinkedList<Document> docs = Document.parse(Util.readFile(fileName));
+            LinkedList<Document> docs = Document.parse(Util.readFile(fileName), text -> {
+                String paragraph = "";
+                String sentence[] = detector.sentDetect((String) text);
+                for (String each : sentence)
+                    paragraph += each + "\n";
+                return paragraph.trim();
+            });
             Util.writeFile(FILE_OUTPUT_PATH, Document.stringify(docs));
         } catch (Exception err) {
             System.out.print(err.getMessage());

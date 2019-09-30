@@ -62,10 +62,11 @@ public class Document {
     /**
      * Parse from one full string of the document data.
      * 
-     * @param data string to be converted to list of documents
-     * @return list of document object
+     * @param data string to be converted to list of documents.
+     * @param body is a callback of the document text. Set null if not used.
+     * @return list of document object.
      */
-    public static LinkedList<Document> parse(String data) throws Exception {
+    public static LinkedList<Document> parse(String data, Lambda body) throws Exception {
         debug.setFunctionName("parse").print("Invoked.");
         // Init needed vars
         LinkedList<Document> docs = new LinkedList<Document>();
@@ -92,6 +93,8 @@ public class Document {
                 // Last case, assign and go to next
                 if (isATag(curWord) && isPassedFirstDoc) {
                     if (curWord.equals(TAGS[0]) || toBeParsed.length - 1 == x) {
+                        if (body != null)
+                            text = (String) body.callback(text);
                         docs.push(new Document(docId.trim(), title.trim(), text.trim()));
                         docId = "";
                         title = "";
