@@ -57,7 +57,7 @@ public class SentenceDetectionME {
     private static void writeData(String data) {
         OutputStream os = null;
         try {
-            os = new FileOutputStream("../out/output.splitted");
+            os = new FileOutputStream("../output/data.splitted");
             os.write(data.getBytes(), 0, data.length());
         } catch (IOException e) {
             e.printStackTrace();
