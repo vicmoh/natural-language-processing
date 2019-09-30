@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.IOException;
+import java.lang.Exception;
 
 import opennlp.tools.sentdetect.SentenceDetectorME;
 import opennlp.tools.sentdetect.SentenceModel;
@@ -84,16 +85,15 @@ public class SentenceDetectionME {
             return;
         }
         debug.setFunctionName("main").print("Starting sentence detector...");
+
         // Load sentence detector model
         InputStream modelData = new FileInputStream(OPEN_NLP_MODELS_PATH);
         SentenceModel model = new SentenceModel(modelData);
+
         // Instantiate SentenceDetectorME
         SentenceDetectorME detector = new SentenceDetectorME(model);
-        // Allow multiple files to be processed
         for (String arg : args) {
-            // Split a file into sentences
             String sentences[] = detector.sentDetect(readString(arg));
-            // Print the sentences
             for (String sent : sentences)
                 System.out.println(sent);
         }
