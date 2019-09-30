@@ -1,4 +1,6 @@
-package src;
+package lib;
+
+import java.lang.Exception;
 
 public class Document {
     // The attribute containing in the document.
@@ -7,7 +9,7 @@ public class Document {
     private String text;
 
     /**
-     * Create a document object.
+     * Create a document model object.
      * 
      * @param docId is the "$DOC" id, for ex. "LA010190-0001".
      * @param title is the "$TITLE" content.

@@ -1,4 +1,4 @@
-import src.Debugger;
+import lib.Debugger;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
