@@ -4,7 +4,9 @@ SRC_PATH=./src/*.java ./src/lib/*.java ./src/flex/*.java
 INPUT=../assets/sample.txt
 OUPUT=../out/sample.splitted
 
-run: flex compile sentence
+run: flex compile sentence tokenizer
+
+compile_all: flex compile
 
 #-------------------------------------------------
 # Below are sub commands
@@ -15,6 +17,9 @@ compile:
 
 sentence:
 	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. SentenceDetection $(INPUT)
+
+tokenizer:
+	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. Tokenizer $(INPUT)
 
 git:
 	git add -A
