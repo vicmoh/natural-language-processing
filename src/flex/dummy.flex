@@ -41,27 +41,15 @@ identifier = {letter}+
    code, that will be executed when the scanner matches the associated
    regular expression. */
    
-"if"               { return new Token(Token.IF, yytext(), yyline, yycolumn); }
-"then"             { return new Token(Token.THEN, yytext(), yyline, yycolumn); }
-"else"             { return new Token(Token.ELSE, yytext(), yyline, yycolumn); }
-"end"              { return new Token(Token.END, yytext(), yyline, yycolumn); }
-"repeat"           { return new Token(Token.REPEAT, yytext(), yyline, yycolumn); }
-"until"            { return new Token(Token.UNTIL, yytext(), yyline, yycolumn); }
-"read"             { return new Token(Token.READ, yytext(), yyline, yycolumn); }
-"write"            { return new Token(Token.WRITE, yytext(), yyline, yycolumn); }
-":="               { return new Token(Token.ASSIGN, yytext(), yyline, yycolumn); }
-"="                { return new Token(Token.EQ, yytext(), yyline, yycolumn); }
-"<"                { return new Token(Token.LT, yytext(), yyline, yycolumn); }
-">"                { return new Token(Token.GT, yytext(), yyline, yycolumn); }
-"+"                { return new Token(Token.PLUS, yytext(), yyline, yycolumn); }
-"-"                { return new Token(Token.MINUS, yytext(), yyline, yycolumn); }
-"*"                { return new Token(Token.TIMES, yytext(), yyline, yycolumn); }
-"/"                { return new Token(Token.OVER, yytext(), yyline, yycolumn); }
-"("                { return new Token(Token.LPAREN, yytext(), yyline, yycolumn); }
-")"                { return new Token(Token.RPAREN, yytext(), yyline, yycolumn); }
-";"                { return new Token(Token.SEMI, yytext(), yyline, yycolumn); }
-{number}           { return new Token(Token.NUM, yytext(), yyline, yycolumn); }
-{identifier}       { return new Token(Token.ID, yytext(), yyline, yycolumn); }
-{WhiteSpace}+      { /* skip whitespace */ }   
-"{"[^\}]*"}"       { /* skip comments */ }
-.                  { return new Token(Token.ERROR, yytext(), yyline, yycolumn); }
+[$][a-zA-Z]+               { return new Token(Token.LABEL, yytext(), yyline, yycolumn); }
+\w                         { return new Token(Token.WORD, yytext(), yyline, yycolumn); }
+[-+]?[0-9]+                { return new Token(Token.NUMBER, yytext(), yyline, yycolumn); }
+[\w]+[\'][\w?]+            { return new Token(Token.APOSTROPHIZED, yytext(), yyline, yycolumn); }
+[\w]+[\-][\w?]+            { return new Token(Token.HYPHENATED, yytext(), yyline, yycolumn); }
+LineTerminator             { return new Token(Token.NEWLINE, yytext(), yyline, yycolumn); }
+[\"][\w]+[\"]              { return new Token(Token.PUNCTUATION, yytext(), yyline, yycolumn); }
+
+/* Other attribute  */
+{identifier}               { return new Token(Token.ID, yytext(), yyline, yycolumn); }
+{WhiteSpace}+              { /* skip whitespace */ }
+.                          { return new Token(Token.ERROR, yytext(), yyline, yycolumn); }

@@ -14,7 +14,7 @@ compile:
 	javac -Xlint:unchecked -classpath $(NLP) $(SRC_PATH) -d ./bin/
 
 sentence:
-	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. SentenceDetectionME $(INPUT)
+	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. SentenceDetection $(INPUT)
 
 git:
 	git add -A
