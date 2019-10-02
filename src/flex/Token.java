@@ -11,6 +11,8 @@ public class Token {
   public final static int HYPHENATED = 8;
   public final static int NEWLINE = 9;
   public final static int PUNCTUATION = 10;
+  // Other
+  public final static int WHITE_SPACES = 11;
 
   public int m_type;
   public String m_value;
@@ -41,6 +43,9 @@ public class Token {
       return "NEWLINE";
     case PUNCTUATION:
       return "PUNCTUATION";
+    // Other
+    case WHITE_SPACES:
+      return "WHITE_SPACES";
     // For testing
     case ID:
       return "ID(" + m_value + ")";

@@ -33,7 +33,14 @@ number = {digit}+
    between A and Z, a and z, zero and nine, or an underscore. */
 letter = [a-zA-Z]
 identifier = {letter}+
-   
+
+// Apostrophized cases: "John's", "O'Reily", "O'Reily's".
+aposCase1 = [\w]+['][s]|[\w]['][\w]+|[\w]['][\w]+['][\w]
+// Apostrophized cases: "You 're", "I 've".
+aposCase2 = ['][\w][\w]|['][\w]
+// Apostrophized case: "world ' cup"
+aposCase3 = [']
+
 %%
    
 /*
@@ -41,15 +48,18 @@ identifier = {letter}+
    code, that will be executed when the scanner matches the associated
    regular expression. */
    
-[$][a-zA-Z]+                   { return new Token(Token.LABEL, yytext(), yyline, yycolumn); }
-\w                             { return new Token(Token.WORD, yytext(), yyline, yycolumn); }
-[0-9]|[-+]?[0-9]+[.]?[0-9]+    { return new Token(Token.NUMBER, yytext(), yyline, yycolumn); }
-[\w]+[\'][\w?]+                { return new Token(Token.APOSTROPHIZED, yytext(), yyline, yycolumn); }
-[\w]+[\-][\w?]+                { return new Token(Token.HYPHENATED, yytext(), yyline, yycolumn); }
-{LineTerminator}+              { return new Token(Token.NEWLINE, yytext(), yyline, yycolumn); }
-[\"][\w]+[\"]                  { return new Token(Token.PUNCTUATION, yytext(), yyline, yycolumn); }
+// [$][a-zA-Z]+                   { return new Token(Token.LABEL, yytext(), yyline, yycolumn); }
+\$DOC                           { return new Token(Token.LABEL, yytext(), yyline, yycolumn); }
+\$TITLE                         { return new Token(Token.LABEL, yytext(), yyline, yycolumn); }
+\$TEXT                          { return new Token(Token.LABEL, yytext(), yyline, yycolumn); }
+\w                              { return new Token(Token.WORD, yytext(), yyline, yycolumn); }
+[0-9]|[-+]?[0-9]+[.]?[0-9]+     { return new Token(Token.NUMBER, yytext(), yyline, yycolumn); }
+aposCase1|aposCase2|aposCase3   { return new Token(Token.APOSTROPHIZED, yytext(), yyline, yycolumn); }
+[\w]+[\-][\w?]+                 { return new Token(Token.HYPHENATED, yytext(), yyline, yycolumn); }
+{LineTerminator}+               { return new Token(Token.NEWLINE, yytext(), yyline, yycolumn); }
+[\"][\w]+[\"]                   { return new Token(Token.PUNCTUATION, yytext(), yyline, yycolumn); }
 
 /* Other attribute  */
-{identifier}                   { return new Token(Token.ID, yytext(), yyline, yycolumn); }
-{WhiteSpace}+                  { /* skip whitespace */ }
-.                              { return new Token(Token.ERROR, yytext(), yyline, yycolumn); }
+{identifier}                    { return new Token(Token.ID, yytext(), yyline, yycolumn); }
+{WhiteSpace}+                   { return new Token(Token.WHITE_SPACES, yytext(), yyline, yycolumn); }
+.                               { return new Token(Token.ERROR, yytext(), yyline, yycolumn); }

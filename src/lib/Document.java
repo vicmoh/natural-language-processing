@@ -91,8 +91,8 @@ public class Document {
                 if (curWord.equals(TAGS[2]))
                     lastTag = TAGS[2];
                 // Last case, assign and go to next
-                if (isATag(curWord) && isPassedFirstDoc) {
-                    if (curWord.equals(TAGS[0]) || toBeParsed.length - 1 == x) {
+                if (isATag(curWord)) {
+                    if (((curWord.equals(TAGS[0]) || toBeParsed.length - 1 == x)) && isPassedFirstDoc) {
                         if (body != null)
                             text = (String) body.callback(text);
                         docs.addLast(new Document(docId.trim(), title.trim(), text.trim()));
@@ -100,9 +100,10 @@ public class Document {
                         title = "";
                         text = "";
                     }
+                    isPassedFirstDoc = true;
                     continue;
                 }
-                isPassedFirstDoc = true;
+
                 // Case for putting the data in document
                 if (lastTag.equals(TAGS[0]))
                     docId += curWord + " ";

@@ -43,18 +43,22 @@ public class Tokenizer {
     final String outputPath = "../output/data.tokenized";
 
     // Try to parse
+    InputStream inFile = null;
     try {
-      InputStream inFile = new FileInputStream(fileName);
+      inFile = new FileInputStream(fileName);
       Tokenizer scanner = new Tokenizer(new Lexer(new InputStreamReader(inFile)));
       Token tok = null;
       String toBeOutput = "";
-      while ((tok = scanner.getNextToken()) != null)
+      while ((tok = scanner.getNextToken()) != null) {
         toBeOutput += tok.m_value;
+      }
       Util.writeFile(outputPath, toBeOutput);
     } catch (Exception err) {
       System.out.println("Unexpected exception:");
       err.printStackTrace();
     }
+    if (inFile != null)
+      inFile.close();
     System.out.println("Program ended.");
   }
 }
