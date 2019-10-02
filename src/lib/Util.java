@@ -24,7 +24,6 @@ public class Util {
      */
     public static String readFile(String filePath) throws Exception {
         debug.setFunctionName("readString").print("Invoked.");
-        // Try to read the whole string
         try {
             InputStream inFile = new FileInputStream(filePath);
             BufferedReader buffer = new BufferedReader(new InputStreamReader(inFile));
