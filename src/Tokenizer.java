@@ -50,7 +50,10 @@ public class Tokenizer {
             Token tok = null;
             String toBeOutput = "";
             while ((tok = scanner.getNextToken()) != null) {
-                toBeOutput += tok.m_value;
+                if (tok.m_type == Token.NEWLINE)
+                    toBeOutput += tok.m_value;
+                else
+                    toBeOutput += tok.m_value + " ";
             }
             Util.writeFile(outputPath, toBeOutput);
         } catch (Exception err) {
