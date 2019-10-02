@@ -40,7 +40,7 @@ public class Tokenizer {
 
         // Init setup for file name and path
         final String fileName = argv[0];
-        final String outputPath = "../output/data.tokenized";
+        final String OUTPUT_PATH = "../output/data.tokenized";
 
         // Try to parse
         InputStream inFile = null;
@@ -66,7 +66,7 @@ public class Tokenizer {
                     toBeOutput += tok.m_value;
                 }
             }
-            Util.writeFile(outputPath, toBeOutput);
+            Util.writeFile(OUTPUT_PATH, toBeOutput);
         } catch (Exception err) {
             System.out.println("Unexpected exception:");
             err.printStackTrace();

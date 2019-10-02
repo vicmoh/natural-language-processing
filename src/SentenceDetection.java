@@ -32,10 +32,10 @@ public class SentenceDetection {
         // Check if file exist in argument.
         final String FILE_OUTPUT_PATH = "../output/data.splitted";
         System.out.println();
-        if (args.length <= 0) {
-            System.out.println("Sorry, no file detected.");
-            return;
-        }
+        if (args.length <= 0)
+            throw new Exception("Sorry, no file detected.");
+
+        // Setup
         String fileName = args[0];
         debug.setFunctionName("main").print("Starting sentence detector...");
         debug.print("File name is \"" + fileName + "\"");
