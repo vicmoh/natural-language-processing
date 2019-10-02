@@ -1,8 +1,6 @@
 NLP=.:./packages/opennlp-tools-1.9.1.jar
 JFLEX=./packages/jflex-1.7.0/bin/jflex
 SRC_PATH=./src/*.java ./src/lib/*.java ./src/flex/*.java
-INPUT=../assets/sample.txt
-OUPUT=../out/sample.splitted
 
 run: flex compile sentence tokenizer
 
@@ -16,10 +14,10 @@ compile:
 	javac -Xlint:unchecked -classpath $(NLP) $(SRC_PATH) -d ./bin/
 
 sentence:
-	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. SentenceDetection $(INPUT)
+	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. SentenceDetection ../assets/sample.txt
 
 tokenizer:
-	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. Tokenizer $(INPUT)
+	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. Tokenizer ../output/data.splitted
 
 git:
 	git add -A
@@ -34,5 +32,5 @@ push:
 clean:
 	rm ./bin/*.class
 
-flex: src/flex/dummy.flex
-	$(JFLEX) src/flex/dummy.flex 
+flex: src/flex/doc.flex
+	$(JFLEX) src/flex/doc.flex 

@@ -40,14 +40,12 @@ public class SentenceDetection {
         debug.setFunctionName("main").print("Starting sentence detector...");
         debug.print("File name is \"" + fileName + "\"");
 
-        // Load sentence detector model
+        // Load sentence detector model and instantiate SentenceDetectorME
         InputStream modelData = new FileInputStream(OPEN_NLP_MODELS_PATH);
         SentenceModel model = new SentenceModel(modelData);
-
-        // Instantiate SentenceDetectorME
         SentenceDetectorME detector = new SentenceDetectorME(model);
 
-        // Run detectorF
+        // Run detector
         try {
             LinkedList<Document> docs = Document.parse(Util.readFile(fileName), text -> {
                 String paragraph = "";

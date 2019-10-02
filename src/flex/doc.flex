@@ -41,15 +41,15 @@ identifier = {letter}+
    code, that will be executed when the scanner matches the associated
    regular expression. */
    
-[$][a-zA-Z]+               { return new Token(Token.LABEL, yytext(), yyline, yycolumn); }
-\w                         { return new Token(Token.WORD, yytext(), yyline, yycolumn); }
-[-+]?[0-9]+                { return new Token(Token.NUMBER, yytext(), yyline, yycolumn); }
-[\w]+[\'][\w?]+            { return new Token(Token.APOSTROPHIZED, yytext(), yyline, yycolumn); }
-[\w]+[\-][\w?]+            { return new Token(Token.HYPHENATED, yytext(), yyline, yycolumn); }
-LineTerminator             { return new Token(Token.NEWLINE, yytext(), yyline, yycolumn); }
-[\"][\w]+[\"]              { return new Token(Token.PUNCTUATION, yytext(), yyline, yycolumn); }
+[$][a-zA-Z]+                   { return new Token(Token.LABEL, yytext(), yyline, yycolumn); }
+\w                             { return new Token(Token.WORD, yytext(), yyline, yycolumn); }
+[0-9]|[-+]?[0-9]+[.]?[0-9]+    { return new Token(Token.NUMBER, yytext(), yyline, yycolumn); }
+[\w]+[\'][\w?]+                { return new Token(Token.APOSTROPHIZED, yytext(), yyline, yycolumn); }
+[\w]+[\-][\w?]+                { return new Token(Token.HYPHENATED, yytext(), yyline, yycolumn); }
+{LineTerminator}+              { return new Token(Token.NEWLINE, yytext(), yyline, yycolumn); }
+[\"][\w]+[\"]                  { return new Token(Token.PUNCTUATION, yytext(), yyline, yycolumn); }
 
 /* Other attribute  */
-{identifier}               { return new Token(Token.ID, yytext(), yyline, yycolumn); }
-{WhiteSpace}+              { /* skip whitespace */ }
-.                          { return new Token(Token.ERROR, yytext(), yyline, yycolumn); }
+{identifier}                   { return new Token(Token.ID, yytext(), yyline, yycolumn); }
+{WhiteSpace}+                  { /* skip whitespace */ }
+.                              { return new Token(Token.ERROR, yytext(), yyline, yycolumn); }
