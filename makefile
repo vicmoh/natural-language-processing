@@ -10,6 +10,9 @@ compile_all: flex compile
 # Below are sub commands
 #-------------------------------------------------
 
+flex: src/flex/doc.flex
+	$(JFLEX) src/flex/doc.flex 
+
 compile:
 	javac -Xlint:unchecked -classpath $(NLP) $(SRC_PATH) -d ./bin/
 
@@ -18,6 +21,20 @@ sentence:
 
 tokenizer:
 	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. Tokenizer ../output/data.splitted
+
+#-------------------------------------------------
+# Check commands
+#-------------------------------------------------
+
+check_split:
+	diff output/data.splitted ./examples/samples/samples.splitted
+
+check_token:
+	diff output/data.tokenized ./examples/samples/samples.tokenized
+
+#-------------------------------------------------
+# GitHub and cleans
+#-------------------------------------------------
 
 git:
 	git add -A
@@ -31,6 +48,3 @@ push:
 
 clean:
 	rm ./bin/*.class
-
-flex: src/flex/doc.flex
-	$(JFLEX) src/flex/doc.flex 
