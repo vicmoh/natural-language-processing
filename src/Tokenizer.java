@@ -49,11 +49,22 @@ public class Tokenizer {
             Tokenizer scanner = new Tokenizer(new Lexer(new InputStreamReader(inFile)));
             Token tok = null;
             String toBeOutput = "";
+            boolean lastTokType = false;
+            boolean isFirstTokPassed = false;
             while ((tok = scanner.getNextToken()) != null) {
-                if (tok.m_type == Token.NEWLINE)
+                if (isFirstTokPassed == false) {
+                    isFirstTokPassed = true;
                     toBeOutput += tok.m_value;
-                else
-                    toBeOutput += tok.m_value + " ";
+                } else if (tok.m_type == Token.NEWLINE) {
+                    lastTokType = true;
+                    toBeOutput += tok.m_value;
+                } else if (lastTokType == false) {
+                    lastTokType = false;
+                    toBeOutput += " " + tok.m_value;
+                } else {
+                    lastTokType = false;
+                    toBeOutput += tok.m_value;
+                }
             }
             Util.writeFile(outputPath, toBeOutput);
         } catch (Exception err) {
