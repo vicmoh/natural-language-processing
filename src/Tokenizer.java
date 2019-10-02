@@ -57,6 +57,8 @@ public class Tokenizer {
       System.out.println("Unexpected exception:");
       err.printStackTrace();
     }
+
+    // Close the file and end
     if (inFile != null)
       inFile.close();
     System.out.println("Program ended.");
