@@ -2,7 +2,7 @@ NLP=.:./packages/opennlp-tools-1.9.1.jar
 JFLEX=./packages/jflex-1.7.0/bin/jflex
 SRC_PATH=./src/*.java ./src/lib/*.java ./src/flex/*.java
 
-run: flex compile sentence tokenizer
+run: flex compile sentencer tokenizer
 
 compile_all: flex compile
 
@@ -16,8 +16,8 @@ flex: src/flex/doc.flex
 compile:
 	javac -Xlint:unchecked -classpath $(NLP) $(SRC_PATH) -d ./bin/
 
-sentence:
-	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. SentenceDetection ../assets/samples.txt
+sentencer:
+	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. Sentencer ../assets/samples.txt
 
 tokenizer:
 	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. Tokenizer ../output/data.splitted
@@ -27,10 +27,10 @@ tokenizer:
 #-------------------------------------------------
 
 check_split:
-	diff output/data.splitted ./examples/samples/samples.splitted
+	diff ./output/data.splitted ./examples/samples/samples.splitted
 
 check_token:
-	diff output/data.tokenized ./examples/samples/samples.tokenized
+	diff ./output/data.tokenized ./examples/samples/samples.tokenized
 
 #-------------------------------------------------
 # GitHub and cleans

@@ -76,6 +76,7 @@ public class Document {
         String docId = "";
         String title = "";
         String text = "";
+        final int lastIndex = toBeParsed.length - 1;
 
         // Start parsing
         try {
@@ -91,8 +92,10 @@ public class Document {
                 if (curWord.equals(TAGS[2]))
                     lastTag = TAGS[2];
                 // Last case, assign and go to next
-                if (isATag(curWord)) {
-                    if (((curWord.equals(TAGS[0]) || toBeParsed.length - 1 == x)) && isPassedFirstDoc) {
+                if (isATag(curWord) || lastIndex <= x) {
+                    if (((curWord.equals(TAGS[0]) || lastIndex <= x)) && isPassedFirstDoc) {
+                        if (lastIndex <= x)
+                            text += curWord;
                         if (body != null)
                             text = (String) body.callback(text);
                         docs.addLast(new Document(docId.trim(), title.trim(), text.trim()));
