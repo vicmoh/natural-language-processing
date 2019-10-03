@@ -46,5 +46,8 @@ push:
 	git commit -m "$(m)"
 	git push
 
+install:
+	unzip ./packages/jflex-1.7.0.zip
+
 clean:
 	rm ./bin/*.class
