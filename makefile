@@ -47,7 +47,7 @@ push:
 	git push
 
 install:
-	unzip ./packages/jflex-1.7.0.zip
+	cd ./packages && unzip ./jflex-1.7.0.zip
 
 clean:
 	rm ./bin/*.class
