@@ -2,7 +2,7 @@ NLP=.:./packages/opennlp-tools-1.9.1.jar
 JFLEX=./packages/jflex-1.7.0/bin/jflex
 SRC_PATH=./src/*.java ./src/lib/*.java ./src/flex/*.java
 
-run: flex compile sentencer tokenizer
+all: flex compile sentencer tokenizer
 
 compile_all: flex compile
 
