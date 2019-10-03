@@ -45,6 +45,8 @@ aposCase3 = [']
 hypCase1 = [\w]+[-][\w]+[-][\w]+
 // Hyphenated case: Such a rule will keep strings like "data-base"
 hypCase2 = [\w]+[-][\w]+
+// Hyphenated case: Such a rule will keep strings like "-"
+hypCase3 = [-]
 
 %%
    
@@ -62,6 +64,7 @@ hypCase2 = [\w]+[-][\w]+
 {aposCase3}                     { return new Token(Token.APOSTROPHIZED, yytext(), yyline, yycolumn); }
 {hypCase1}                      { return new Token(Token.HYPHENATED, yytext(), yyline, yycolumn); }
 {hypCase2}                      { return new Token(Token.HYPHENATED, yytext(), yyline, yycolumn); }
+// {hypCase3}                      { return new Token(Token.HYPHENATED, yytext(), yyline, yycolumn); }
 [\w]+                           { return new Token(Token.WORD, yytext(), yyline, yycolumn); }
 [0-9]|[-+]?[0-9]+[.]?[0-9]+     { return new Token(Token.NUMBER, yytext(), yyline, yycolumn); } 
 {LineTerminator}+               { return new Token(Token.NEWLINE, yytext(), yyline, yycolumn); }

@@ -29,6 +29,43 @@ public class Tokenizer {
     }
 
     /**
+     * Function for splitting the hyphenated.
+     * 
+     * @param value string to be split.
+     */
+    public static String splitHyphenated(String value) {
+        debug.setFunctionName("splitHyphenated");
+        String toBeReturn = "";
+        String[] split = value.split("-");
+        for (int x = 0; x < split.length; x++) {
+            if (split.length - 1 <= x)
+                toBeReturn += split[x];
+            else
+                toBeReturn += split[x] + " - ";
+        }
+        debug.print(toBeReturn);
+        return toBeReturn;
+    }
+
+    /**
+     * Reformat for the hyphenated cases.
+     * 
+     * @param value
+     * @return the reformated string
+     */
+    public static String reformatHyphenatedCase(String value) {
+        final String toBeReturn = "";
+        String[] split = value.split("-");
+        if (split.length >= 3) {
+            if (split[1].length() > 2)
+                return splitHyphenated(value);
+            else
+                return value;
+        } else
+            return value;
+    }
+
+    /**
      * Main function to run the program.
      * 
      * @param argv
@@ -60,10 +97,16 @@ public class Tokenizer {
                     toBeOutput += tok.m_value;
                 } else if (lastTokType == false) {
                     lastTokType = false;
-                    toBeOutput += " " + tok.m_value;
+                    if (tok.m_type == Token.HYPHENATED)
+                        toBeOutput += " " + Tokenizer.reformatHyphenatedCase(tok.m_value);
+                    else
+                        toBeOutput += " " + tok.m_value;
                 } else {
                     lastTokType = false;
-                    toBeOutput += tok.m_value;
+                    if (tok.m_type == Token.HYPHENATED)
+                        toBeOutput += Tokenizer.reformatHyphenatedCase(tok.m_value);
+                    else
+                        toBeOutput += tok.m_value;
                 }
             }
             Util.writeFile(OUTPUT_PATH, toBeOutput);
