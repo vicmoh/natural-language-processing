@@ -40,13 +40,13 @@ aposCase1 = [\w]+['][sS]|[\w]['][\w]+|[\w]['][\w]+['][\w]
 aposCase2 = ['][\w][\w]|['][\w]
 // Apostrophized case: "world ' cup"
 aposCase3 = [']
+// Apostrophized case: "father-in-law’s" is treated as one token
+aposCase4 = [\w]+[-][\w][\w]?[-][\w]+['][s]
 
 // Hyphenated case: and "father-in-law" as single tokens
 hypCase1 = [\w]+[-][\w]+[-][\w]+
 // Hyphenated case: Such a rule will keep strings like "data-base"
 hypCase2 = [\w]+[-][\w]+
-// Hyphenated case: Such a rule will keep strings like "-"
-hypCase3 = [-]
 
 %%
    
@@ -62,9 +62,9 @@ hypCase3 = [-]
 {aposCase1}                     { return new Token(Token.APOSTROPHIZED, yytext(), yyline, yycolumn); }
 {aposCase2}                     { return new Token(Token.APOSTROPHIZED, yytext(), yyline, yycolumn); }
 {aposCase3}                     { return new Token(Token.APOSTROPHIZED, yytext(), yyline, yycolumn); }
+{aposCase4}                     { return new Token(Token.APOSTROPHIZED, yytext(), yyline, yycolumn); }
 {hypCase1}                      { return new Token(Token.HYPHENATED, yytext(), yyline, yycolumn); }
 {hypCase2}                      { return new Token(Token.HYPHENATED, yytext(), yyline, yycolumn); }
-// {hypCase3}                      { return new Token(Token.HYPHENATED, yytext(), yyline, yycolumn); }
 [\w]+                           { return new Token(Token.WORD, yytext(), yyline, yycolumn); }
 [0-9]|[-+]?[0-9]+[.]?[0-9]+     { return new Token(Token.NUMBER, yytext(), yyline, yycolumn); } 
 {LineTerminator}+               { return new Token(Token.NEWLINE, yytext(), yyline, yycolumn); }
