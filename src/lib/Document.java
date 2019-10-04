@@ -2,8 +2,11 @@ package lib;
 
 import lib.*;
 import java.lang.RuntimeException;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.ListIterator;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Document {
     // Debugger
@@ -47,26 +50,29 @@ public class Document {
     }
 
     /**
-     * Print the documents.
+     * Print the documents. TODO: Buggy, could not call twice, need to check why.
      * 
-     * @param documents to be debugged and printed
+     * @param documents to be stringify
      */
     public static String stringify(LinkedList<Document> documents) {
         debug.setFunctionName("stringify").print("Invoked.");
-        String docs = "";
-        for (Document doc : documents)
-            docs += doc.toString();
-        return docs;
+        String tempDocs = "";
+        ListIterator<Document> iter = documents.listIterator(0);
+        debug.print("documents.size() " + documents.size());
+        while (iter.hasNext())
+            tempDocs += iter.next().toString();
+        debug.print("tempDocs = " + tempDocs);
+        return tempDocs;
     }
 
     /**
-     * Parse from one full string of the document data.
+     * Parse from one full string of the tokenized document data.
      * 
      * @param data string to be converted to list of documents.
      * @param body is a callback of the document text. Set null if not used.
      * @return list of document object.
      */
-    public static LinkedList<Document> parse(String data, Lambda body) throws Exception {
+    public static LinkedList<Document> parseToken(String data, Lambda body) throws Exception {
         debug.setFunctionName("parse").print("Invoked.");
         // Init needed vars
         LinkedList<Document> docs = new LinkedList<Document>();
@@ -82,22 +88,28 @@ public class Document {
         try {
             for (int x = 0; x < toBeParsed.length; x++) {
                 String curWord = toBeParsed[x];
+                String trimmedCurWord = curWord.replaceAll("[ \t\n\r]", "");
+                debug.print("trimmedCurWord = [" + trimmedCurWord + "]");
+                debug.print("lastTag = " + lastTag);
                 // Case for the doc name.
-                if (curWord.equals(TAGS[0]))
+                if (trimmedCurWord.equals(TAGS[0]))
                     lastTag = TAGS[0];
                 // Case for the title
-                if (curWord.equals(TAGS[1]))
+                if (trimmedCurWord.equals(TAGS[1]))
                     lastTag = TAGS[1];
                 // Case for the text
-                if (curWord.equals(TAGS[2]))
+                if (trimmedCurWord.equals(TAGS[2]))
                     lastTag = TAGS[2];
                 // Last case, assign and go to next
-                if (isATag(curWord) || lastIndex <= x) {
-                    if (((curWord.equals(TAGS[0]) || lastIndex <= x)) && isPassedFirstDoc) {
+                if (isATag(trimmedCurWord) || lastIndex <= x) {
+                    debug.print("*************************** = " + text);
+                    if (((trimmedCurWord.equals(TAGS[0]) || lastIndex <= x)) && isPassedFirstDoc) {
                         if (lastIndex <= x)
                             text += curWord;
-                        if (body != null)
+                        if (body != null){
                             text = (String) body.callback(text);
+                            title = (String) body.callback(title);
+                        }
                         docs.addLast(new Document(docId.trim(), title.trim(), text.trim()));
                         docId = "";
                         title = "";
@@ -120,7 +132,77 @@ public class Document {
         }
 
         // Return Docs
-        debug.print("---------------------------------->\n" + stringify(docs));
+        // TODO: Buggy, could not call twice, need to check why.
+        // debug.print("---------------------------------->\n" + stringify(docs));
+        return docs;
+    }
+
+    /**
+     * Parse from one full string of the document data.
+     * 
+     * @param data string to be converted to list of documents.
+     * @param body is a callback of the document text. Set null if not used.
+     * @return list of document object.
+     */
+    public static LinkedList<Document> parse(String data, Lambda body) throws Exception {
+        debug.setFunctionName("parse").print("Invoked.");
+        // Init needed vars
+        LinkedList<Document> docs = new LinkedList<Document>();
+        boolean isPassedFirstDoc = false;
+        String[] toBeParsed = data.split("[ \r?\n]");
+        String lastTag = "";
+        String docId = "";
+        String title = "";
+        String text = "";
+        final int lastIndex = toBeParsed.length - 1;
+
+        // Start parsing
+        try {
+            for (int x = 0; x < toBeParsed.length; x++) {
+                String curWord = toBeParsed[x];
+                // Case for the doc name.
+                if (curWord.trim().equals(TAGS[0]))
+                    lastTag = TAGS[0];
+                // Case for the title
+                if (curWord.trim().equals(TAGS[1]))
+                    lastTag = TAGS[1];
+                // Case for the text
+                if (curWord.trim().equals(TAGS[2]))
+                    lastTag = TAGS[2];
+                // Last case, assign and go to next
+                if (isATag(curWord.trim()) || lastIndex <= x) {
+                    if (((curWord.trim().equals(TAGS[0]) || lastIndex <= x)) && isPassedFirstDoc) {
+                        debug.print("text = " + text);
+                        if (lastIndex <= x)
+                            text += curWord + '\n';
+                        if (body != null)
+                            text = (String) body.callback(text);
+                        docs.addLast(new Document(docId.trim(), title.trim(), text.trim()));
+                        docId = "";
+                        title = "";
+                        text = "";
+                    }
+                    isPassedFirstDoc = true;
+                    continue;
+                }
+
+                // Case for putting the data in document
+                if (lastTag.equals(TAGS[0]))
+                    docId += curWord + " ";
+                if (lastTag.equals(TAGS[1]))
+                    title += curWord + " ";
+                if (lastTag.equals(TAGS[2]))
+                    text += curWord + " ";
+                else
+                    text += '\n';
+            }
+        } catch (Exception err) {
+            throw new Exception("Could not parse file data. Invalid Format.");
+        }
+
+        // Return Docs
+        // TODO: Buggy, could not call twice, need to check why.
+        // debug.print("---------------------------------->\n" + stringify(docs));
         return docs;
     }
 

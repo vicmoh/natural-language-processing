@@ -36,7 +36,7 @@ check_token:
 	diff ./output/data.tokenized ./examples/samples/samples.tokenized
 
 check_tagged:
-	diff ./output/data.tokenized ./examples/samples/samples.tagged
+	diff ./output/data.tagged ./examples/samples/samples.tagged
 
 #-------------------------------------------------
 # GitHub and cleans
