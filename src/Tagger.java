@@ -98,7 +98,7 @@ public class Tagger {
                 toBeReturn += tokens[i] + "/" + tags[i] + " ";
 
             // To be return
-            return toBeReturn.replaceAll("[ ]+[\\r?\\n]+", "\n");
+            return toBeReturn.replaceAll("[ ]+[\r]*[\n]+", "\n");
         });
 
         // Output

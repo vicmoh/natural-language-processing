@@ -765,7 +765,7 @@ class Lexer {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1: 
-            { return new Token(Token.ERROR, yytext(), yyline, yycolumn);
+            { return new Token(Token.PUNCTUATION, yytext(), yyline, yycolumn);
             } 
             // fall through
           case 9: break;

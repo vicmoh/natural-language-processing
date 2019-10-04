@@ -35,7 +35,7 @@ check_split:
 check_token:
 	diff ./output/data.tokenized ./examples/samples/samples.tokenized
 
-check_tagged:
+check_tag:
 	diff ./output/data.tagged ./examples/samples/samples.tagged
 
 #-------------------------------------------------

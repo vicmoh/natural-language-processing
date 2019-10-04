@@ -149,7 +149,7 @@ public class Document {
         // Init needed vars
         LinkedList<Document> docs = new LinkedList<Document>();
         boolean isPassedFirstDoc = false;
-        String[] toBeParsed = data.split("[ \r?\n]");
+        String[] toBeParsed = data.split("[ \r\n]|[ \n]");
         String lastTag = "";
         String docId = "";
         String title = "";

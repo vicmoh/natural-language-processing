@@ -72,4 +72,4 @@ hypCase2 = [\w]+[-][\w]+
 /* Other attribute  */
 {identifier}                    { return new Token(Token.ID, yytext(), yyline, yycolumn); }
 {WhiteSpace}+                   {  }
-.                               { return new Token(Token.ERROR, yytext(), yyline, yycolumn); }
+.                               { return new Token(Token.PUNCTUATION, yytext(), yyline, yycolumn); }
