@@ -2,7 +2,7 @@ NLP=.:./packages/opennlp-tools-1.9.1.jar
 JFLEX=./packages/jflex-1.7.0/bin/jflex
 SRC_PATH=./src/*.java ./src/lib/*.java ./src/flex/*.java
 
-all: flex compile sentencer tokenizer
+all: flex compile sentencer tokenizer tagger
 
 compile_all: flex compile
 
@@ -22,6 +22,9 @@ sentencer:
 tokenizer:
 	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. Tokenizer ../output/data.splitted
 
+tagger:
+	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. Tagger ../output/data.tokenized
+
 #-------------------------------------------------
 # Check commands
 #-------------------------------------------------
@@ -31,6 +34,9 @@ check_split:
 
 check_token:
 	diff ./output/data.tokenized ./examples/samples/samples.tokenized
+
+check_tagged:
+	diff ./output/data.tokenized ./examples/samples/samples.tagged
 
 #-------------------------------------------------
 # GitHub and cleans

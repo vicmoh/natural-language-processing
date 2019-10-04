@@ -71,7 +71,7 @@ public class Document {
         // Init needed vars
         LinkedList<Document> docs = new LinkedList<Document>();
         boolean isPassedFirstDoc = false;
-        String[] toBeParsed = data.split(" ");
+        String[] toBeParsed = data.split("[ ]");
         String lastTag = "";
         String docId = "";
         String title = "";
