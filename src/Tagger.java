@@ -67,12 +67,16 @@ public class Tagger {
     public static void main(String args[]) throws Exception {
         if (args[0].length() < 1)
             throw new Exception("Argument is less than 1, no file detected.");
+
+        // Setup
+        final String TOKEN_NLP = "../packages/OpenNLP_models/en-token.bin";
+        final String MAXENT_NLP = "../packages/OpenNLP_models/en-pos-maxent.bin";
         String fileName = args[0];
         debug.setFunctionName("mains");
         debug.print("Invoked with file: " + args[0]);
 
         // Init
-        InputStream posTagStream = new FileInputStream("../packages/OpenNLP_models/en-pos-maxent.bin");
+        InputStream posTagStream = new FileInputStream(MAXENT_NLP);
         POSModel posModel = new POSModel(posTagStream);
         POSTaggerME posTagger = new POSTaggerME(posModel);
 
