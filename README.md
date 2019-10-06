@@ -1,4 +1,12 @@
+
 # Machine Learning for Natural Language Processing
+
+## Author
+
+Name: `Vicky Mohammad`
+Email: `mohammav@uoguelph.ca`
+
+If you need help compiling and running the program, please do contact me.
 
 ## General description:
 
