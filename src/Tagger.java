@@ -9,6 +9,9 @@ import java.io.IOException;
 import opennlp.tools.postag.POSModel;
 import opennlp.tools.postag.POSTaggerME;
 
+/**
+ * Class for tagging the tokenized data to the tagged model data.
+ */
 public class Tagger {
     /**
      * Debugger for print.

@@ -11,6 +11,9 @@ import java.util.LinkedList;
 import opennlp.tools.sentdetect.SentenceDetectorME;
 import opennlp.tools.sentdetect.SentenceModel;
 
+/**
+ * Class to make the paragraph into sentences
+ */
 public class Sentencer {
     /**
      * The file output path
@@ -76,7 +79,7 @@ public class Sentencer {
             modelData.close();
             throw new Exception(err.getMessage());
         }
-        
+
         // Return
         modelData.close();
         return docs;

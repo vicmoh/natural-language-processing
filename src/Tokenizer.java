@@ -12,6 +12,9 @@ import java.io.InputStreamReader;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
+/**
+ * Tokenized the sentences into recognized words.
+ */
 public class Tokenizer {
     /**
      * The lexer scanner
