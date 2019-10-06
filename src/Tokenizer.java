@@ -81,30 +81,6 @@ public class Tokenizer {
     }
 
     /**
-     * The min tokens after processed.
-     */
-    public int minTokens = 0;
-    /**
-     * The max tokens after processed
-     */
-    public int maxTokens = 0;
-
-    /**
-     * The average tokens after processed
-     */
-    public double avgTokens = 0;
-
-    /**
-     * The total tokens after parsed.
-     */
-    public int totalTokens = 0;
-
-    /**
-     * To check if first doc is passed when parsing
-     */
-    public boolean isFirstDocPassed = false;
-
-    /**
      * Default constructor.
      */
     public Tokenizer() {
@@ -124,42 +100,6 @@ public class Tokenizer {
      */
     private Token getNextToken() throws java.io.IOException {
         return scanner.yylex();
-    }
-
-    /**
-     * Run this function to process the stats.
-     * 
-     * @param fileName
-     * @throws Exception
-     */
-    public void runTokenStats() throws Exception {
-        LinkedList<Document> docs = new LinkedList<Document>();
-        String tokenized = new Tokenizer().run(Sentencer.FILE_OUTPUT_PATH);
-        // Run detector
-        try {
-            docs = Document.parse(tokenized, text -> {
-                String[] tok = ((String) text).split("[ \n\r\t\f]");
-                String paragraph = "";
-                for (String each : tok) {
-                    paragraph += each + "\n";
-                    this.totalTokens++;
-                }
-                // Cases for min and max sentences
-                if (tok.length > this.maxTokens)
-                    this.maxTokens = tok.length;
-                if (tok.length < this.minTokens || isFirstDocPassed == false) {
-                    this.minTokens = tok.length;
-                    isFirstDocPassed = true;
-                }
-                // Return paragraph
-                return paragraph.trim();
-            });
-        } catch (Exception err) {
-            throw new Exception(err.getMessage());
-        }
-        // Return
-        this.isFirstDocPassed = false;
-        this.avgTokens = this.totalTokens / docs.size();
     }
 
     /**
@@ -206,18 +146,5 @@ public class Tokenizer {
         if (inFile != null)
             inFile.close();
         return toBeOutput;
-    }
-
-    /**
-     * Get the string output for the stats.
-     * 
-     * @return string of the stats.
-     */
-    public String toStatsString() {
-        String min = "Min tokens: " + Integer.toString(this.minTokens) + "\n";
-        String max = "Max tokens: " + Integer.toString(this.maxTokens) + "\n";
-        String avg = "Avg tokens: " + Double.toString(this.avgTokens) + "\n";
-        String total = "Total tokens: " + Double.toString(this.totalTokens) + "\n";
-        return min + max + avg + total;
     }
 }

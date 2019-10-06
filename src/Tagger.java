@@ -10,7 +10,6 @@ import opennlp.tools.postag.POSModel;
 import opennlp.tools.postag.POSTaggerME;
 
 public class Tagger {
-
     /**
      * Debugger for print.
      */

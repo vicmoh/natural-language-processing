@@ -48,31 +48,6 @@ public class Sentencer {
     }
 
     /**
-     * Min number of sentence in document.
-     */
-    public int minSentence = 0;
-
-    /**
-     * Max number of sentence in document
-     */
-    public int maxSentence = 0;
-
-    /**
-     * The avg sentence in the documents
-     */
-    public double avgSentence = 0;
-
-    /**
-     * The total sentence in the documents
-     */
-    public int totalSentence = 0;
-
-    /**
-     * To check if first doc is passed when parsing
-     */
-    public boolean isFirstDocPassed = false;
-
-    /**
      * Construct sentencer to split into sentence
      * 
      * @param fileName to be checked
@@ -91,17 +66,9 @@ public class Sentencer {
             docs = Document.parse(Util.readFile(fileName), text -> {
                 String paragraph = "";
                 String sentence[] = detector.sentDetect((String) text);
-                for (String each : sentence) {
+                for (String each : sentence)
                     paragraph += each + "\n";
-                    this.totalSentence++;
-                }
-                // Cases for min and max sentences
-                if (sentence.length > this.maxSentence)
-                    this.maxSentence = sentence.length;
-                if (sentence.length < this.minSentence || isFirstDocPassed == false) {
-                    this.minSentence = sentence.length;
-                    isFirstDocPassed = true;
-                }
+
                 // Return paragraph
                 return paragraph.trim();
             });
@@ -109,23 +76,9 @@ public class Sentencer {
             modelData.close();
             throw new Exception(err.getMessage());
         }
+        
         // Return
-        this.isFirstDocPassed = false;
-        this.avgSentence = this.totalSentence / docs.size();
         modelData.close();
         return docs;
-    }
-
-    /**
-     * Get the string of the stats result.
-     * 
-     * @return the stats result.
-     */
-    public String toStatsString() {
-        String min = "Min sentences: " + Integer.toString(this.minSentence) + "\n";
-        String max = "Max sentences: " + Integer.toString(this.maxSentence) + "\n";
-        String avg = "Avg sentences: " + Double.toString(this.avgSentence) + "\n";
-        String total = "Total sentences: " + Double.toString(this.totalSentence) + "\n";
-        return min + max + avg + total;
     }
 }
