@@ -42,8 +42,6 @@ class Analyzer {
         // Calculate for tokens
         for (Document doc : tokDocs) {
             totalTokens += doc.numOfTokens;
-            totalSentence += doc.numOfSentences;
-            // Count for tok
             if (doc.numOfTokens > maxTokens)
                 maxTokens = doc.numOfTokens;
             if (doc.numOfTokens < minTokens || isFirstDocPassedForTok == false) {
@@ -53,9 +51,7 @@ class Analyzer {
         }
         // Calculate for sentences
         for (Document doc : senDocs) {
-            totalTokens += doc.numOfTokens;
             totalSentence += doc.numOfSentences;
-            // Count for sen
             if (doc.numOfSentences > maxSentence)
                 maxSentence = doc.numOfSentences;
             if (doc.numOfSentences < minSentence || isFirstDocPassedForSen == false) {

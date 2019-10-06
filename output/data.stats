@@ -2,10 +2,10 @@ File: ../assets/samples.txt
 Number of documents: 5
 Min sentences: 6
 Max sentences: 23
-Avg sentences: 15.0
-Total sentences: 77.0
+Avg sentences: 13.0
+Total sentences: 67.0
 Min tokens: 102
 Max tokens: 859
-Avg tokens: 633.0
-Total tokens: 3168.0
+Avg tokens: 338.0
+Total tokens: 1690.0
 
