@@ -33,6 +33,8 @@ class Analyzer {
             throw new Exception("Argument for the file must be passed.");
 
         // Init
+        String avgTokPerSenInDoc = "--- Average Tokens Per Sentence in Document ---\n";
+        int docsCount = 0;
         String fileName = args[0];
         Tokenizer tok = new Tokenizer();
         Sentencer sen = new Sentencer();
@@ -41,6 +43,7 @@ class Analyzer {
 
         // Calculate for tokens
         for (Document doc : tokDocs) {
+            docsCount++;
             totalTokens += doc.numOfTokens;
             if (doc.numOfTokens > maxTokens)
                 maxTokens = doc.numOfTokens;
@@ -48,6 +51,7 @@ class Analyzer {
                 minTokens = doc.numOfTokens;
                 isFirstDocPassedForTok = true;
             }
+            avgTokPerSenInDoc += "Document-" + doc.getID() + ": " + Double.toString(doc.avgTokInSentences) + "\n";
         }
         // Calculate for sentences
         for (Document doc : senDocs) {
@@ -60,8 +64,8 @@ class Analyzer {
             }
         }
         // Count the average
-        avgTokens = totalTokens / tokDocs.size();
-        avgSentence = totalSentence / senDocs.size();
+        avgTokens = (double) totalTokens / (double) tokDocs.size();
+        avgSentence = (double) totalSentence / (double) senDocs.size();
 
         // File?
         String fileBeingCheck = "File: " + fileName + "\n";
@@ -70,9 +74,10 @@ class Analyzer {
         // (2) What are the min, avg, and max document lengths of sentences?
         // (3) What are the min, avg, and max document lengths by the number of tokens?
         String statRes = toStatsString() + "\n";
+        // (4) Average number for all
 
         // Result
-        String result = fileBeingCheck + numOfDocs + statRes;
+        String result = fileBeingCheck + numOfDocs + statRes + avgTokPerSenInDoc;
         Util.writeFile("../output/data.stats", result);
     }
 

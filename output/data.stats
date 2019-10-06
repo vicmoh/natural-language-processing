@@ -1,11 +1,17 @@
-File: ../assets/articles.txt
-Number of documents: 92
-Min sentences: 3
-Max sentences: 212
-Avg sentences: 39.0
-Total sentences: 3667.0
-Min tokens: 51
-Max tokens: 4990
-Avg tokens: 910.0
-Total tokens: 83781.0
+File: ../assets/samples.txt
+Number of documents: 5
+Min sentences: 6
+Max sentences: 23
+Avg sentences: 13.4
+Total sentences: 67.0
+Min tokens: 102
+Max tokens: 859
+Avg tokens: 338.0
+Total tokens: 1690.0
 
+--- Average Tokens Per Sentence in Document ---
+Document-LA010190-0001: 51.0
+Document-LA010190-0002: 429.5
+Document-LA010190-0003: 116.5
+Document-LA010190-0004: 159.5
+Document-LA010190-0005: 88.5

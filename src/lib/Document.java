@@ -20,6 +20,7 @@ public class Document {
     // Counting
     public int numOfSentences = 0;
     public int numOfTokens = 0;
+    public double avgTokInSentences = 0;
 
     /**
      * Create a document model object.
@@ -46,8 +47,15 @@ public class Document {
             String[] tokens = eachSen.split("[ \r\n\t]");
             for (String eachTok : tokens)
                 numOfTokens++;
-
         }
+        this.avgTokInSentences = (double) numOfTokens / (double) numOfSentences;
+    }
+
+    /**
+     * Get the title of the document.
+     */
+    public String getID(){
+        return this.docId;
     }
 
     /**
