@@ -6,7 +6,7 @@
 Name: `Vicky Mohammad`
 Email: `mohammav@uoguelph.ca`
 
-If you need help compiling and running the program, please do contact me.
+If you need help compiling and running the program, or has some questions, please do contact me.
 
 ## General description
 
@@ -42,3 +42,9 @@ The program file directories is organized by:
  *  `src/` - The `.java` file containing the 4 program and helper classes.
     * `flex/` - flex library for parsing the documents.
     * `lib/` - Helper function folder to help code the 4 program.
+
+## Assumption
+
+Some assumptions:
+ * The data analysis includes the `text` and `title`.
+ * Number containing `comma` or `period` between them for example. `1,000,000` is count as one token.
