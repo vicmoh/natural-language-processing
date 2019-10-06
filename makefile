@@ -65,3 +65,4 @@ clean:
 	rm ./bin/*.class
 	rm -rf ./bin/lib
 	rm -rf ./bin/src
+	rm ./output/*
