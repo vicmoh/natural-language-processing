@@ -89,8 +89,8 @@ public class Tagger {
             String[] lines = toBeSplit.split("\n");
             for (String line : lines) {
                 // trimmed the token
-                String[] tokens = line.split("[ ]");
-                String[] trimmedTokens = line.split("[ ]");
+                String[] tokens = line.split("[ \n]");
+                String[] trimmedTokens = line.split("[ \n]");
                 debug.print("number of tokens = " + tokens.length);
                 debug.print("number of trimmed = " + trimmedTokens.length);
 
