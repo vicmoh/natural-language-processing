@@ -106,7 +106,7 @@ public class Document {
                     if (((trimmedCurWord.equals(TAGS[0]) || lastIndex <= x)) && isPassedFirstDoc) {
                         if (lastIndex <= x)
                             text += curWord;
-                        if (body != null){
+                        if (body != null) {
                             text = (String) body.callback(text);
                             title = (String) body.callback(title);
                         }

@@ -86,19 +86,26 @@ public class Tagger {
             String toBeSplit = (String) text;
             String toBeReturn = "";
 
-            // trimmed the token
-            String[] tokens = toBeSplit.split("[ ]");
-            String[] trimmedTokens = toBeSplit.split("[ ]");
-            debug.print("number of tokens = " + tokens.length);
-            debug.print("number of trimmed = " + trimmedTokens.length);
+            String[] lines = toBeSplit.split("\n");
+            for (String line : lines) {
+                // trimmed the token
+                String[] tokens = line.split("[ ]");
+                String[] trimmedTokens = line.split("[ ]");
+                debug.print("number of tokens = " + tokens.length);
+                debug.print("number of trimmed = " + trimmedTokens.length);
 
-            for (int x = 0; x < trimmedTokens.length; x++)
-                trimmedTokens[x] = trimmedTokens[x].replaceAll("[ \n\r]", "");
+                // Trimmed token
+                for (int x = 0; x < trimmedTokens.length; x++)
+                    trimmedTokens[x] = trimmedTokens[x].replaceAll("[ \n\r]", "");
 
-            // Process the token
-            String[] tags = posTagger.tag(trimmedTokens);
-            for (int i = 0; i < tokens.length; i++)
-                toBeReturn += tokens[i] + "/" + tags[i] + " ";
+                // Process the token
+                String[] tags = posTagger.tag(trimmedTokens);
+                for (int i = 0; i < tokens.length; i++)
+                    toBeReturn += tokens[i] + "/" + tags[i] + " ";
+
+                // New line
+                toBeReturn += "\n";
+            }
 
             // To be return
             return toBeReturn.replaceAll("[ ]+[\r]*[\n]+", "\n");
