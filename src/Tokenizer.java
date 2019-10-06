@@ -13,6 +13,12 @@ public class Tokenizer {
     private static Debugger debug = Debugger.init().setClassName("Tokenizer").showDebugPrint(false);
 
     /**
+     * Default constructor
+     */
+    private Tokenizer() {
+    }
+
+    /**
      * Construct a scanner.
      * 
      * @param lexer
@@ -66,25 +72,19 @@ public class Tokenizer {
     }
 
     /**
-     * Main function to run the program.
+     * Parse the file.
      * 
-     * @param argv
+     * @param fileName
+     * @return the parse file to the result string.
      */
-    public static void main(String argv[]) throws Exception {
-        if (argv.length < 1)
-            throw new Exception("Could not find file path.");
-
-        // Init setup for file name and path
-        final String fileName = argv[0];
-        final String OUTPUT_PATH = "../output/data.tokenized";
-
+    public String run(String fileName) throws Exception {
         // Try to parse
+        String toBeOutput = "";
         InputStream inFile = null;
         try {
             inFile = new FileInputStream(fileName);
             Tokenizer scanner = new Tokenizer(new Lexer(new InputStreamReader(inFile)));
             Token tok = null;
-            String toBeOutput = "";
             boolean lastTokType = false;
             boolean isFirstTokPassed = false;
             while ((tok = scanner.getNextToken()) != null) {
@@ -108,13 +108,30 @@ public class Tokenizer {
                         toBeOutput += tok.m_value;
                 }
             }
-            Util.writeFile(OUTPUT_PATH, toBeOutput);
         } catch (Exception err) {
             throw new Exception(err.toString());
         }
-
         // Close the file and end
         if (inFile != null)
             inFile.close();
+        return toBeOutput;
+    }
+
+    /**
+     * Main function to run the program.
+     * 
+     * @param argv
+     */
+    public static void main(String argv[]) throws Exception {
+        if (argv.length < 1)
+            throw new Exception("Could not find file path.");
+
+        // Init setup for file name and path
+        final String fileName = argv[0];
+        final String OUTPUT_PATH = "../output/data.tokenized";
+
+        // Run
+        Tokenizer tok = new Tokenizer();
+        Util.writeFile(OUTPUT_PATH, tok.run(fileName));
     }
 }
