@@ -22,8 +22,8 @@ It will create the `.class` file to `bin/` folder.
 all process output will be on `output/` folder.
 
 To run other input file by assigning `INPUT` argument:
- * `make INPUT="../assets/articles.txt"`
- * This will run `../assets/articles.txt` instead.
+ * type: `make INPUT="../assets/articles.txt"`
+ * This will run `../assets/articles.txt` as input file instead.
 
 The `output/` after process will contain:
  * `data.splitted` - created from `Sentencer.java`
