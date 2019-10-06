@@ -107,8 +107,8 @@ public class Document {
                         if (lastIndex <= x)
                             text += curWord;
                         if (body != null) {
-                            text = (String) body.callback(text);
-                            title = (String) body.callback(title);
+                            text = (String) body.callback(text.trim());
+                            title = (String) body.callback(title.trim());
                         }
                         docs.addLast(new Document(docId.trim(), title.trim(), text.trim()));
                         docId = "";
