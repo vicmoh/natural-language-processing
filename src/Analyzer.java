@@ -1,4 +1,5 @@
 import java.util.LinkedList;
+import java.util.ListIterator;
 
 import lib.*;
 
@@ -33,7 +34,6 @@ class Analyzer {
             throw new Exception("Argument for the file must be passed.");
 
         // Init
-        String avgTokPerSenInDoc = "--- Average Tokens Per Sentence in Document ---\n";
         int docsCount = 0;
         String fileName = args[0];
         Tokenizer tok = new Tokenizer();
@@ -43,7 +43,6 @@ class Analyzer {
 
         // Calculate for tokens
         for (Document doc : tokDocs) {
-            docsCount++;
             totalTokens += doc.numOfTokens;
             if (doc.numOfTokens > maxTokens)
                 maxTokens = doc.numOfTokens;
@@ -51,7 +50,6 @@ class Analyzer {
                 minTokens = doc.numOfTokens;
                 isFirstDocPassedForTok = true;
             }
-            avgTokPerSenInDoc += "Document-" + doc.getID() + ": " + Double.toString(doc.avgTokInSentences) + "\n";
         }
         // Calculate for sentences
         for (Document doc : senDocs) {
@@ -75,9 +73,20 @@ class Analyzer {
         // (3) What are the min, avg, and max document lengths by the number of tokens?
         String statRes = toStatsString() + "\n";
         // (4) Average number for all
+        String avgSenInAllToks = "Avg sentence lengths by the number of all tokens: ";
+        String avgSenInPerDocToks = "--- Avg sentence lengths by the number of per doc tokens ---\n";
+        ListIterator<Document> senIter = senDocs.listIterator();
+        ListIterator<Document> tokIter = tokDocs.listIterator();
+        while (tokIter.hasNext()) {
+            Document senDoc = senIter.next();
+            Document tokDoc = tokIter.next();
+            double avg = (double) senDoc.numOfSentences / (double) tokDoc.numOfTokens;
+            avgSenInPerDocToks += "Doc-" + tokDoc.getID() + ": " + avg + "\n";
+        }
+        avgSenInAllToks += Double.toString((double) avgSentence / (double) totalTokens) + "\n";
 
         // Result
-        String result = fileBeingCheck + numOfDocs + statRes + avgTokPerSenInDoc;
+        String result = fileBeingCheck + numOfDocs + statRes + avgSenInAllToks + avgSenInPerDocToks;
         Util.writeFile("../output/data.stats", result);
     }
 

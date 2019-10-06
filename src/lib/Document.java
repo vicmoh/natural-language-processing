@@ -21,6 +21,7 @@ public class Document {
     public int numOfSentences = 0;
     public int numOfTokens = 0;
     public double avgTokInSentences = 0;
+    public double avgSenInTok = 0;
 
     /**
      * Create a document model object.
@@ -49,12 +50,13 @@ public class Document {
                 numOfTokens++;
         }
         this.avgTokInSentences = (double) numOfTokens / (double) numOfSentences;
+        this.avgSenInTok = (double) numOfSentences / (double) numOfTokens;
     }
 
     /**
      * Get the title of the document.
      */
-    public String getID(){
+    public String getID() {
         return this.docId;
     }
 
