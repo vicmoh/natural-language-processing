@@ -12,33 +12,16 @@ import opennlp.tools.postag.POSTaggerME;
 public class Tagger {
 
     /**
-     * Debugger for print
+     * Debugger for print.
      */
-    static final Debugger debug = Debugger.init().setClassName("Tagger").showDebugPrint(true);
+    static final Debugger debug = Debugger.init().setClassName("Tagger").showDebugPrint(false);
 
-    // /**
-    // *
-    // * @param arg
-    // * @return
-    // * @throws Exception
-    // */
-    // public static String readString(String arg) throws Exception {
-    // debug.setFunctionName("readString");
-    // InputStream inFile = new FileInputStream(arg);
-    // BufferedReader buf = new BufferedReader(new InputStreamReader(inFile));
-    // StringBuilder sb = new StringBuilder();
-    // String line = buf.readLine();
-    // String toBeReturn = "";
-    // while (line != null) {
-    // sb.append(line + " ");
-    // line = buf.readLine();
-    // toBeReturn = toBeReturn + line + "\n";
-    // debug.print(toBeReturn);
-    // }
-    // buf.close();
-    // return toBeReturn;
-    // }
-
+    /**
+     * Read a file into one full string.
+     * 
+     * @param filePath
+     * @return The file strings
+     */
     public static String readLine(String filePath) {
         debug.setClassName("readLine");
         debug.print("File path = " + filePath);
@@ -50,7 +33,6 @@ public class Tagger {
             if (temp != null)
                 line += temp + " \n";
             while (temp != null) {
-                System.out.println(line);
                 temp = reader.readLine();
                 if (temp == null)
                     break;

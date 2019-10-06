@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class Document {
     // Debugger
-    private static final Debugger debug = Debugger.init().showDebugPrint(true).setClassName("Document");
+    private static final Debugger debug = Debugger.init().showDebugPrint(false).setClassName("Document");
     // Data tag
     private static final String[] TAGS = { "$DOC", "$TITLE", "$TEXT" };
     // The attribute containing in the document.

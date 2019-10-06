@@ -10,7 +10,7 @@ public class Tokenizer {
     /**
      * Debugger for printing.
      */
-    private static Debugger debug = Debugger.init().setClassName("Tokenizer").showDebugPrint(true);
+    private static Debugger debug = Debugger.init().setClassName("Tokenizer").showDebugPrint(false);
 
     /**
      * Construct a scanner.
@@ -71,7 +71,6 @@ public class Tokenizer {
      * @param argv
      */
     public static void main(String argv[]) throws Exception {
-        System.out.println("Starting program...");
         if (argv.length < 1)
             throw new Exception("Could not find file path.");
 
@@ -111,13 +110,11 @@ public class Tokenizer {
             }
             Util.writeFile(OUTPUT_PATH, toBeOutput);
         } catch (Exception err) {
-            System.out.println("Unexpected exception:");
-            err.printStackTrace();
+            throw new Exception(err.toString());
         }
 
         // Close the file and end
         if (inFile != null)
             inFile.close();
-        System.out.println("Program ended.");
     }
 }

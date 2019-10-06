@@ -13,7 +13,7 @@ public class Util {
     /**
      * Setup debugger for debug printing.
      */
-    private static Debugger debug = Debugger.init().showDebugPrint(true).setClassName("Parser");
+    private static Debugger debug = Debugger.init().showDebugPrint(false).setClassName("Parser");
 
     /**
      * Read the string and return whole file into one string, without new line.
