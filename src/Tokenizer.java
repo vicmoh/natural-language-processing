@@ -13,7 +13,15 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 
 public class Tokenizer {
+    /**
+     * The lexer scanner
+     */
     private Lexer scanner = null;
+
+    /**
+     * The output path for tokenizer
+     */
+    public final static String OUTPUT_PATH = "../output/data.tokenized";
 
     /**
      * Debugger for printing.
@@ -31,9 +39,6 @@ public class Tokenizer {
 
         // Init setup for file name and path
         final String fileName = argv[0];
-        final String OUTPUT_PATH = "../output/data.tokenized";
-
-        // Run
         Tokenizer tok = new Tokenizer();
         Util.writeFile(OUTPUT_PATH, tok.run(fileName));
     }

@@ -17,6 +17,9 @@ public class Document {
     private String docId = "";
     private String title = "";
     private String text = "";
+    // Counting
+    public int numOfSentences = 0;
+    public int numOfTokens = 0;
 
     /**
      * Create a document model object.
@@ -34,6 +37,18 @@ public class Document {
         this.docId = docId;
         this.title = title;
         this.text = text;
+
+        String docString = title + "\n" + text;
+        String[] sentences = docString.split("[\n]+");
+        
+        for (String eachSen : sentences) {
+            numOfSentences++;
+            String[] tokens = eachSen.split("[ \r\n\t]");
+            for (String eachTok : tokens)
+                numOfTokens++;
+
+        }
+        System.out.println(numOfSentences);
     }
 
     /**
