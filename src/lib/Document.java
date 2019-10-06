@@ -40,7 +40,7 @@ public class Document {
 
         String docString = title + "\n" + text;
         String[] sentences = docString.split("[\n]+");
-        
+
         for (String eachSen : sentences) {
             numOfSentences++;
             String[] tokens = eachSen.split("[ \r\n\t]");
@@ -48,7 +48,6 @@ public class Document {
                 numOfTokens++;
 
         }
-        System.out.println(numOfSentences);
     }
 
     /**
