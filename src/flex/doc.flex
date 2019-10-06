@@ -55,21 +55,21 @@ hypCase2 = [\w]+[-][\w]+
    code, that will be executed when the scanner matches the associated
    regular expression. */
    
-// [$][a-zA-Z]+                   { return new Token(Token.LABEL, yytext(), yyline, yycolumn); }
-\$DOC                           { return new Token(Token.LABEL, yytext(), yyline, yycolumn); }
-\$TITLE                         { return new Token(Token.LABEL, yytext(), yyline, yycolumn); }
-\$TEXT                          { return new Token(Token.LABEL, yytext(), yyline, yycolumn); }
-{aposCase1}                     { return new Token(Token.APOSTROPHIZED, yytext(), yyline, yycolumn); }
-{aposCase2}                     { return new Token(Token.APOSTROPHIZED, yytext(), yyline, yycolumn); }
-{aposCase3}                     { return new Token(Token.APOSTROPHIZED, yytext(), yyline, yycolumn); }
-{aposCase4}                     { return new Token(Token.APOSTROPHIZED, yytext(), yyline, yycolumn); }
-{hypCase1}                      { return new Token(Token.HYPHENATED, yytext(), yyline, yycolumn); }
-{hypCase2}                      { return new Token(Token.HYPHENATED, yytext(), yyline, yycolumn); }
-[\w]+                           { return new Token(Token.WORD, yytext(), yyline, yycolumn); }
-[0-9]|[-+]?[0-9]+[.]?[0-9]+     { return new Token(Token.NUMBER, yytext(), yyline, yycolumn); } 
-{LineTerminator}+               { return new Token(Token.NEWLINE, yytext(), yyline, yycolumn); }
+// [$][a-zA-Z]+                      { return new Token(Token.LABEL, yytext(), yyline, yycolumn); }
+\$DOC                                { return new Token(Token.LABEL, yytext(), yyline, yycolumn); }
+\$TITLE                              { return new Token(Token.LABEL, yytext(), yyline, yycolumn); }
+\$TEXT                               { return new Token(Token.LABEL, yytext(), yyline, yycolumn); }
+{aposCase1}                          { return new Token(Token.APOSTROPHIZED, yytext(), yyline, yycolumn); }
+{aposCase2}                          { return new Token(Token.APOSTROPHIZED, yytext(), yyline, yycolumn); }
+{aposCase3}                          { return new Token(Token.APOSTROPHIZED, yytext(), yyline, yycolumn); }
+{aposCase4}                          { return new Token(Token.APOSTROPHIZED, yytext(), yyline, yycolumn); }
+{hypCase1}                           { return new Token(Token.HYPHENATED, yytext(), yyline, yycolumn); }
+{hypCase2}                           { return new Token(Token.HYPHENATED, yytext(), yyline, yycolumn); }
+[\w]+                                { return new Token(Token.WORD, yytext(), yyline, yycolumn); }
+[-+]?[0-9]|[-+]?[0-9]+[.]?[0-9]+     { return new Token(Token.NUMBER, yytext(), yyline, yycolumn); } 
+{LineTerminator}+                    { return new Token(Token.NEWLINE, yytext(), yyline, yycolumn); }
 
 /* Other attribute  */
-{identifier}                    { return new Token(Token.ID, yytext(), yyline, yycolumn); }
-{WhiteSpace}+                   {  }
-.                               { return new Token(Token.PUNCTUATION, yytext(), yyline, yycolumn); }
+{identifier}                         { return new Token(Token.ID, yytext(), yyline, yycolumn); }
+{WhiteSpace}+                        {  }
+.                                    { return new Token(Token.PUNCTUATION, yytext(), yyline, yycolumn); }

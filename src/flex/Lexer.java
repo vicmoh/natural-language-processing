@@ -190,11 +190,11 @@ class Lexer {
 
   private static final String ZZ_ACTION_PACKED_0 =
     "\1\0\1\1\1\2\1\3\2\4\1\5\2\1\2\4"+
-    "\3\0\1\5\4\0\1\5\1\6\1\7\1\5\1\7"+
-    "\4\0\1\6\1\0\1\10\2\0\2\6\3\0\1\6";
+    "\3\0\1\5\1\6\3\0\1\5\1\7\1\6\1\5"+
+    "\4\0\1\7\1\0\1\10\2\0\2\7\3\0\1\7";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[39];
+    int [] result = new int[38];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -221,12 +221,12 @@ class Lexer {
   private static final String ZZ_ROWMAP_PACKED_0 =
     "\0\0\0\25\0\52\0\77\0\124\0\151\0\176\0\223"+
     "\0\250\0\275\0\322\0\347\0\374\0\u0111\0\u0126\0\u013b"+
-    "\0\u0150\0\u0165\0\u017a\0\u018f\0\u01a4\0\u0111\0\25\0\u013b"+
-    "\0\u01b9\0\u01ce\0\u01e3\0\u0126\0\u01f8\0\u020d\0\25\0\u0222"+
-    "\0\u0237\0\u024c\0\u0261\0\u0276\0\u028b\0\u02a0\0\u028b";
+    "\0\u0150\0\u0165\0\u017a\0\u018f\0\u01a4\0\u0111\0\25\0\u01b9"+
+    "\0\u01ce\0\u01e3\0\u0126\0\u01f8\0\u020d\0\25\0\u0222\0\u0237"+
+    "\0\u024c\0\u0261\0\u0276\0\u028b\0\u02a0\0\u028b";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[39];
+    int [] result = new int[38];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -261,17 +261,17 @@ class Lexer {
     "\1\0\1\24\1\0\1\24\1\0\10\24\6\0\2\25"+
     "\1\0\1\25\1\0\1\25\1\0\10\25\6\0\1\26"+
     "\24\0\2\27\1\0\1\27\1\0\1\27\1\0\10\27"+
-    "\6\0\1\30\17\0\1\16\14\0\1\31\27\0\1\32"+
-    "\1\0\1\33\12\0\1\27\1\0\1\27\17\0\2\24"+
-    "\1\34\1\24\1\0\1\24\1\0\10\24\6\0\2\35"+
-    "\1\0\1\35\1\36\1\35\1\0\10\35\17\0\1\37"+
-    "\25\0\1\40\30\0\1\41\6\0\2\42\1\0\1\42"+
-    "\1\36\1\42\1\0\10\42\6\0\2\43\1\0\1\43"+
-    "\1\0\1\43\1\0\10\43\22\0\1\44\22\0\1\37"+
-    "\12\0\2\42\1\0\1\42\1\45\1\42\1\0\10\42"+
-    "\6\0\2\43\1\46\1\43\1\0\1\43\1\0\10\43"+
-    "\23\0\1\37\7\0\2\47\1\0\1\47\1\0\1\47"+
-    "\1\0\10\47\13\0\1\27\14\0";
+    "\6\0\1\20\17\0\1\16\14\0\1\30\27\0\1\31"+
+    "\1\0\1\32\12\0\1\27\1\0\1\27\17\0\2\24"+
+    "\1\33\1\24\1\0\1\24\1\0\10\24\6\0\2\34"+
+    "\1\0\1\34\1\35\1\34\1\0\10\34\17\0\1\36"+
+    "\25\0\1\37\30\0\1\40\6\0\2\41\1\0\1\41"+
+    "\1\35\1\41\1\0\10\41\6\0\2\42\1\0\1\42"+
+    "\1\0\1\42\1\0\10\42\22\0\1\43\22\0\1\36"+
+    "\12\0\2\41\1\0\1\41\1\44\1\41\1\0\10\41"+
+    "\6\0\2\42\1\45\1\42\1\0\1\42\1\0\10\42"+
+    "\23\0\1\36\7\0\2\46\1\0\1\46\1\0\1\46"+
+    "\1\0\10\46\13\0\1\27\14\0";
 
   private static int [] zzUnpackTrans() {
     int [] result = new int[693];
@@ -312,12 +312,11 @@ class Lexer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\1\0\1\11\11\1\3\0\1\1\4\0\3\1\1\11"+
-    "\1\1\4\0\1\1\1\0\1\11\2\0\2\1\3\0"+
-    "\1\1";
+    "\1\0\1\11\11\1\3\0\2\1\3\0\3\1\1\11"+
+    "\4\0\1\1\1\0\1\11\2\0\2\1\3\0\1\1";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[39];
+    int [] result = new int[38];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -790,12 +789,12 @@ class Lexer {
             // fall through
           case 13: break;
           case 6: 
-            { return new Token(Token.HYPHENATED, yytext(), yyline, yycolumn);
+            { return new Token(Token.NUMBER, yytext(), yyline, yycolumn);
             } 
             // fall through
           case 14: break;
           case 7: 
-            { return new Token(Token.NUMBER, yytext(), yyline, yycolumn);
+            { return new Token(Token.HYPHENATED, yytext(), yyline, yycolumn);
             } 
             // fall through
           case 15: break;
