@@ -1,13 +1,13 @@
-File: ../assets/samples.txt
-Number of documents: 5
-Min sentences: 6
-Max sentences: 23
-Avg sentences: 13.4
-Total sentences: 67.0
-Min tokens: 102
-Max tokens: 859
-Avg tokens: 338.0
-Total tokens: 1690.0
+File: ../assets/articles.txt
+Number of documents: 92
+Min sentences: 3
+Max sentences: 212
+Avg sentences: 39.858695652173914
+Total sentences: 3667.0
+Min tokens: 51
+Max tokens: 4990
+Avg tokens: 910.6195652173913
+Total tokens: 83777.0
 
 --- Average Tokens Per Sentence in Document ---
 Document-LA010190-0001: 51.0
@@ -15,3 +15,90 @@ Document-LA010190-0002: 429.5
 Document-LA010190-0003: 116.5
 Document-LA010190-0004: 159.5
 Document-LA010190-0005: 88.5
+Document-LA010190-0006: 78.5
+Document-LA010190-0007: 121.5
+Document-LA010190-0008: 172.0
+Document-LA010190-0009: 25.5
+Document-LA010190-0010: 279.5
+Document-LA010190-0011: 510.0
+Document-LA010190-0012: 31.5
+Document-LA010190-0013: 456.0
+Document-LA010190-0014: 100.5
+Document-LA010190-0015: 102.5
+Document-LA010190-0016: 52.5
+Document-LA010190-0017: 78.5
+Document-LA010190-0018: 395.5
+Document-LA010190-0019: 1446.5
+Document-LA010190-0020: 317.5
+Document-LA010190-0021: 708.5
+Document-LA010190-0022: 118.5
+Document-LA010190-0023: 1669.0
+Document-LA010190-0024: 1228.0
+Document-LA010190-0025: 1070.0
+Document-LA010190-0026: 272.0
+Document-LA010190-0027: 477.0
+Document-LA010190-0028: 79.0
+Document-LA010190-0029: 132.0
+Document-LA010190-0030: 281.0
+Document-LA010190-0031: 631.5
+Document-LA010190-0032: 149.5
+Document-LA010190-0033: 219.5
+Document-LA010190-0034: 84.0
+Document-LA010190-0035: 44.5
+Document-LA010190-0036: 80.5
+Document-LA010190-0037: 41.0
+Document-LA010190-0038: 1393.0
+Document-LA010190-0039: 496.0
+Document-LA010190-0040: 162.0
+Document-LA010190-0041: 67.0
+Document-LA010190-0042: 883.0
+Document-LA010190-0043: 577.5
+Document-LA010190-0044: 615.0
+Document-LA010190-0045: 347.0
+Document-LA010190-0046: 618.5
+Document-LA010190-0047: 502.0
+Document-LA010190-0048: 240.5
+Document-LA010190-0049: 235.5
+Document-LA010190-0050: 53.5
+Document-LA010190-0051: 28.0
+Document-LA010190-0052: 26.0
+Document-LA010190-0053: 122.0
+Document-LA010190-0054: 295.5
+Document-LA010190-0055: 794.5
+Document-LA010190-0056: 1569.5
+Document-LA010190-0057: 670.0
+Document-LA010190-0058: 584.0
+Document-LA010190-0059: 381.0
+Document-LA010190-0060: 28.5
+Document-LA010190-0061: 274.0
+Document-LA010190-0062: 516.5
+Document-LA010190-0063: 1736.5
+Document-LA010190-0064: 886.0
+Document-LA010190-0065: 228.0
+Document-LA010190-0066: 345.5
+Document-LA010190-0067: 217.5
+Document-LA010190-0068: 56.0
+Document-LA010190-0069: 84.5
+Document-LA010190-0070: 60.0
+Document-LA010190-0071: 804.5
+Document-LA010190-0072: 360.0
+Document-LA010190-0073: 235.5
+Document-LA010190-0074: 208.0
+Document-LA010190-0075: 232.0
+Document-LA010190-0076: 771.5
+Document-LA010190-0077: 733.0
+Document-LA010190-0078: 1245.0
+Document-LA010190-0079: 51.5
+Document-LA010190-0080: 54.0
+Document-LA010190-0081: 2495.0
+Document-LA010190-0082: 401.5
+Document-LA010190-0083: 322.0
+Document-LA010190-0084: 345.5
+Document-LA010190-0085: 209.5
+Document-LA010190-0086: 1465.5
+Document-LA010190-0087: 905.5
+Document-LA010190-0088: 1197.0
+Document-LA010190-0089: 976.5
+Document-LA010190-0090: 611.0
+Document-LA010190-0091: 362.5
+Document-LA010190-0092: 509.5
