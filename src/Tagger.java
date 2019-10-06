@@ -89,8 +89,11 @@ public class Tagger {
             // trimmed the token
             String[] tokens = toBeSplit.split("[ ]");
             String[] trimmedTokens = toBeSplit.split("[ ]");
+            debug.print("number of tokens = " + tokens.length);
+            debug.print("number of trimmed = " + trimmedTokens.length);
+
             for (int x = 0; x < trimmedTokens.length; x++)
-                trimmedTokens[x] = trimmedTokens[x].trim();
+                trimmedTokens[x] = trimmedTokens[x].replaceAll("[ \n\r]", "");
 
             // Process the token
             String[] tags = posTagger.tag(trimmedTokens);

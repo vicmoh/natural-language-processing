@@ -215,8 +215,8 @@ public class Document {
         if (this.docId.equals("") || this.title.equals("") || this.text.equals(""))
             return "";
         String docId = "$DOC " + this.docId + "\n";
-        String title = "$TITLE\n" + this.title + "\n";
         String text = "$TEXT\n" + this.text + "\n";
+        String title = "$TITLE\n" + this.title + "\n";
         return docId + title + text;
     }
 }
