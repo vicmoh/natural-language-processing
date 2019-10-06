@@ -13,9 +13,13 @@ import opennlp.tools.sentdetect.SentenceModel;
 
 public class Sentencer {
     /**
+     * The file output path
+     */
+    public static final String FILE_OUTPUT_PATH = "../output/data.splitted";
+    /**
      * The path for the OpenNLP models.
      */
-    private static final String OPEN_NLP_MODELS_PATH = "../packages/OpenNLP_models/en-sent.bin";
+    public static final String OPEN_NLP_MODELS_PATH = "../packages/OpenNLP_models/en-sent.bin";
 
     /**
      * Set up a debugger for debug printing.
@@ -29,8 +33,7 @@ public class Sentencer {
      * @throws Exception
      */
     public static void main(String args[]) throws Exception {
-        // Check if file exist in argument.
-        final String FILE_OUTPUT_PATH = "../output/data.splitted";
+
         if (args.length <= 0)
             throw new Exception("Sorry, no file detected.");
 
@@ -103,11 +106,13 @@ public class Sentencer {
                 return paragraph.trim();
             });
         } catch (Exception err) {
+            modelData.close();
             throw new Exception(err.getMessage());
         }
         // Return
         this.isFirstDocPassed = false;
         this.avgSentence = this.totalSentence / docs.size();
+        modelData.close();
         return docs;
     }
 
@@ -117,9 +122,10 @@ public class Sentencer {
      * @return the stats result.
      */
     public String toStatsString() {
-        String min = "Min sentences: " + Integer.toString(minSentence) + "\n";
-        String max = "Max sentences: " + Integer.toString(maxSentence) + "\n";
-        String avg = "Avg sentences: " + Double.toString(avgSentence) + "\n";
-        return min + max + avg;
+        String min = "Min sentences: " + Integer.toString(this.minSentence) + "\n";
+        String max = "Max sentences: " + Integer.toString(this.maxSentence) + "\n";
+        String avg = "Avg sentences: " + Double.toString(this.avgSentence) + "\n";
+        String total = "Total sentences: " + Double.toString(this.totalSentence) + "\n";
+        return min + max + avg + total;
     }
 }

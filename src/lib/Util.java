@@ -26,15 +26,20 @@ public class Util {
         debug.setFunctionName("readString").print("Invoked.");
         try {
             InputStream inFile = new FileInputStream(filePath);
-            BufferedReader buffer = new BufferedReader(new InputStreamReader(inFile));
+            InputStreamReader in = new InputStreamReader(inFile);
+            BufferedReader buffer = new BufferedReader(in);
             StringBuilder sb = new StringBuilder();
             String line = buffer.readLine();
             while (line != null) {
                 sb.append(line + " ");
                 line = buffer.readLine();
             }
-            buffer.close();
-            inFile.close();
+            if (buffer != null)
+                buffer.close();
+            if (inFile != null)
+                inFile.close();
+            if (in != null)
+                in.close();
             return sb.toString();
         } catch (Exception exception) {
             throw new Exception("Exception ocurred. Could not read file.");
@@ -58,7 +63,8 @@ public class Util {
             throw new Exception("Failed to write file to the path. Path might be invalid.");
         } finally {
             try {
-                os.close();
+                if (os != null)
+                    os.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }

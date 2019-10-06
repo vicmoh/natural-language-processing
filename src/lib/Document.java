@@ -102,7 +102,6 @@ public class Document {
                     lastTag = TAGS[2];
                 // Last case, assign and go to next
                 if (isATag(trimmedCurWord) || lastIndex <= x) {
-                    debug.print("*************************** = " + text);
                     if (((trimmedCurWord.equals(TAGS[0]) || lastIndex <= x)) && isPassedFirstDoc) {
                         if (lastIndex <= x)
                             text += curWord;

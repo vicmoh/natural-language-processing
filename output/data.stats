@@ -3,4 +3,10 @@ Number of documents: 5
 Min sentences: 5
 Max sentences: 22
 Avg sentences: 12.0
+Total sentences: 62.0
+
+Min tokens: 103
+Max tokens: 860
+Avg tokens: 339.0
+Total tokens: 1695.0
 
