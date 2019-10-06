@@ -87,6 +87,8 @@ public class Tagger {
         });
 
         // Output
-        Util.writeFile("../output/data.tagged", Document.stringify(docs));
+        String res = Document.stringify(docs);
+        System.out.println(res);
+        Util.writeFile("../output/data.tagged", res);
     }
 }

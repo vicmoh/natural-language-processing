@@ -43,6 +43,8 @@ public class Tokenizer {
         // Init setup for file name and path
         final String fileName = argv[0];
         Tokenizer tok = new Tokenizer();
+        String res = tok.run(fileName);
+        System.out.println();
         Util.writeFile(OUTPUT_PATH, tok.run(fileName));
     }
 

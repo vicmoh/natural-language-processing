@@ -87,6 +87,7 @@ class Analyzer {
 
         // Result
         String result = fileBeingCheck + numOfDocs + statRes + avgSenInAllToks + avgSenInPerDocToks;
+        System.out.println(result);
         Util.writeFile("../output/data.stats", result);
     }
 

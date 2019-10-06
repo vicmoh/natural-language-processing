@@ -18,16 +18,16 @@ compile:
 	javac -Xlint:unchecked -classpath $(NLP) $(SRC_PATH) -d ./bin/
 
 sentencer:
-	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. Sentencer $(INPUT)
+	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. Sentencer $(INPUT) > ../output/data.splitted
 
 tokenizer:
-	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. Tokenizer ../output/data.splitted
+	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. Tokenizer ../output/data.splitted > ../output/data.tokenized
 
 tagger:
-	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. Tagger ../output/data.tokenized
+	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. Tagger ../output/data.tokenized > ../output/data.tagged
 
 analyzer:
-	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. Analyzer $(INPUT)
+	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. Analyzer $(INPUT) > ../output/data.stats
 
 #-------------------------------------------------
 # Check commands

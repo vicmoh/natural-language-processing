@@ -196,10 +196,13 @@ public class Document {
                 if (isATag(curWord.trim()) || lastIndex <= x) {
                     if (((curWord.trim().equals(TAGS[0]) || lastIndex <= x)) && isPassedFirstDoc) {
                         debug.print("text = " + text);
-                        if (lastIndex <= x)
-                            text += curWord + '\n';
+                        if (lastIndex <= x) {
+                            text += curWord;
+                            text = text.replaceAll("[\n][\n]+", "");
+                        }
                         if (body != null)
                             text = (String) body.callback(text);
+
                         docs.addLast(new Document(docId.trim(), title.trim(), text.trim()));
                         docId = "";
                         title = "";
@@ -216,8 +219,6 @@ public class Document {
                     title += curWord + " ";
                 if (lastTag.equals(TAGS[2]))
                     text += curWord + " ";
-                else
-                    text += '\n';
             }
         } catch (Exception err) {
             throw new Exception("Could not parse file data. Invalid Format.");
