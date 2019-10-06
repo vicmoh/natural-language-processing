@@ -26,10 +26,10 @@ To run other input file by assigning `INPUT` argument:
  * This will run `../assets/articles.txt` instead.
 
 The `output/` after process will contain:
- * `data.splitted`
- * `data.stats`
- * `data.tagged`
- * `data.tokenized`
+ * `data.splitted` - created from `Sentencer.java`
+ * `data.stats` - created from `Analyzer.java`
+ * `data.tagged` - created from `Tagger.java`
+ * `data.tokenized` - created from `Tokenizer.java`
 
 ## File and folder structure
 
@@ -42,6 +42,10 @@ The program file directories is organized by:
  *  `src/` - The `.java` file containing the 4 program and helper classes.
     * `flex/` - flex library for parsing the documents.
     * `lib/` - Helper function folder to help code the 4 program.
+        * `Analyzer.java` - The program to create the statistics
+        * `Sentencer.java` - The program to create the sentence splitting
+        * `Tagger.java` - The program to create the tagging with the NLP model.
+        * `Tokenizer.java` - The program to create the tokenized data.
 
 ## Assumption
 
