@@ -3,7 +3,7 @@ JFLEX=./packages/jflex-1.7.0/bin/jflex
 SRC_PATH=./src/*.java ./src/lib/*.java ./src/flex/*.java
 INPUT=../assets/samples.txt
 
-all: flex compile sentencer tokenizer tagger analyzer
+all: flex compile sentencer tokenizer tagger analyzer normalize
 
 compile_all: flex compile
 
@@ -28,6 +28,9 @@ tagger:
 
 analyzer:
 	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. Analyzer $(INPUT) > ../output/data.stats
+
+normalize:
+	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. Normalize ../output/data.tokenized > ../output/data.normalize
 
 #-------------------------------------------------
 # Check commands

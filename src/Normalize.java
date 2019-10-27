@@ -1,3 +1,4 @@
+import lib.*;
 import java.util.Scanner;
 import opennlp.tools.stemmer.PorterStemmer;
 
@@ -7,12 +8,7 @@ public class Normalize {
      */
     private static Debugger debug = Debugger.init().showDebugPrint(true).setClassName("Normalize");
 
-    /**
-     * Main functions to run the program
-     * @param args
-     * @throws Exception
-     */
-    public static void main(String args[]) throws Exception {
+    private static void test() {
         // Create an instance of stemmer
         PorterStemmer stemmer = new PorterStemmer();
 
@@ -26,5 +22,16 @@ public class Normalize {
                 System.out.print(" " + stemmer.stem(tokens[i]));
             System.out.println();
         }
+
+    }
+
+    /**
+     * Main functions to run the program
+     * 
+     * @param args
+     * @throws Exception
+     */
+    public static void main(String args[]) throws Exception {
+        test();
     }
 }
