@@ -25,7 +25,6 @@ public class Normalize {
                 System.out.print(" " + stemmer.stem(tokens[i]));
             System.out.println();
         }
-
     }
 
     /**
