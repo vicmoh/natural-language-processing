@@ -8,7 +8,10 @@ public class Normalize {
      */
     private static Debugger debug = Debugger.init().showDebugPrint(true).setClassName("Normalize");
 
-    private static void test() {
+    /**
+     * Function that comes from the example
+     */
+    private static void example() {
         // Create an instance of stemmer
         PorterStemmer stemmer = new PorterStemmer();
 
@@ -32,6 +35,6 @@ public class Normalize {
      * @throws Exception
      */
     public static void main(String args[]) throws Exception {
-        
+
     }
 }
