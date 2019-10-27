@@ -38,7 +38,7 @@ class Analyzer {
         String fileName = args[0];
         Tokenizer tok = new Tokenizer();
         Sentencer sen = new Sentencer();
-        LinkedList<Document> tokDocs = Document.parse(tok.run(fileName), null);
+        LinkedList<Document> tokDocs = Document.parse(tok.run(fileName), null, null, null);
         LinkedList<Document> senDocs = sen.run(fileName);
 
         // Calculate for tokens

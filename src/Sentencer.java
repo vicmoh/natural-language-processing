@@ -68,7 +68,7 @@ public class Sentencer {
 
         // Run detector
         try {
-            docs = Document.parse(Util.readFile(fileName), text -> {
+            docs = Document.parse(Util.readFile(fileName), null, null, text -> {
                 String paragraph = "";
                 String sentence[] = detector.sentDetect((String) text);
                 for (String each : sentence)

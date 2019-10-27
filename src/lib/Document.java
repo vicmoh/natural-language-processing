@@ -163,16 +163,25 @@ public class Document {
     /**
      * Parse from one full string of the document data.
      * 
-     * @param data string to be converted to list of documents.
-     * @param body is a callback of the document text. Set null if not used.
+     * @param data
+     * @param splitLambda callback for how you want data to be split. By Default
+     *                    data is split with new line.
+     * @param titleLambda callback for processing the title
+     * @param bodyLambda  callback for processing the body
      * @return list of document object.
+     * @throws Exception
      */
-    public static LinkedList<Document> parse(String data, Lambda body) throws Exception {
+    public static LinkedList<Document> parse(String data, Lambda splitLambda, Lambda titleLambda, Lambda bodyLambda)
+            throws Exception {
         debug.setFunctionName("parse").print("Invoked.");
         // Init needed vars
         LinkedList<Document> docs = new LinkedList<Document>();
         boolean isPassedFirstDoc = false;
-        String[] toBeParsed = data.split("[ \r\n]|[ \n]");
+        String[] toBeParsed = new String[0];
+        if (splitLambda == null)
+            toBeParsed = data.split("[ \r\n]|[ \n]");
+        else
+            toBeParsed = (String[]) splitLambda.callback((Object) data);
         String lastTag = "";
         String docId = "";
         String title = "";
@@ -200,8 +209,10 @@ public class Document {
                             text += curWord;
                             text = text.replaceAll("[\n][\n]+", "");
                         }
-                        if (body != null)
-                            text = (String) body.callback(text);
+                        if (titleLambda != null)
+                            title = (String) titleLambda.callback(title.trim());
+                        if (bodyLambda != null)
+                            text = (String) bodyLambda.callback(text.trim());
 
                         docs.addLast(new Document(docId.trim(), title.trim(), text.trim()));
                         docId = "";

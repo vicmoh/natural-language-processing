@@ -32,6 +32,6 @@ public class Normalize {
      * @throws Exception
      */
     public static void main(String args[]) throws Exception {
-        test();
+        
     }
 }
