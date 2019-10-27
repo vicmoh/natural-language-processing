@@ -10,7 +10,7 @@ public class Debugger {
     /**
      * The state wether the debugger should be print when it is called.
      */
-    private boolean showDebugPrints = false;
+    private boolean showDebugPrints = true;
 
     /**
      * The class name of that is being debugged.

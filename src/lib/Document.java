@@ -134,15 +134,13 @@ public class Document {
                 if (isATag(curWord.trim()) || lastIndex <= x) {
                     if (((curWord.trim().equals(TAGS[0]) || lastIndex <= x)) && isPassedFirstDoc) {
                         debug.print("text = " + text);
-                        if (lastIndex <= x) {
+                        if (lastIndex <= x)
                             text += curWord;
-                            text = text.replaceAll("[\n][\n]+", "");
-                        }
                         if (titleLambda != null)
                             title = (String) titleLambda.callback(title.trim());
                         if (bodyLambda != null)
                             text = (String) bodyLambda.callback(text.trim());
-
+                        // Add to doc object
                         docs.addLast(new Document(docId.trim(), title.trim(), text.trim()));
                         docId = "";
                         title = "";

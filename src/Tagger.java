@@ -26,36 +26,6 @@ public class Tagger {
     private static POSTaggerME posTagger;
 
     /**
-     * Read a file into one full string.
-     * 
-     * @param filePath
-     * @return The file strings
-     */
-    public static String readLine(String filePath) {
-        debug.setClassName("readLine");
-        debug.print("File path = " + filePath);
-        BufferedReader reader;
-        String line = "";
-        try {
-            reader = new BufferedReader(new FileReader(filePath));
-            String temp = reader.readLine();
-            if (temp != null)
-                line += temp + " \n";
-            while (temp != null) {
-                temp = reader.readLine();
-                if (temp == null)
-                    break;
-                line += temp + " \n";
-            }
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        debug.print("line = " + line);
-        return line;
-    }
-
-    /**
      * Function for processing the title and body
      * 
      * @param text
@@ -93,8 +63,8 @@ public class Tagger {
         posTagger = new POSTaggerME(posModel);
 
         // Parse
-        LinkedList<Document> docs = Document.parse(readLine(fileName), text -> ((String) (text)).split("[ ]"),
-                text -> process(text), text -> process(text));
+        LinkedList<Document> docs = Document.parse(Util.readFileWithNewLine(fileName),
+                text -> ((String) (text)).split("[ ]"), text -> process(text), text -> process(text));
 
         // Output
         String res = Document.stringify(docs);

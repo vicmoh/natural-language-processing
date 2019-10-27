@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.OutputStream;
 import java.io.IOException;
 
@@ -14,6 +15,37 @@ public class Util {
      * Setup debugger for debug printing.
      */
     private static Debugger debug = Debugger.init().showDebugPrint(false).setClassName("Parser");
+
+    /**
+     * Function to read file with the new line into one whole string.
+     * 
+     * @param filePath to be read
+     * @return String of the file
+     * @throws Exception
+     */
+    public static String readFileWithNewLine(String filePath) throws Exception {
+        debug.setClassName("readLine");
+        debug.print("File path = " + filePath);
+        BufferedReader reader;
+        String line = "";
+        try {
+            reader = new BufferedReader(new FileReader(filePath));
+            String temp = reader.readLine();
+            if (temp != null)
+                line += temp + " \n";
+            while (temp != null) {
+                temp = reader.readLine();
+                if (temp == null)
+                    break;
+                line += temp + " \n";
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        debug.print("line = " + line);
+        return line;
+    }
 
     /**
      * Read the string and return whole file into one string, without new line.

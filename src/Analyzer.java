@@ -10,7 +10,7 @@ class Analyzer {
     /**
      * Create a debugger to show some prints
      */
-    final static Debugger debug = Debugger.init().showDebugPrint(true).setClassName("Analyzer");
+    final static Debugger debug = Debugger.init().showDebugPrint(false).setClassName("Analyzer");
 
     // For the statistics
     public static int minTokens = 0;
