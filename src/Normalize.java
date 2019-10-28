@@ -7,7 +7,7 @@ public class Normalize {
     /**
      * Init the debugger to show debug prints
      */
-    private static Debugger debug = Debugger.init().showDebugPrint(true).setClassName("Normalize");
+    private static Debugger debug = Debugger.init().showDebugPrint(false).setClassName("Normalize");
 
     /**
      * List of stop words to be removed
@@ -56,18 +56,16 @@ public class Normalize {
     public static String removeNumPuncAndStopWords(String val) {
         try {
             String toBeEdited = val;
-            String[] splitted = toBeEdited.split("[ ]");
+            String[] splitted = toBeEdited.split("[ \t]+");
             String res = "";
             boolean isFirst = true;
             for (String each : splitted) {
-                if (each.matches("[-+]?[0-9]*[\\.,]?[0-9]+") || each.matches("[\\.,!?:;]") || isStopWord(each)) {
-                } else {
+                if (!(each.matches("[-+]?[0-9]*[\\.,]?[0-9]+") || each.matches("[\\.,!?:;]") || isStopWord(each))) {
                     if (isFirst) {
                         isFirst = false;
                         res += each;
-                    } else if (!isFirst) {
+                    } else
                         res += " " + each;
-                    }
                 }
             }
             return res;
@@ -86,7 +84,7 @@ public class Normalize {
         if (filePath != null)
             path = filePath;
         String words = Util.readFileWithNewLine(path);
-        String[] list = words.split("[\n ]+|[\r\n ]+");
+        String[] list = words.split("[\n]|[\r\n]");
         listOfStopWords = list;
     }
 
@@ -100,9 +98,31 @@ public class Normalize {
         if (listOfStopWords == null)
             throw new Exception("Stop words is empty. Read the file and re-run.");
         for (String stopWord : listOfStopWords)
-            if (stopWord.equals(val))
+            if (stopWord.replaceAll("[\n ]+|[\r\n ]+", "").equals(val.replaceAll("[\n ]+|[\r\n ]+", "")))
                 return true;
         return false;
+    }
+
+    /**
+     * Stemmed the word in the file.
+     * 
+     * @param val
+     * @return String
+     */
+    public static String stemmed(String val) {
+        String toBeReturn = "";
+        PorterStemmer stemmer = new PorterStemmer();
+        String[] tokens = val.split("[ \t]+");
+        boolean isFirst = true;
+        for (String each : tokens) {
+            String stemmed = stemmer.stem(each);
+            if (isFirst) {
+                isFirst = false;
+                toBeReturn += stemmed;
+            } else
+                toBeReturn += " " + stemmed;
+        }
+        return toBeReturn;
     }
 
     /**
@@ -120,15 +140,15 @@ public class Normalize {
         LinkedList<Document> docs = Document.parse(Util.readFileWithNewLine(fileName), text -> {
             return ((String) (text)).split("[ ]");
         }, text -> {
-            return (Object) removeNumPuncAndStopWords(setTextToLowerCase((String) text));
+            return (Object) stemmed(removeNumPuncAndStopWords(setTextToLowerCase((String) text)));
         }, text -> {
-            return (Object) removeNumPuncAndStopWords(setTextToLowerCase((String) text));
+            return (Object) stemmed(removeNumPuncAndStopWords(setTextToLowerCase((String) text)));
         });
 
         /// Output
         String outString = "";
         for (Document doc : docs)
             outString += doc.toString();
-        Util.writeFile("../output/data.normalize", outString);
+        Util.writeFile("../output/data.stemmed", outString);
     }
 }
