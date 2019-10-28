@@ -54,22 +54,26 @@ public class Normalize {
      * @return String of the removed data.
      */
     public static String removeNumPuncAndStopWords(String val) {
-        String toBeEdited = val;
-        String[] splitted = toBeEdited.split("[ ]");
-        String res = "";
-        boolean isFirst = true;
-        for (String each : splitted) {
-            if (each.matches("[-+]?[0-9]*[\\.,]?[0-9]+") || each.matches("[\\.,!?:;]") || isStopWord(each)) {
-            } else {
-                if (isFirst) {
-                    isFirst = false;
-                    res += each;
-                } else if (!isFirst) {
-                    res += " " + each;
+        try {
+            String toBeEdited = val;
+            String[] splitted = toBeEdited.split("[ ]");
+            String res = "";
+            boolean isFirst = true;
+            for (String each : splitted) {
+                if (each.matches("[-+]?[0-9]*[\\.,]?[0-9]+") || each.matches("[\\.,!?:;]") || isStopWord(each)) {
+                } else {
+                    if (isFirst) {
+                        isFirst = false;
+                        res += each;
+                    } else if (!isFirst) {
+                        res += " " + each;
+                    }
                 }
             }
+            return res;
+        } catch (Exception err) {
+            return val;
         }
-        return res;
     }
 
     /**
