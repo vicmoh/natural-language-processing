@@ -29,16 +29,41 @@ public class Normalize {
     }
 
     /**
-     * Function to set each token to lower case
+     * Function to set each token to lower case.
      * 
-     * @param string to be lowered case
-     * @return the string
+     * @param string to be lowered case.
+     * @return the string.
      */
     public static String setTextToLowerCase(String string) {
         debug.setFunctionName("setTextToLowerCase");
         String toBeLowered = string;
         String res = toBeLowered.toLowerCase();
         debug.print(res);
+        return res;
+    }
+
+    /**
+     * Remove the number and punctuation in the data.
+     * 
+     * @param val to be removed.
+     * @return String of the removed data.
+     */
+    public static String removeNumberAndPunctuation(String val) {
+        String toBeEdited = val;
+        String[] splitted = toBeEdited.split("[ ]");
+        String res = "";
+        boolean isFirst = true;
+        for (String each : splitted) {
+            if (each.matches("[-+]?[0-9]*[\\.,]?[0-9]+") || each.matches("[\\.,!?:;]")) {
+            } else {
+                if (isFirst) {
+                    isFirst = false;
+                    res += each;
+                } else if (!isFirst) {
+                    res += " " + each;
+                }
+            }
+        }
         return res;
     }
 
@@ -54,9 +79,9 @@ public class Normalize {
         LinkedList<Document> docs = Document.parse(Util.readFileWithNewLine(fileName), text -> {
             return ((String) (text)).split("[ ]");
         }, text -> {
-            return (Object) setTextToLowerCase((String) text);
+            return (Object) removeNumberAndPunctuation(setTextToLowerCase((String) text));
         }, text -> {
-            return (Object) setTextToLowerCase((String) text);
+            return (Object) removeNumberAndPunctuation(setTextToLowerCase((String) text));
         });
         /// Output
         String outString = "";

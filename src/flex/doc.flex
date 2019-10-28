@@ -66,8 +66,7 @@ hypCase2 = [\w]+[-][\w]+
 {hypCase1}                           { return new Token(Token.HYPHENATED, yytext(), yyline, yycolumn); }
 {hypCase2}                           { return new Token(Token.HYPHENATED, yytext(), yyline, yycolumn); }
 [\w]+                                { return new Token(Token.WORD, yytext(), yyline, yycolumn); }
-[-+]?[0-9]|[-+]?[0-9]+[.,]?[0-9]+    { return new Token(Token.NUMBER, yytext(), yyline, yycolumn); } 
--?\d+(,\d+)*(\.\d+(\d+)?)?           { return new Token(Token.NUMBER, yytext(), yyline, yycolumn); } 
+[-+]?[0-9]*[\.,]?[0-9]+              { return new Token(Token.NUMBER, yytext(), yyline, yycolumn); } 
 {LineTerminator}+                    { return new Token(Token.NEWLINE, yytext(), yyline, yycolumn); }
 
 /* Other attribute  */
