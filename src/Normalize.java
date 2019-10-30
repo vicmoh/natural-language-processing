@@ -61,6 +61,8 @@ public class Normalize {
             boolean isFirst = true;
             for (String each : splitted) {
                 each = each.replaceAll("([^'^\\s\\w])|[0-9]", "");
+                if (each.length() == 1)
+                    each = each.replaceAll("[']", "");
                 if (!(each.matches("[-+]?[0-9]*[\\.,]?[0-9]+") || each.matches("([^'^\\s\\w])|[0-9]")
                         || isStopWord(each))) {
                     if (isFirst) {

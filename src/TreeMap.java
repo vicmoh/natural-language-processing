@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.Comparator;
+import java.util.Arrays;
 
 public class TreeMap {
     /**
@@ -45,7 +47,7 @@ public class TreeMap {
             String[] tokens = lines[i].split("[ ]");
             for (String token : tokens) {
                 // filter out irrelevant lines
-                if (token.matches("\\([0-9]+\\)"))
+                if (token.matches("\\([0-9]+\\)") || token.equals(""))
                     continue;
                 // update relevant token on TreeMap
                 if (this.posting.containsKey(token)) {
@@ -69,15 +71,22 @@ public class TreeMap {
      */
     public void printProcess() {
         try {
-            this.toBePrint = "";
-            Set<String> keys = this.posting.keySet();
-            Iterator<String> iter = keys.iterator();
-            System.out.println("*** Total entries: " + keys.size());
-            while (iter.hasNext()) {
-                String key = iter.next();
-                for (Term term : this.posting.get(key))
-                    this.toBePrint += term.toString() + "\n";
+            int count = 0;
+            String[] orderedKeys = new String[this.posting.size()];
+            this.toBePrint = "Total entries: " + this.posting.size() + "\n";
+            for (Map.Entry<String, LinkedList<Term>> entry : this.posting.entrySet()) {
+                orderedKeys[count] = entry.getKey();
+                count++;
             }
+            Arrays.sort(orderedKeys, new Comparator<String>() {
+                @Override
+                public int compare(String c1, String c2) {
+                    return c1.compareTo(c2);
+                }
+            });
+            for (int x = 0; x < orderedKeys.length; x++)
+                for (Term term : this.posting.get(orderedKeys[x]))
+                    this.toBePrint += term.toString() + "\n";
             Util.writeFile("../output/data.posting", this.toBePrint);
         } catch (Exception err) {
         }
