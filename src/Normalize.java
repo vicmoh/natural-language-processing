@@ -81,10 +81,10 @@ public class Normalize {
     /**
      * Read the stop words list file and saved it.
      * 
-     * @param filePath of the stop words, by default it is "../output/stopwords.txt"
+     * @param filePath of the stop words, by default it is "../assets/stopwords.txt"
      */
     public static void readStopWordsListFile(String filePath) throws Exception {
-        String path = "../output/stopwords.txt";
+        String path = "../assets/stopwords.txt";
         if (filePath != null)
             path = filePath;
         String words = Util.readFileWithNewLine(path);

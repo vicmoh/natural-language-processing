@@ -22,7 +22,7 @@ public class TreeMap {
     /**
      * The tree map for the dictionary
      */
-    public HashMap<String, LinkedList<Term>> dictionary = new HashMap<String, LinkedList<Term>>();
+    public HashMap<String, Integer> dictionary = new HashMap<String, Integer>();
 
     /**
      * The tree map for the posting
@@ -30,9 +30,14 @@ public class TreeMap {
     public HashMap<String, LinkedList<Term>> posting = new HashMap<String, LinkedList<Term>>();
 
     /**
-     * Temp variable for storing the print statement.
+     * Posting output path
      */
-    private String toBePrint = "";
+    private static final String POSTING_PATH = "../output/posting.txt";
+
+    /**
+     * Dictionary output path
+     */
+    private static final String DICTIONARY_PATH = "../output/dictionary.txt";
 
     /**
      * Process the frequency of the terms
@@ -53,11 +58,19 @@ public class TreeMap {
                 if (this.posting.containsKey(token)) {
                     // Add frequency or add as new list
                     Term term = this.posting.get(token).get(0);
-                    if (term != null && term.getDid() == docId)
+                    if (term != null && term.getDid() == docId) {
+                        int curTotal = this.dictionary.get(token);
+                        this.dictionary.put(token, ++curTotal);
                         this.posting.get(token).get(0).incrementFrequency();
-                    else
+                    } else {
+                        int curTotal = this.dictionary.get(token);
+                        this.dictionary.put(token, ++curTotal);
                         this.posting.get(token).add(0, new Term(docId, token));
+                    }
                 } else {
+                    // Add for Dictionary
+                    this.dictionary.put(token, 1);
+                    // Add for posting
                     LinkedList<Term> terms = new LinkedList<Term>();
                     terms.add(new Term(docId, token));
                     this.posting.put(token, terms);
@@ -69,11 +82,13 @@ public class TreeMap {
     /**
      * Print the process output
      */
-    public void printProcess() {
+    public void outputProcess() {
         try {
+            // Output the posting
             int count = 0;
+            String toBePrint = "";
             String[] orderedKeys = new String[this.posting.size()];
-            this.toBePrint = "Total entries: " + this.posting.size() + "\n";
+            toBePrint = "Total entries: " + this.posting.size() + "\n";
             for (Map.Entry<String, LinkedList<Term>> entry : this.posting.entrySet()) {
                 orderedKeys[count] = entry.getKey();
                 count++;
@@ -86,8 +101,14 @@ public class TreeMap {
             });
             for (int x = 0; x < orderedKeys.length; x++)
                 for (Term term : this.posting.get(orderedKeys[x]))
-                    this.toBePrint += term.toString() + "\n";
-            Util.writeFile("../output/data.posting", this.toBePrint);
+                    toBePrint += term.toString() + "\n";
+            Util.writeFile(POSTING_PATH, toBePrint);
+
+            // Output the dictionary file
+            toBePrint = "Total stems: " + this.dictionary.size() + "\n";
+            for (int x = 0; x < orderedKeys.length; x++)
+                toBePrint += orderedKeys[x] + " " + this.dictionary.get(orderedKeys[x]).toString() + "\n";
+            Util.writeFile(DICTIONARY_PATH, toBePrint);
         } catch (Exception err) {
         }
     }
@@ -105,7 +126,7 @@ public class TreeMap {
             this.processFrequency(doc.getTitle(), doc.getID());
             this.processFrequency(doc.getText(), doc.getID());
         }
-        printProcess();
+        outputProcess();
     }
 
     public static void main(String args[]) {
