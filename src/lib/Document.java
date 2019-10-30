@@ -154,9 +154,8 @@ public class Document {
             int startPos = 0;
             for (int x = 0; x < toBeParsed.length; x++) {
                 String curWord = toBeParsed[x];
-
                 // Count the line number
-                if (curWord.matches("[\n]"))
+                if (curWord.contains("\n"))
                     lineNum++;
                 // Case for the doc name.
                 if (curWord.trim().replaceAll("[\r\n]|[\n]", "").equals(TAGS[0])) {
