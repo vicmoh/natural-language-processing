@@ -146,12 +146,13 @@ public class Document {
         String docId = "";
         String title = "";
         String text = "";
-        int lineNum = 0;
+        int lineNum = 1;
         final int lastIndex = toBeParsed.length - 1;
 
         // Start parsing
         try {
-            int startPos = 0;
+            int startPos = 1;
+            int lastPos = 1;
             for (int x = 0; x < toBeParsed.length; x++) {
                 String curWord = toBeParsed[x];
                 // Count the line number
@@ -160,7 +161,7 @@ public class Document {
                 // Case for the doc name.
                 if (curWord.trim().replaceAll("[\r\n]|[\n]", "").equals(TAGS[0])) {
                     lastTag = TAGS[0];
-                    startPos = lineNum;
+                    lastPos = lineNum;
                 }
                 // Case for the title
                 if (curWord.trim().replaceAll("[\r\n]|[\n]", "").equals(TAGS[1]))
@@ -190,8 +191,10 @@ public class Document {
                 }
 
                 // Case for putting the data in document
-                if (lastTag.equals(TAGS[0]))
+                if (lastTag.equals(TAGS[0])) {
                     docId += curWord + " ";
+                    startPos = lastPos;
+                }
                 if (lastTag.equals(TAGS[1]))
                     title += curWord + " ";
                 if (lastTag.equals(TAGS[2]))
