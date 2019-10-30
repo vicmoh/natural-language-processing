@@ -15,8 +15,8 @@ public class Document {
     private static final String[] TAGS = { "$DOC", "$TITLE", "$TEXT" };
     // The attribute containing in the document.
     private String docId = "";
-    private String title = "";
-    private String text = "";
+    public String title = "";
+    public String text = "";
     // Counting
     public int numOfSentences = 0;
     public int numOfTokens = 0;

@@ -60,7 +60,9 @@ public class Normalize {
             String res = "";
             boolean isFirst = true;
             for (String each : splitted) {
-                if (!(each.matches("[-+]?[0-9]*[\\.,]?[0-9]+") || each.matches("[\\.,!?:;]") || isStopWord(each))) {
+                each = each.replaceAll("([^'^\\s\\w])|[0-9]", "");
+                if (!(each.matches("[-+]?[0-9]*[\\.,]?[0-9]+") || each.matches("([^'^\\s\\w])|[0-9]")
+                        || isStopWord(each))) {
                     if (isFirst) {
                         isFirst = false;
                         res += each;

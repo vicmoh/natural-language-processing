@@ -1,80 +1,110 @@
-class TreeMap {
+import lib.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Scanner;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.FileInputStream;
+import java.io.InputStream;
+
+public class TreeMap {
     /**
      * The tree map for the dictionary
      */
-    Map<String, LinkedList<TermFrequency>> dictionary = new Map<String, LinkedList<TermFrequency>>();
+    public HashMap<String, LinkedList<Term>> dictionary = new HashMap<String, LinkedList<Term>>();
 
     /**
      * The tree map for the posting
      */
-    Map<String, LinkedList<TermFrequency>> posting = new Map<String, LinkedList<TermFrequency>>();
+    public HashMap<String, LinkedList<Term>> posting = new HashMap<String, LinkedList<Term>>();
 
     /**
-     * Example for the information retrieval
+     * Temp variable for storing the print statement.
      */
-    public static void example() {
-        // TreeMap for string-integer pairs
-        TreeMap<String, Integer> map = new TreeMap<String, Integer>();
+    private String toBePrint = "";
 
-        // load an input file into the TreeMap
-        Scanner input = new Scanner(System.in);
-        while (input.hasNextLine()) {
-            String line = input.nextLine();
-            String[] tokens = line.split("[ \t]+");
-            for (int i = 0; i < tokens.length; i++) {
-                // filter out irrelevant tokens
-                if (tokens[i].matches("\\([0-9]+\\)"))
+    /**
+     * Process the frequency of the terms
+     * 
+     * @param paragraph
+     * @param docNum
+     */
+    public void processFrequency(String paragraph, int docNum) {
+        String temp = paragraph;
+        String[] lines = paragraph.split("[\n]|[\r\n]");
+        for (int i = 0; i < lines.length; i++) {
+            String[] tokens = lines[i].split("[ ]");
+            for (String token : tokens) {
+                // filter out irrelevant lines
+                if (token.matches("\\([0-9]+\\)"))
                     continue;
-                // update relevant tokens on TreeMap
-                if (map.containsKey(tokens[i]))
-                    map.put(tokens[i], map.get(tokens[i]) + 1);
-                else
-                    map.put(tokens[i], 1);
+                // update relevant token on TreeMap
+                if (this.posting.containsKey(token)) {
+                    // Add frequency or add as new list
+                    Term term = this.posting.get(token).get(0);
+                    if (term != null && term.getDid() == docNum)
+                        this.posting.get(token).get(0).incrementFrequency();
+                    else
+                        this.posting.get(token).add(0, new Term(docNum, token));
+                } else {
+                    LinkedList<Term> terms = new LinkedList<Term>();
+                    terms.add(new Term(docNum, token));
+                    this.posting.put(token, terms);
+                }
             }
-        }
-
-        // display the TreeMap alphabetically
-        Set<String> keys = map.keySet();
-        Iterator<String> iter = keys.iterator();
-        System.out.println("*** Total entries: " + keys.size());
-        while (iter.hasNext()) {
-            String key = iter.next();
-            System.out.println(key + " occurs " + map.get(key));
         }
     }
 
-    public static void postingProcess() throws Exception {
-        // TreeMap for string-integer pairs
-        TreeMap<String, Integer> map = new TreeMap<String, Integer>();
-
-        // load an input file into the TreeMap
-        Scanner input = new Scanner(System.in);
-        while (input.hasNextLine()) {
-            String line = input.nextLine();
-            String[] tokens = line.split("[ \t]+");
-            for (int i = 0; i < tokens.length; i++) {
-                // filter out irrelevant tokens
-                if (tokens[i].matches("\\([0-9]+\\)"))
-                    continue;
-                // update relevant tokens on TreeMap
-                if (map.containsKey(tokens[i]))
-                    map.put(tokens[i], map.get(tokens[i]) + 1);
-                else
-                    map.put(tokens[i], 1);
+    /**
+     * Print the process output
+     */
+    public void printProcess() {
+        try {
+            this.toBePrint = "";
+            Set<String> keys = this.posting.keySet();
+            Iterator<String> iter = keys.iterator();
+            System.out.println("*** Total entries: " + keys.size());
+            while (iter.hasNext()) {
+                String key = iter.next();
+                for (Term term : this.posting.get(key))
+                    this.toBePrint += term.toString() + "\n";
             }
+            Util.writeFile("../output/data.posting", this.toBePrint);
+        } catch (Exception err) {
         }
+    }
 
-        // display the TreeMap alphabetically
-        Set<String> keys = map.keySet();
-        Iterator<String> iter = keys.iterator();
-        System.out.println("*** Total entries: " + keys.size());
-        while (iter.hasNext()) {
-            String key = iter.next();
-            System.out.println(key + " occurs " + map.get(key));
+    /**
+     * Function for processing the posting file.
+     * 
+     * @throws Exception
+     */
+    public void postingProcess() throws Exception {
+        final String path = "../output/data.stemmed";
+        LinkedList<Document> docs = Document.parse(Util.readFileWithNewLine(path), null, null, null);
+        LinkedList<Document> resDocs = new LinkedList<Document>();
+        int count = 0;
+        for (Document doc : docs) {
+            this.processFrequency(doc.title, count);
+            this.processFrequency(doc.text, count);
+            count++;
         }
+        printProcess();
     }
 
     public static void main(String args[]) {
-
+        try {
+            new TreeMap().postingProcess();
+        } catch (Exception err) {
+        }
     }
 }
