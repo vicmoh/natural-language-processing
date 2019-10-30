@@ -38,9 +38,9 @@ public class TreeMap {
      * Process the frequency of the terms
      * 
      * @param paragraph
-     * @param docNum
+     * @param docId
      */
-    public void processFrequency(String paragraph, int docNum) {
+    public void processFrequency(String paragraph, String docId) {
         String temp = paragraph;
         String[] lines = paragraph.split("[\n]|[\r\n]");
         for (int i = 0; i < lines.length; i++) {
@@ -53,13 +53,13 @@ public class TreeMap {
                 if (this.posting.containsKey(token)) {
                     // Add frequency or add as new list
                     Term term = this.posting.get(token).get(0);
-                    if (term != null && term.getDid() == docNum)
+                    if (term != null && term.getDid() == docId)
                         this.posting.get(token).get(0).incrementFrequency();
                     else
-                        this.posting.get(token).add(0, new Term(docNum, token));
+                        this.posting.get(token).add(0, new Term(docId, token));
                 } else {
                     LinkedList<Term> terms = new LinkedList<Term>();
-                    terms.add(new Term(docNum, token));
+                    terms.add(new Term(docId, token));
                     this.posting.put(token, terms);
                 }
             }
@@ -101,11 +101,9 @@ public class TreeMap {
         final String path = "../output/data.stemmed";
         LinkedList<Document> docs = Document.parse(Util.readFileWithNewLine(path), null, null, null);
         LinkedList<Document> resDocs = new LinkedList<Document>();
-        int count = 0;
         for (Document doc : docs) {
-            this.processFrequency(doc.title, count);
-            this.processFrequency(doc.text, count);
-            count++;
+            this.processFrequency(doc.getTitle(), doc.getID());
+            this.processFrequency(doc.getText(), doc.getID());
         }
         printProcess();
     }

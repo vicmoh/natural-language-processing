@@ -1,7 +1,7 @@
 package lib;
 
 public class Term {
-    private int did = 0;
+    private String did = "";
     private int tf = 1;
     private String token = "(NULL)";
 
@@ -9,23 +9,36 @@ public class Term {
      * Object for creating the did and tf
      * 
      * @param did
-     * @param token
+     * @param tokens
      */
-    public Term(int did, String token) {
+    public Term(String did, String token) {
         this.did = did;
         this.token = token;
     }
 
+    /**
+     * Increment the frequency of the token.
+     */
     public void incrementFrequency() {
         this.tf++;
     }
 
-    public int getDid() {
+    /**
+     * Get the doc id.
+     * 
+     * @return return the doc id.
+     */
+    public String getDid() {
         return this.did;
     }
 
+    /**
+     * Get term frequency.
+     * 
+     * @return the term frequency.
+     */
     public int getTf() {
-        return this.did;
+        return this.tf;
     }
 
     @Override

@@ -15,8 +15,8 @@ public class Document {
     private static final String[] TAGS = { "$DOC", "$TITLE", "$TEXT" };
     // The attribute containing in the document.
     private String docId = "";
-    public String title = "";
-    public String text = "";
+    private String title = "";
+    private String text = "";
     // Counting
     public int numOfSentences = 0;
     public int numOfTokens = 0;
@@ -54,10 +54,30 @@ public class Document {
     }
 
     /**
-     * Get the title of the document.
+     * Get the id of the document.
+     * 
+     * @return the id of the document.
      */
     public String getID() {
         return this.docId;
+    }
+
+    /**
+     * Get title of the document.
+     * 
+     * @return the title.
+     */
+    public String getTitle() {
+        return this.title;
+    }
+
+    /**
+     * Get the body of the text document.
+     * 
+     * @return the body text.
+     */
+    public String getText() {
+        return this.text;
     }
 
     /**
