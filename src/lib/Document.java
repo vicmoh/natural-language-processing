@@ -17,6 +17,7 @@ public class Document {
     private String docId = "";
     private String title = "";
     private String text = "";
+    private int startPosition = 0;// The line number
     // Counting
     public int numOfSentences = 0;
     public int numOfTokens = 0;
@@ -30,19 +31,20 @@ public class Document {
      * @param title is the "$TITLE" content.
      * @param text  is the "$TEXT" content.
      */
-    Document(String docId, String title, String text) throws Exception {
+    Document(String docId, String title, String text, int pos) throws Exception {
         assert (docId != null);
         assert (title != null);
         assert (text != null);
         if (docId == null || title == null || text == null)
             throw new Exception("Could not create document due to missing content.");
+        // Init
         this.docId = docId;
         this.title = title;
         this.text = text;
-
+        this.startPosition = pos;
+        // Count
         String docString = title + "\n" + text;
         String[] sentences = docString.split("[\n]+");
-
         for (String eachSen : sentences) {
             numOfSentences++;
             String[] tokens = eachSen.split("[ \r\n\t]");
@@ -78,6 +80,15 @@ public class Document {
      */
     public String getText() {
         return this.text;
+    }
+
+    /**
+     * Get the start position.
+     * 
+     * @return the position.
+     */
+    public int getStartPos() {
+        return this.startPosition;
     }
 
     /**
@@ -135,24 +146,33 @@ public class Document {
         String docId = "";
         String title = "";
         String text = "";
+        int lineNum = 0;
         final int lastIndex = toBeParsed.length - 1;
 
         // Start parsing
         try {
+            int startPos = 0;
             for (int x = 0; x < toBeParsed.length; x++) {
                 String curWord = toBeParsed[x];
+
+                // Count the line number
+                if (curWord.matches("[\n]"))
+                    lineNum++;
                 // Case for the doc name.
-                if (curWord.trim().equals(TAGS[0]))
+                if (curWord.trim().replaceAll("[\r\n]|[\n]", "").equals(TAGS[0])) {
                     lastTag = TAGS[0];
+                    startPos = lineNum;
+                }
                 // Case for the title
-                if (curWord.trim().equals(TAGS[1]))
+                if (curWord.trim().replaceAll("[\r\n]|[\n]", "").equals(TAGS[1]))
                     lastTag = TAGS[1];
                 // Case for the text
-                if (curWord.trim().equals(TAGS[2]))
+                if (curWord.trim().replaceAll("[\r\n]|[\n]", "").equals(TAGS[2]))
                     lastTag = TAGS[2];
                 // Last case, assign and go to next
-                if (isATag(curWord.trim()) || lastIndex <= x) {
-                    if (((curWord.trim().equals(TAGS[0]) || lastIndex <= x)) && isPassedFirstDoc) {
+                if (isATag(curWord.trim().replaceAll("[\r\n]|[\n]", "")) || lastIndex <= x) {
+                    if (((curWord.trim().replaceAll("[\r\n]|[\n]", "").equals(TAGS[0]) || lastIndex <= x))
+                            && isPassedFirstDoc) {
                         debug.print("text = " + text);
                         if (lastIndex <= x)
                             text += curWord;
@@ -161,7 +181,7 @@ public class Document {
                         if (bodyLambda != null)
                             text = (String) bodyLambda.callback(text.trim());
                         // Add to doc object
-                        docs.addLast(new Document(docId.trim(), title.trim(), text.trim()));
+                        docs.addLast(new Document(docId.trim(), title.trim(), text.trim(), startPos));
                         docId = "";
                         title = "";
                         text = "";

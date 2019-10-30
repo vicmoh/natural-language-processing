@@ -40,6 +40,11 @@ public class TreeMap {
     private static final String DICTIONARY_PATH = "../output/dictionary.txt";
 
     /**
+     * Document ids output path
+     */
+    private static final String DOC_IDS_PATH = "../output/docids.txt";
+
+    /**
      * Process the frequency of the terms
      * 
      * @param paragraph
@@ -82,7 +87,7 @@ public class TreeMap {
     /**
      * Print the process output
      */
-    public void outputProcess() {
+    public void outputProcess(LinkedList<Document> docs) {
         try {
             // Output the posting
             int count = 0;
@@ -109,6 +114,12 @@ public class TreeMap {
             for (int x = 0; x < orderedKeys.length; x++)
                 toBePrint += orderedKeys[x] + " " + this.dictionary.get(orderedKeys[x]).toString() + "\n";
             Util.writeFile(DICTIONARY_PATH, toBePrint);
+
+            // Output the doc ids
+            toBePrint = "Total docs: " + docs.size() + "\n";
+            for (Document doc : docs)
+                toBePrint += doc.getID() + " " + Integer.toString(doc.getStartPos()) + " " + doc.getTitle() + "\n";
+            Util.writeFile(DOC_IDS_PATH, toBePrint);
         } catch (Exception err) {
         }
     }
@@ -120,13 +131,14 @@ public class TreeMap {
      */
     public void postingProcess() throws Exception {
         final String path = "../output/data.stemmed";
-        LinkedList<Document> docs = Document.parse(Util.readFileWithNewLine(path), null, null, null);
+        LinkedList<Document> docs = Document.parse(Util.readFileWithNewLine(path),
+                text -> ((String) (text)).split("[ ]"), null, null);
         LinkedList<Document> resDocs = new LinkedList<Document>();
         for (Document doc : docs) {
             this.processFrequency(doc.getTitle(), doc.getID());
             this.processFrequency(doc.getText(), doc.getID());
         }
-        outputProcess();
+        outputProcess(docs);
     }
 
     public static void main(String args[]) {
