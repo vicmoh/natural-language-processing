@@ -119,7 +119,7 @@ public class TreeMap {
             // Output the dictionary file
             toBePrint = "Total stems: " + this.dictionary.size() + "\n";
             for (int x = 0; x < orderedKeys.length; x++)
-                toBePrint += orderedKeys[x] + " " + this.dictionary.get(orderedKeys[x]).toString() + "\n";
+                toBePrint += orderedKeys[x] + " " + this.posting.get(orderedKeys[x]).size() + "\n";
             Util.writeFile(DICTIONARY_PATH, toBePrint);
 
             // Output the doc ids
