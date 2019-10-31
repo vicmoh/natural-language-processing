@@ -54,25 +54,30 @@ public class Normalize {
      * @return String of the removed data.
      */
     public static String removeNumPuncAndStopWords(String val) {
+        System.out.println("***********************");
+        System.out.println(val);
+        System.out.println("***********************");
         try {
             String regReplace = "([^'^\\s\\w])|[0-9]";
             String regSkip = "([^'^\\s\\w])|[0-9]";
             String regNum = "[-+]?[0-9]*[\\.,]?[0-9]+";
             String toBeEdited = val;
-            String[] splitted = toBeEdited.split("[ \t]+");
             String res = "";
-            boolean isFirst = true;
-            for (String each : splitted) {
-                each = each.replaceAll(regReplace, "");
-                if (each.length() == 1)
-                    each = each.replaceAll("[']", "");
-                if (!(each.matches(regNum) || each.matches(regSkip) || isStopWord(each))) {
-                    if (isFirst) {
-                        isFirst = false;
-                        res += each;
-                    } else
-                        res += " " + each;
+            String[] lines = toBeEdited.split("[\n]+|[\r\n]+");
+            for (String line : lines) {
+                String[] splitted = line.trim().split("[ \t]+");
+                boolean isFirst = true;
+                for (String each : splitted) {
+                    each = each.replaceAll(regReplace, "");
+                    if (!(isStopWord(each) || (each.length() == 1 && each.equals("'")))) {
+                        if (isFirst) {
+                            isFirst = false;
+                            res += each;
+                        } else
+                            res += " " + each;
+                    }
                 }
+                res += "\n";
             }
             return res;
         } catch (Exception err) {

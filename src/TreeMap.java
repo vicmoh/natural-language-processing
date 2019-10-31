@@ -54,6 +54,7 @@ public class TreeMap {
         String temp = paragraph;
         String[] lines = paragraph.split("[\n]|[\r\n]");
         for (int i = 0; i < lines.length; i++) {
+            System.out.println("lines[i]: " + lines[i]);
             String[] tokens = lines[i].split("[ ]");
             for (String token : tokens) {
                 // filter out irrelevant lines
