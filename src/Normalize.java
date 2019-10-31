@@ -135,7 +135,7 @@ public class Normalize {
         }
         return toBeReturn;
     }
-
+	
     /**
      * Main functions to run the program
      * 

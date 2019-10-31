@@ -90,11 +90,10 @@ public class TreeMap {
      */
     public void outputProcess(LinkedList<Document> docs) {
         try {
-            // Output the posting
+            // Ordered and sort the values
             int count = 0;
             String toBePrint = "";
             String[] orderedKeys = new String[this.posting.size()];
-            toBePrint = "Total entries: " + this.posting.size() + "\n";
             for (Map.Entry<String, LinkedList<Term>> entry : this.posting.entrySet()) {
                 orderedKeys[count] = entry.getKey();
                 count++;
@@ -105,9 +104,16 @@ public class TreeMap {
                     return c1.compareTo(c2);
                 }
             });
+
+            String totalEntriesStr = "Total entries: ";
+            int totalEntries = 0;
             for (int x = 0; x < orderedKeys.length; x++)
-                for (Term term : this.posting.get(orderedKeys[x]))
+                for (Term term : this.posting.get(orderedKeys[x])) {
                     toBePrint += term.toString() + "\n";
+                    totalEntries++;
+                }
+            totalEntriesStr += Integer.toString(totalEntries) + "\n";
+            toBePrint = totalEntriesStr + toBePrint;
             Util.writeFile(POSTING_PATH, toBePrint);
 
             // Output the dictionary file
@@ -140,6 +146,13 @@ public class TreeMap {
             this.processFrequency(doc.getText(), doc.getID());
         }
         outputProcess(docs);
+    }
+
+    /**
+     * @return int of the total entries
+     */
+    public static int totalEntries() {
+        return 0;
     }
 
     public static void main(String args[]) {

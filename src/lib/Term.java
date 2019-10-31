@@ -43,6 +43,6 @@ public class Term {
 
     @Override
     public String toString() {
-        return this.token + ": " + this.did + " " + this.tf;
+        return this.did + " " + this.tf;
     }
 }
