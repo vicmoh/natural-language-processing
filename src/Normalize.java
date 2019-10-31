@@ -58,8 +58,8 @@ public class Normalize {
         System.out.println(val);
         System.out.println("***********************");
         try {
-            String regReplace = "([^'^\\s\\w])|[0-9]";
             String regSkip = "([^'^\\s\\w])|[0-9]";
+            String regPunc = "([^'^\\s\\w])|[0-9]";
             String regNum = "[-+]?[0-9]*[\\.,]?[0-9]+";
             String toBeEdited = val;
             String res = "";
@@ -68,8 +68,8 @@ public class Normalize {
                 String[] splitted = line.trim().split("[ \t]+");
                 boolean isFirst = true;
                 for (String each : splitted) {
-                    each = each.replaceAll(regReplace, "");
-                    if (!(isStopWord(each) || (each.length() == 1 && each.equals("'")))) {
+                    if (!(isStopWord(each) || each.matches(regNum) || each.matches(regPunc)
+                            || (each.length() == 1 && each.equals("'")))) {
                         if (isFirst) {
                             isFirst = false;
                             res += each;
