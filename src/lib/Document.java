@@ -138,10 +138,14 @@ public class Document {
         LinkedList<Document> docs = new LinkedList<Document>();
         boolean isPassedFirstDoc = false;
         String[] toBeParsed = new String[0];
+
+        // Run lambda calls
         if (splitLambda == null)
             toBeParsed = data.split("[ \r\n]|[ \n]");
         else
             toBeParsed = (String[]) splitLambda.callback((Object) data);
+
+        // Setup
         String lastTag = "";
         String docId = "";
         String title = "";
@@ -151,6 +155,8 @@ public class Document {
 
         // Start parsing
         try {
+            String newLineRegex = "[\r\n]+|[\n]+";
+            String spaceNewLineRegex = "[ ]+([\n]|[\r\n])";
             int startPos = 1;
             int lastPos = 1;
             for (int x = 0; x < toBeParsed.length; x++) {
@@ -159,19 +165,19 @@ public class Document {
                 if (curWord.contains("\n"))
                     lineNum++;
                 // Case for the doc name.
-                if (curWord.trim().replaceAll("[\r\n]|[\n]", "").equals(TAGS[0])) {
+                if (curWord.trim().replaceAll(newLineRegex, "").equals(TAGS[0])) {
                     lastTag = TAGS[0];
                     lastPos = lineNum;
                 }
                 // Case for the title
-                if (curWord.trim().replaceAll("[\r\n]|[\n]", "").equals(TAGS[1]))
+                if (curWord.trim().replaceAll(newLineRegex, "").equals(TAGS[1]))
                     lastTag = TAGS[1];
                 // Case for the text
-                if (curWord.trim().replaceAll("[\r\n]|[\n]", "").equals(TAGS[2]))
+                if (curWord.trim().replaceAll(newLineRegex, "").equals(TAGS[2]))
                     lastTag = TAGS[2];
                 // Last case, assign and go to next
-                if (isATag(curWord.trim().replaceAll("[\r\n]|[\n]", "")) || lastIndex <= x) {
-                    if (((curWord.trim().replaceAll("[\r\n]|[\n]", "").equals(TAGS[0]) || lastIndex <= x))
+                if (isATag(curWord.trim().replaceAll(newLineRegex, "")) || lastIndex <= x) {
+                    if (((curWord.trim().replaceAll(newLineRegex, "").equals(TAGS[0]) || lastIndex <= x))
                             && isPassedFirstDoc) {
                         debug.print("text = " + text);
                         if (lastIndex <= x)
@@ -181,7 +187,8 @@ public class Document {
                         if (bodyLambda != null)
                             text = (String) bodyLambda.callback(text.trim());
                         // Add to doc object
-                        docs.addLast(new Document(docId.trim(), title.trim(), text.trim(), startPos));
+                        docs.addLast(new Document(docId.trim(), title.trim().replaceAll(spaceNewLineRegex, "\n"),
+                                text.trim().replaceAll(spaceNewLineRegex, "\n"), startPos));
                         docId = "";
                         title = "";
                         text = "";

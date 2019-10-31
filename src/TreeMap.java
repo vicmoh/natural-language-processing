@@ -132,7 +132,7 @@ public class TreeMap {
     public void postingProcess() throws Exception {
         final String path = "../output/data.stemmed";
         LinkedList<Document> docs = Document.parse(Util.readFileWithNewLine(path),
-                text -> ((String) (text)).split("[ ]"), null, null);
+                text -> ((String) (text)).split("[ \t]+"), null, null);
         LinkedList<Document> resDocs = new LinkedList<Document>();
         for (Document doc : docs) {
             this.processFrequency(doc.getTitle(), doc.getID());

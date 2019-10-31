@@ -7,7 +7,7 @@ public class Normalize {
     /**
      * Init the debugger to show debug prints
      */
-    private static Debugger debug = Debugger.init().showDebugPrint(false).setClassName("Normalize");
+    private static Debugger debug = Debugger.init().showDebugPrint(true).setClassName("Normalize");
 
     /**
      * List of stop words to be removed
@@ -55,16 +55,18 @@ public class Normalize {
      */
     public static String removeNumPuncAndStopWords(String val) {
         try {
+            String regReplace = "([^'^\\s\\w])|[0-9]";
+            String regSkip = "([^'^\\s\\w])|[0-9]";
+            String regNum = "[-+]?[0-9]*[\\.,]?[0-9]+";
             String toBeEdited = val;
             String[] splitted = toBeEdited.split("[ \t]+");
             String res = "";
             boolean isFirst = true;
             for (String each : splitted) {
-                each = each.replaceAll("([^'^\\s\\w])|[0-9]", "");
+                each = each.replaceAll(regReplace, "");
                 if (each.length() == 1)
                     each = each.replaceAll("[']", "");
-                if (!(each.matches("[-+]?[0-9]*[\\.,]?[0-9]+") || each.matches("([^'^\\s\\w])|[0-9]")
-                        || isStopWord(each))) {
+                if (!(each.matches(regNum) || each.matches(regSkip) || isStopWord(each))) {
                     if (isFirst) {
                         isFirst = false;
                         res += each;
@@ -141,8 +143,9 @@ public class Normalize {
 
         // Read the tokenized file.
         String fileName = args[0];
+        debug.print("fileName: " + fileName);
         LinkedList<Document> docs = Document.parse(Util.readFileWithNewLine(fileName), text -> {
-            return ((String) (text)).split("[ ]");
+            return ((String) (text)).split("[ \t]+");
         }, text -> {
             return (Object) stemmed(removeNumPuncAndStopWords(setTextToLowerCase((String) text)));
         }, text -> {
