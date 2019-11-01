@@ -3,7 +3,7 @@ JFLEX=./packages/jflex-1.7.0/bin/jflex
 SRC_PATH=./src/*.java ./src/lib/*.java ./src/flex/*.java
 INPUT=../assets/samples.txt
 
-all: flex compile sentencer tokenizer tagger analyzer preprocessed tree_map
+all: flex compile sentencer tokenizer tagger analyzer pre_processed post_process
 
 compile_all: flex compile
 
@@ -29,11 +29,11 @@ tagger:
 analyzer:
 	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. Analyzer $(INPUT) > ../output/data.stats
 
-preprocessed:
+pre_processed:
 	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. Preprocessed ../output/data.tokenized
 
-tree_map:
-	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. TreeMap ../output/data.stemmed
+post_process:
+	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. PostProcess ../output/data.stemmed
 
 #-------------------------------------------------
 # Check commands

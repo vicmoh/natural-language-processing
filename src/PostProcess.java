@@ -1,5 +1,6 @@
 import lib.*;
 import java.util.HashMap;
+import java.util.TreeMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.Iterator;
@@ -18,16 +19,16 @@ import java.io.InputStream;
 import java.util.Comparator;
 import java.util.Arrays;
 
-public class TreeMap {
+public class PostProcess {
     /**
      * The tree map for the dictionary
      */
-    public HashMap<String, Integer> dictionary = new HashMap<String, Integer>();
+    public TreeMap<String, Integer> dictionary = new TreeMap<String, Integer>();
 
     /**
      * The tree map for the posting
      */
-    public HashMap<String, LinkedList<Term>> posting = new HashMap<String, LinkedList<Term>>();
+    public TreeMap<String, LinkedList<Term>> posting = new TreeMap<String, LinkedList<Term>>();
 
     /**
      * Posting output path
@@ -136,7 +137,7 @@ public class TreeMap {
      * 
      * @throws Exception
      */
-    public void postingProcess() throws Exception {
+    public void run() throws Exception {
         final String path = "../output/data.stemmed";
         LinkedList<Document> docs = Document.parse(Util.readFileWithNewLine(path),
                 text -> ((String) (text)).split("[ \t]+"), null, null);
@@ -149,15 +150,13 @@ public class TreeMap {
     }
 
     /**
-     * @return int of the total entries
+     * Main function to run the program
+     * 
+     * @param args
      */
-    public static int totalEntries() {
-        return 0;
-    }
-
     public static void main(String args[]) {
         try {
-            new TreeMap().postingProcess();
+            new PostProcess().run();
         } catch (Exception err) {
         }
     }
