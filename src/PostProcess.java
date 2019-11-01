@@ -115,6 +115,7 @@ public class PostProcess {
     public void outputProcess(LinkedList<Document> docs) {
         this.outputString = "";
         try {
+            // Output for the entries
             String totalEntriesStr = "Total entries: ";
             this.totalEntries = 0;
             this.posting.forEach((key, terms) -> {
@@ -125,7 +126,6 @@ public class PostProcess {
             });
             totalEntriesStr += Integer.toString(this.totalEntries) + "\n";
             this.outputString = totalEntriesStr + this.outputString;
-
             Util.writeFile(POSTING_PATH, this.outputString);
 
             // Output the dictionary file
@@ -133,7 +133,6 @@ public class PostProcess {
             this.dictionary.forEach((key, array) -> {
                 this.outputString += key + " " + this.posting.get(key).size() + "\n";
             });
-
             Util.writeFile(DICTIONARY_PATH, this.outputString);
 
             // Output the doc ids
@@ -141,7 +140,6 @@ public class PostProcess {
             for (Document doc : docs)
                 this.outputString += doc.getID() + " " + Integer.toString(doc.getStartPos()) + " " + doc.getTitle()
                         + "\n";
-
             Util.writeFile(DOC_IDS_PATH, this.outputString);
         } catch (Exception err) {
             System.out.println("Exception: Could not write to a file: " + err.toString());
