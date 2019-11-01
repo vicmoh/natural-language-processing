@@ -9,6 +9,7 @@ import java.util.Scanner;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputValidation;
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -17,9 +18,21 @@ import java.io.InputStreamReader;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class PostProcess {
+    /// This variables are used as temporary file data of each lines.
+    public static String[] postingFileData = new String[0];
+    public static String[] dictionaryFileData = new String[0];
+    public static String[] docIdsFileData = new String[0];
+
+    /// Offset data
+    public static Integer[] postingOffset = new Integer[0];
+    public static Integer[] dictionaryOffset = new Integer[0];
+    public static String[] postingKey = new String[0];
+    public static String[] dictionaryKey = new String[0];
+
     /**
      * The tree map for the dictionary
      */
@@ -44,6 +57,16 @@ public class PostProcess {
      * Document ids output path
      */
     private static final String DOC_IDS_PATH = "../output/docids.txt";
+
+    /**
+     * Temp variable for output string
+     */
+    private String outputString = "";
+
+    /**
+     * Counter for the total entries
+     */
+    private int totalEntries = 0;
 
     /**
      * Process the frequency of the terms
@@ -90,45 +113,59 @@ public class PostProcess {
      * Print the process output
      */
     public void outputProcess(LinkedList<Document> docs) {
+        this.outputString = "";
         try {
-            // Ordered and sort the values
-            int count = 0;
-            String toBePrint = "";
-            String[] orderedKeys = new String[this.posting.size()];
-            for (Map.Entry<String, LinkedList<Term>> entry : this.posting.entrySet()) {
-                orderedKeys[count] = entry.getKey();
-                count++;
-            }
-            Arrays.sort(orderedKeys, new Comparator<String>() {
-                @Override
-                public int compare(String c1, String c2) {
-                    return c1.compareTo(c2);
+            String totalEntriesStr = "Total entries: ";
+            this.totalEntries = 0;
+            this.posting.forEach((key, terms) -> {
+                for (Term term : terms) {
+                    this.outputString += term.toString() + "\n";
+                    this.totalEntries++;
                 }
             });
+            totalEntriesStr += Integer.toString(this.totalEntries) + "\n";
+            this.outputString = totalEntriesStr + this.outputString;
 
-            String totalEntriesStr = "Total entries: ";
-            int totalEntries = 0;
-            for (int x = 0; x < orderedKeys.length; x++)
-                for (Term term : this.posting.get(orderedKeys[x])) {
-                    toBePrint += term.toString() + "\n";
-                    totalEntries++;
-                }
-            totalEntriesStr += Integer.toString(totalEntries) + "\n";
-            toBePrint = totalEntriesStr + toBePrint;
-            Util.writeFile(POSTING_PATH, toBePrint);
+            Util.writeFile(POSTING_PATH, this.outputString);
 
             // Output the dictionary file
-            toBePrint = "Total stems: " + this.dictionary.size() + "\n";
-            for (int x = 0; x < orderedKeys.length; x++)
-                toBePrint += orderedKeys[x] + " " + this.posting.get(orderedKeys[x]).size() + "\n";
-            Util.writeFile(DICTIONARY_PATH, toBePrint);
+            this.outputString = "Total stems: " + this.dictionary.size() + "\n";
+            this.dictionary.forEach((key, array) -> {
+                this.outputString += key + " " + this.posting.get(key).size() + "\n";
+            });
+
+            Util.writeFile(DICTIONARY_PATH, this.outputString);
 
             // Output the doc ids
-            toBePrint = "Total docs: " + docs.size() + "\n";
+            this.outputString = "Total docs: " + docs.size() + "\n";
             for (Document doc : docs)
-                toBePrint += doc.getID() + " " + Integer.toString(doc.getStartPos()) + " " + doc.getTitle() + "\n";
-            Util.writeFile(DOC_IDS_PATH, toBePrint);
+                this.outputString += doc.getID() + " " + Integer.toString(doc.getStartPos()) + " " + doc.getTitle()
+                        + "\n";
+
+            Util.writeFile(DOC_IDS_PATH, this.outputString);
         } catch (Exception err) {
+            System.out.println("Exception: Could not write to a file: " + err.toString());
+        }
+
+    }
+
+    /**
+     * Get the data for the posting, dictionary, and doc ids file data.
+     */
+    public void loadingInputFile() {
+        final String newLineRegex = "[\r\n]+|[\n]+";
+        try {
+            // For the posting file
+            String postingData = Util.readFileWithNewLine(POSTING_PATH);
+            PostProcess.postingFileData = postingData.split(newLineRegex);
+            // For the dictionary file
+            String dictionaryData = Util.readFileWithNewLine(DICTIONARY_PATH);
+            PostProcess.dictionaryFileData = dictionaryData.split(newLineRegex);
+            // For the docids file
+            String docIdsData = Util.readFileWithNewLine(DOC_IDS_PATH);
+            PostProcess.docIdsFileData = docIdsData.split(newLineRegex);
+        } catch (Exception err) {
+            System.out.println("Exception: Could not read file: " + err.toString());
         }
     }
 
@@ -146,7 +183,7 @@ public class PostProcess {
             this.processFrequency(doc.getTitle(), doc.getID());
             this.processFrequency(doc.getText(), doc.getID());
         }
-        outputProcess(docs);
+        this.outputProcess(docs);
     }
 
     /**
