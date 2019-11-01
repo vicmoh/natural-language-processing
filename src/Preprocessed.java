@@ -7,7 +7,7 @@ public class Preprocessed {
     /**
      * Init the debugger to show debug prints
      */
-    private static Debugger debug = Debugger.init().showDebugPrint(true).setClassName("Normalize");
+    private static Debugger debug = Debugger.init().showDebugPrint(false).setClassName("Normalize");
 
     /**
      * List of stop words to be removed

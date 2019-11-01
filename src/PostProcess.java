@@ -27,11 +27,11 @@ public class PostProcess {
     public static String[] dictionaryFileData = new String[0];
     public static String[] docIdsFileData = new String[0];
 
-    /// Offset data
-    public static Integer[] postingOffset = new Integer[0];
-    public static Integer[] dictionaryOffset = new Integer[0];
-    public static String[] postingKey = new String[0];
-    public static String[] dictionaryKey = new String[0];
+    /**
+     * List of offsets in the dictionary for the online process of the inverted
+     * files
+     */
+    public static ArrayList<Term> dictionaryOffsets = new ArrayList<Term>();
 
     /**
      * The tree map for the dictionary. Key string is the doc and Integer is doc
@@ -118,7 +118,7 @@ public class PostProcess {
         this.outputString = "";
         try {
             // Output for the entries
-            String totalEntriesStr = "Total entries: ";
+            String totalEntriesStr = "";
             this.totalEntries = 0;
             this.posting.forEach((key, terms) -> {
                 for (Term term : terms) {
@@ -131,14 +131,14 @@ public class PostProcess {
             Util.writeFile(POSTING_PATH, this.outputString);
 
             // Output the dictionary file
-            this.outputString = "Total stems: " + this.dictionary.size() + "\n";
+            this.outputString = "" + this.dictionary.size() + "\n";
             this.dictionary.forEach((key, array) -> {
                 this.outputString += key + " " + this.posting.get(key).size() + "\n";
             });
             Util.writeFile(DICTIONARY_PATH, this.outputString);
 
             // Output the doc ids
-            this.outputString = "Total docs: " + docs.size() + "\n";
+            this.outputString = "" + docs.size() + "\n";
             for (Document doc : docs)
                 this.outputString += doc.getID() + " " + Integer.toString(doc.getStartPos()) + " " + doc.getTitle()
                         + "\n";
@@ -150,17 +150,45 @@ public class PostProcess {
     }
 
     /**
+     * Print the content of the inverted dictionary from the
+     * PostProcess.dictionaryStem and PostProcess.dictionaryOffset
+     */
+    public void printInvertedDictionary() {
+        for (Term each : PostProcess.dictionaryOffsets)
+            System.out.println("Word: " + each.getToken() + ", Offset: " + each.getOffset());
+    }
+
+    /**
      * Get the data for the posting, dictionary, and doc ids file data.
      */
-    public void loadingInputFile() {
+    public void loadInvertedFile() {
         final String newLineRegex = "[\r\n]+|[\n]+";
         try {
-            // For the posting file
-            String postingData = Util.readFileWithNewLine(POSTING_PATH);
-            PostProcess.postingFileData = postingData.split(newLineRegex);
             // For the dictionary file
             String dictionaryData = Util.readFileWithNewLine(DICTIONARY_PATH);
             PostProcess.dictionaryFileData = dictionaryData.split(newLineRegex);
+            Boolean isFirst = true;
+            int count = 0;
+            int offsetCounter = 0;
+            for (String line : PostProcess.dictionaryFileData) {
+                /// Init the array's
+                if (isFirst) {
+                    isFirst = false;
+                    continue;
+                }
+                // Add the offsets
+                String[] data = line.split("[ ]");
+                int df = Integer.parseInt(data[1].trim());
+                PostProcess.dictionaryOffsets.add(new Term(data[0], offsetCounter));
+                offsetCounter += df;
+                count++;
+            }
+            printInvertedDictionary();
+
+            // For the posting file
+            String postingData = Util.readFileWithNewLine(POSTING_PATH);
+            PostProcess.postingFileData = postingData.split(newLineRegex);
+
             // For the docids file
             String docIdsData = Util.readFileWithNewLine(DOC_IDS_PATH);
             PostProcess.docIdsFileData = docIdsData.split(newLineRegex);
@@ -184,6 +212,7 @@ public class PostProcess {
             this.processFrequency(doc.getText(), doc.getID());
         }
         this.outputProcess(docs);
+        this.loadInvertedFile();
     }
 
     /**
