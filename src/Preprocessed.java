@@ -68,6 +68,7 @@ public class Preprocessed {
                 String[] splitted = line.trim().split("[ \t]+");
                 boolean isFirst = true;
                 for (String each : splitted) {
+                    each = each.replaceAll(regPunc, "");
                     if (!(isStopWord(each) || each.matches(regNum) || each.matches(regPunc)
                             || (each.length() == 1 && each.equals("'")))) {
                         if (isFirst) {
@@ -126,7 +127,7 @@ public class Preprocessed {
         String[] tokens = val.split("[ \t]+");
         boolean isFirst = true;
         for (String each : tokens) {
-            String stemmed = stemmer.stem(each);
+            String stemmed = stemmer.stem(each.replaceAll("['']", ""));
             if (isFirst) {
                 isFirst = false;
                 toBeReturn += stemmed;
