@@ -34,12 +34,14 @@ public class PostProcess {
     public static String[] dictionaryKey = new String[0];
 
     /**
-     * The tree map for the dictionary
+     * The tree map for the dictionary. Key string is the doc and Integer is doc
+     * frequency
      */
     public TreeMap<String, Integer> dictionary = new TreeMap<String, Integer>();
 
     /**
-     * The tree map for the posting
+     * The tree map for the posting. Key string is the term token.
+     * 
      */
     public TreeMap<String, LinkedList<Term>> posting = new TreeMap<String, LinkedList<Term>>();
 
