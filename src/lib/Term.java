@@ -1,19 +1,20 @@
 package lib;
 
 public class Term {
-    private String did = "";
+    private String docId = "";
+    private int did = 0;
     private int tf = 1;
     private String token = "(NULL)";
     private int offset = 0;
 
     /**
-     * Object for creating the did and tf
+     * Object for creating the docId and tf
      * 
-     * @param did
+     * @param docId
      * @param tokens
      */
-    public Term(String did, String token) {
-        this.did = did;
+    public Term(String docId, String token) {
+        this.docId = docId;
         this.token = token;
     }
 
@@ -29,6 +30,20 @@ public class Term {
     }
 
     /**
+     * @param did the did to set
+     */
+    public void setDid(int did) {
+        this.did = did;
+    }
+
+    /**
+     * @return the did
+     */
+    public int getDid() {
+        return this.did;
+    }
+
+    /**
      * Increment the frequency of the token.
      */
     public void incrementFrequency() {
@@ -40,8 +55,8 @@ public class Term {
      * 
      * @return return the doc id.
      */
-    public String getDid() {
-        return this.did;
+    public String getDocId() {
+        return this.docId;
     }
 
     /**
@@ -73,6 +88,6 @@ public class Term {
 
     @Override
     public String toString() {
-        return this.did + " " + this.tf;
+        return this.docId + " " + Integer.toString(this.tf);
     }
 }

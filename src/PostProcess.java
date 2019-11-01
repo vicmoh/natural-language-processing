@@ -90,7 +90,7 @@ public class PostProcess {
                 if (this.posting.containsKey(token)) {
                     // Add frequency or add as new list
                     Term term = this.posting.get(token).get(0);
-                    if (term != null && term.getDid() == docId) {
+                    if (term != null && term.getDocId() == docId) {
                         int curTotal = this.dictionary.get(token);
                         this.dictionary.put(token, ++curTotal);
                         this.posting.get(token).get(0).incrementFrequency();
