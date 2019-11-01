@@ -18,6 +18,7 @@ public class Document {
     private String title = "";
     private String text = "";
     private int startPosition = 0;// The line number
+    private int docNum = 0;
     // Counting
     public int numOfSentences = 0;
     public int numOfTokens = 0;
@@ -31,7 +32,7 @@ public class Document {
      * @param title is the "$TITLE" content.
      * @param text  is the "$TEXT" content.
      */
-    Document(String docId, String title, String text, int pos) throws Exception {
+    Document(String docId, String title, String text, int pos, int docNum) throws Exception {
         assert (docId != null);
         assert (title != null);
         assert (text != null);
@@ -41,6 +42,7 @@ public class Document {
         this.docId = docId;
         this.title = title;
         this.text = text;
+        this.docNum = docNum;
         this.startPosition = pos;
         // Count
         String docString = title + "\n" + text;
@@ -53,6 +55,13 @@ public class Document {
         }
         this.avgTokInSentences = (double) numOfTokens / (double) numOfSentences;
         this.avgSenInTok = (double) numOfSentences / (double) numOfTokens;
+    }
+
+    /**
+     * @return the docNum
+     */
+    public int getDocNum() {
+        return this.docNum;
     }
 
     /**
@@ -135,6 +144,7 @@ public class Document {
             throws Exception {
         debug.setFunctionName("parse").print("Invoked.");
         // Init needed vars
+        int docCount = 0;
         LinkedList<Document> docs = new LinkedList<Document>();
         boolean isPassedFirstDoc = false;
         String[] toBeParsed = new String[0];
@@ -188,7 +198,7 @@ public class Document {
                             text = (String) bodyLambda.callback(text.trim());
                         // Add to doc object
                         docs.addLast(new Document(docId.trim(), title.trim().replaceAll(spaceNewLineRegex, "\n"),
-                                text.trim().replaceAll(spaceNewLineRegex, "\n"), startPos));
+                                text.trim().replaceAll(spaceNewLineRegex, "\n"), startPos, docCount++));
                         docId = "";
                         title = "";
                         text = "";

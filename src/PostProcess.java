@@ -76,7 +76,7 @@ public class PostProcess {
      * @param paragraph
      * @param docId
      */
-    public void processFrequency(String paragraph, String docId) {
+    public void processFrequency(String paragraph, String docId, int docNum) {
         String temp = paragraph;
         String[] lines = paragraph.split("[\n]|[\r\n]");
         for (int i = 0; i < lines.length; i++) {
@@ -97,14 +97,18 @@ public class PostProcess {
                     } else {
                         int curTotal = this.dictionary.get(token);
                         this.dictionary.put(token, ++curTotal);
-                        this.posting.get(token).add(0, new Term(docId, token));
+                        Term termToBeAdded = new Term(docId, token);
+                        termToBeAdded.setDid(docNum);
+                        this.posting.get(token).add(0, termToBeAdded);
                     }
                 } else {
                     // Add for Dictionary
                     this.dictionary.put(token, 1);
                     // Add for posting
                     LinkedList<Term> terms = new LinkedList<Term>();
-                    terms.add(new Term(docId, token));
+                    Term termToBeAdded = new Term(docId, token);
+                    termToBeAdded.setDid(docNum);
+                    terms.add(termToBeAdded);
                     this.posting.put(token, terms);
                 }
             }
@@ -122,7 +126,7 @@ public class PostProcess {
             this.totalEntries = 0;
             this.posting.forEach((key, terms) -> {
                 for (Term term : terms) {
-                    this.outputString += term.toString() + "\n";
+                    this.outputString += term.getDid() + " " + term.toString() + "\n";
                     this.totalEntries++;
                 }
             });
@@ -146,7 +150,6 @@ public class PostProcess {
         } catch (Exception err) {
             System.out.println("Exception: Could not write to a file: " + err.toString());
         }
-
     }
 
     /**
@@ -207,9 +210,11 @@ public class PostProcess {
         LinkedList<Document> docs = Document.parse(Util.readFileWithNewLine(path),
                 text -> ((String) (text)).split("[ \t]+"), null, null);
         LinkedList<Document> resDocs = new LinkedList<Document>();
+        int docNum = 0;
         for (Document doc : docs) {
-            this.processFrequency(doc.getTitle(), doc.getID());
-            this.processFrequency(doc.getText(), doc.getID());
+            this.processFrequency(doc.getTitle(), doc.getID(), doc.getDocNum());
+            this.processFrequency(doc.getText(), doc.getID(), doc.getDocNum());
+            docNum++;
         }
         this.outputProcess(docs);
         this.loadInvertedFile();

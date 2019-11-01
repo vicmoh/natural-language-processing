@@ -88,6 +88,6 @@ public class Term {
 
     @Override
     public String toString() {
-        return this.docId + " " + Integer.toString(this.tf);
+        return Integer.toString(this.tf);
     }
 }
