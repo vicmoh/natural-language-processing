@@ -3,7 +3,7 @@ import java.util.Scanner;
 import opennlp.tools.stemmer.PorterStemmer;
 import java.util.*;
 
-public class Normalize {
+public class Preprocessed {
     /**
      * Init the debugger to show debug prints
      */
@@ -135,7 +135,7 @@ public class Normalize {
         }
         return toBeReturn;
     }
-	
+
     /**
      * Main functions to run the program
      * 
