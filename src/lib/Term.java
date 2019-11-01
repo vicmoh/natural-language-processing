@@ -4,6 +4,7 @@ public class Term {
     private String did = "";
     private int tf = 1;
     private String token = "(NULL)";
+    private int offset = 0;
 
     /**
      * Object for creating the did and tf
@@ -39,6 +40,15 @@ public class Term {
      */
     public int getTf() {
         return this.tf;
+    }
+
+    /**
+     * Get the offset.
+     * 
+     * @return the offset
+     */
+    public int getOffset() {
+        return this.offset;
     }
 
     @Override
