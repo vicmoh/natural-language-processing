@@ -110,7 +110,7 @@ public class Preprocessed {
         if (listOfStopWords == null)
             throw new Exception("Stop words is empty. Read the file and re-run.");
         for (String stopWord : listOfStopWords)
-            if (stopWord.replaceAll("[\n ]+|[\r\n ]+", "").equals(val.replaceAll("[\n ]+|[\r\n ]+", "")))
+            if (stopWord.replaceAll("[\n ]+|[\r\n ]+", "").equalsIgnoreCase(val.replaceAll("[\n ]+|[\r\n ]+", "")))
                 return true;
         return false;
     }
@@ -127,7 +127,7 @@ public class Preprocessed {
         String[] tokens = val.split("[ \t]+");
         boolean isFirst = true;
         for (String each : tokens) {
-            String stemmed = stemmer.stem(each.replaceAll("['']", ""));
+            String stemmed = stemmer.stem(each.replaceAll("[']", ""));
             if (isFirst) {
                 isFirst = false;
                 toBeReturn += stemmed;
