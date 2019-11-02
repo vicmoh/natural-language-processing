@@ -352,7 +352,6 @@ public class OnlineProcess {
      */
     public double calcQueryIdf(String query) {
         int df = calcOffset(query);
-        System.out.print(df);
         if (df == 0)
             return 0;
         return Math.log((double) (this.docIdsList.size() / df));
@@ -393,9 +392,10 @@ public class OnlineProcess {
      */
     public void calcCosSim(String[] queries) {
         // Init
-        this.queryResults = new ArrayList<QueryResult>();
+        this.queryResults.clear();
         double[][] matrix = weightMatrix;
         double[] sims = new double[matrix.length];
+        Map<String, QueryResult> uniqueRes = new Map<String, QueryResult>();
         for (int i = 0; i < sims.length; i++)
             sims[i] = 0;
         // Go to each query
@@ -403,11 +403,11 @@ public class OnlineProcess {
             // Calculate the similarity
             for (int y = 0; y < matrix.length; y++) {
                 // Record the number of unique words
-                for (int x = 0; x < matrix[y].length; x++) {
+                for (int x = 0; x < matrix[y].length; x++)
                     sims[y] += matrix[y][x] * this.calcQueryIdf(query);
-                }
-                this.queryResults.add(new QueryResult(this.docIdsList.get(y).docId, sims[y]));
+                uniqueRes.put(this.docIdsList.get(y).docId, new QueryResult(this.docIdsList.get(y).docId, sims[y]));
             }
+        uniqueRes.forEach((docId, res) -> this.queryResults.add(res));
         // Short query result
         Collections.sort(this.queryResults, new Comparator<QueryResult>() {
             @Override
@@ -421,7 +421,7 @@ public class OnlineProcess {
     }
 
     public void printQueryResult() {
-        System.out.println("----------------- Query Result -----------------");
+        System.out.println("\n----------------- Query Result -----------------");
         for (QueryResult res : this.queryResults)
             System.out.println(res.toString());
     }
@@ -436,9 +436,11 @@ public class OnlineProcess {
         // Run command
         String inputString = "";
         while (!inputString.equalsIgnoreCase("q")) {
-            System.out.print("Enter a query: ");
+            System.out.print("\nEnter a query: ");
             Scanner scanner = new Scanner(System.in);
             inputString = scanner.nextLine();
+            if (inputString.equalsIgnoreCase("q"))
+                break;
             this.runQueryString(inputString);
         }
     }
