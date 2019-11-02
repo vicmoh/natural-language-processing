@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.math.BigDecimal;
 
 class DictionaryData {
     public String word;
