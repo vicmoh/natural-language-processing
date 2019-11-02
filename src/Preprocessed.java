@@ -141,7 +141,7 @@ public class Preprocessed {
      * @return stemmed words.
      */
     public static String stem(String val) {
-        return Preprocessed.stemmed(Preprocessed.removeNumPuncAndStopWords(Preprocessed.setTextToLowerCase(val)));
+        return stemmed(removeNumPuncAndStopWords(setTextToLowerCase(val)));
     }
 
     /**
