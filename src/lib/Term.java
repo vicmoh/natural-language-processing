@@ -6,6 +6,17 @@ public class Term {
     private int tf = 1;
     private String token = "(NULL)";
     private int offset = 0;
+    private int df = 0;
+    private int weight = 0;
+
+    /**
+     * Object for creating the token
+     * 
+     * @param tokens
+     */
+    public Term(String token) {
+        this.token = token;
+    }
 
     /**
      * Object for creating the docId and tf
@@ -30,10 +41,38 @@ public class Term {
     }
 
     /**
+     * @param weight the weight to set
+     */
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    /**
+     * @return the weight
+     */
+    public int getWeight() {
+        return this.weight;
+    }
+
+    /**
      * @param did the did to set
      */
     public void setDid(int did) {
         this.did = did;
+    }
+
+    /**
+     * @param df the df to set
+     */
+    public void setDf(int df) {
+        this.df = df;
+    }
+
+    /**
+     * @return the df
+     */
+    public int getDf() {
+        return this.df;
     }
 
     /**

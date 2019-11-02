@@ -25,6 +25,7 @@ import java.util.Arrays;
 class DictionaryData {
     public String word;
     public int df;
+    public Term term;
 
     /**
      * Class for the data on dictionary in each line
@@ -35,6 +36,8 @@ class DictionaryData {
     DictionaryData(String word, int df) {
         this.word = word;
         this.df = df;
+        this.term = new Term(word);
+        this.term.setDf(df);
     }
 }
 
