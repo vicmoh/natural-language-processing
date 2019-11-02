@@ -208,7 +208,6 @@ public class OnlineProcess {
         // For the docids file --------------------------------------
         String docIdsData = Util.readFileWithNewLine(DOC_IDS_PATH);
         docIdsFileData = docIdsData.split(newLineRegex);
-        docIdsFileData = docIdsData.split(newLineRegex);
         isFirst = true;
         for (String line : docIdsFileData) {
             if (isFirst) {
@@ -216,7 +215,6 @@ public class OnlineProcess {
                 continue;
             }
             // Init
-            System.out.println(line);
             String[] toks = line.split("[ ]");
             String docId = toks[0];
             int startLine = Integer.parseInt(toks[1]);
