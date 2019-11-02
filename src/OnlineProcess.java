@@ -1,4 +1,5 @@
 import lib.*;
+import opennlp.tools.stemmer.PorterStemmer;
 import java.lang.Math;
 import java.util.HashMap;
 import java.util.TreeMap;
@@ -100,6 +101,7 @@ public class OnlineProcess {
     public ArrayList<DictionaryData> dictionaryList = new ArrayList<DictionaryData>();
     public TreeMap<String, DictionaryData> dictionaryMap = new TreeMap<String, DictionaryData>();
     public TreeMap<String, Term> weightMap = new TreeMap<String, Term>();
+    public TreeMap<String, Integer> queriesFrequencies = new TreeMap<String, Integer>();
 
     /**
      * Used for the weight matrix for the vector model
@@ -214,7 +216,7 @@ public class OnlineProcess {
      * @param tf
      * @param df
      * @param totalDoc
-     * @return
+     * @return weight
      */
     public double calcWeight(int tf, int df, int totalDoc) {
         if (df == 0)
@@ -326,10 +328,66 @@ public class OnlineProcess {
     }
 
     /**
-     * Function to the string of the stemmed query
+     * Stemmed the string.
+     * 
+     * @param val
+     * @return stemmed words.
      */
-    public void stemmedQuery() {
+    public static String stem(String val) {
+        return Preprocessed.stemmed(Preprocessed.removeNumPuncAndStopWords(Preprocessed.setTextToLowerCase(val)));
+    }
 
+    /**
+     * Calculate the q value which is the query Idf of the frequency term.
+     */
+    public double calcQueryIdf(String query) {
+        return Math.log((double) (this.docIdsList.size() / calcOffset(query)));
+    }
+
+    /**
+     * Load the query and create frequency table.
+     * 
+     * @param query
+     * @return Stemmed version of the query
+     */
+    public void loadQuery(String query) {
+        final boolean SHOW_PRINT = false;
+        PorterStemmer stemmer = new PorterStemmer();
+        String[] toks = stem(query).split("[ ]");
+        for (int x = 0; x < toks.length; x++)
+            if (this.queriesFrequencies.containsKey(toks[x])) {
+                int freq = this.queriesFrequencies.get(toks[x]);
+                this.queriesFrequencies.put(toks[x], ++freq);
+            } else
+                this.queriesFrequencies.put(toks[x], 1);
+        // Print the token
+        if (SHOW_PRINT) {
+            for (String each : toks)
+                System.out.print(each + " ");
+            System.out.println("");
+        }
+    }
+
+    /**
+     * Calculate cosine similarities
+     * 
+     * @param queries
+     */
+    public void calcCosSim(String[] queries) {
+        // Init
+        double[][] matrix = weightMatrix;
+        double[] sims = new double[matrix.length];
+        for (int i = 0; i < sims.length; i++)
+            sims[i] = 0;
+        // Calculate the similarity
+        for (int y = 0; y < matrix.length; y++) {
+            // Record the number of unique words
+            TreeMap<String, Boolean> uniqueWords = new TreeMap<String, Boolean>();
+            for (int x = 0; x < matrix[y].length; x++) {
+                String word = this.dictionaryList.get(x).word;
+                sims[y] += matrix[y][x] * this.calcQueryIdf(word);
+            }
+        }
     }
 
     /**
