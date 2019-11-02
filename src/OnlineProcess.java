@@ -338,20 +338,10 @@ public class OnlineProcess {
     }
 
     /**
-     * Stemmed the string.
-     * 
-     * @param val
-     * @return stemmed words.
-     */
-    public static String stem(String val) {
-        return Preprocessed.stemmed(Preprocessed.removeNumPuncAndStopWords(Preprocessed.setTextToLowerCase(val)));
-    }
-
-    /**
-     * Calculate the q value which is the query Idf of the frequency term.
+     * s Calculate the q value which is the query Idf of the frequency term.
      */
     public double calcQueryIdf(String query) {
-        int df = calcOffset(query);
+        int df = this.queriesFrequencies.get(query);
         if (df == 0)
             return 0;
         return Math.log((double) (this.docIdsList.size() / df));
@@ -366,13 +356,16 @@ public class OnlineProcess {
     public void runQueryString(String queryString) {
         final boolean SHOW_PRINT = true;
         PorterStemmer stemmer = new PorterStemmer();
-        String[] toks = stem(queryString).split("[ ]");
-        for (int x = 0; x < toks.length; x++)
+        String[] toks = Preprocessed.stem(queryString).split("[ ]");
+        this.queriesFrequencies.clear();
+        for (int x = 0; x < toks.length; x++) {
+            System.out.println("tok: " + toks[x]);
             if (this.queriesFrequencies.containsKey(toks[x])) {
                 int freq = this.queriesFrequencies.get(toks[x]);
                 this.queriesFrequencies.put(toks[x], ++freq);
             } else
                 this.queriesFrequencies.put(toks[x], 1);
+        }
         // Calculate similarities
         calcCosSim(toks);
         // Print the token
@@ -395,7 +388,7 @@ public class OnlineProcess {
         this.queryResults.clear();
         double[][] matrix = weightMatrix;
         double[] sims = new double[matrix.length];
-        Map<String, QueryResult> uniqueRes = new Map<String, QueryResult>();
+        TreeMap<String, QueryResult> uniqueRes = new TreeMap<String, QueryResult>();
         for (int i = 0; i < sims.length; i++)
             sims[i] = 0;
         // Go to each query
@@ -403,8 +396,11 @@ public class OnlineProcess {
             // Calculate the similarity
             for (int y = 0; y < matrix.length; y++) {
                 // Record the number of unique words
-                for (int x = 0; x < matrix[y].length; x++)
-                    sims[y] += matrix[y][x] * this.calcQueryIdf(query);
+                for (int x = 0; x < matrix[y].length; x++) {
+                    double freq = this.queriesFrequencies.get(query) / this.queriesFrequencies.size();
+                    sims[y] += matrix[y][x] * freq;
+                    System.out.println("weight: " + matrix[y][x] + ", freq: " + freq);
+                }
                 uniqueRes.put(this.docIdsList.get(y).docId, new QueryResult(this.docIdsList.get(y).docId, sims[y]));
             }
         uniqueRes.forEach((docId, res) -> this.queryResults.add(res));
@@ -452,6 +448,7 @@ public class OnlineProcess {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
+        Preprocessed.run("../output/data.tokenized");
         new OnlineProcess().run();
     }
 }

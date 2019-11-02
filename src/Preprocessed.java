@@ -135,30 +135,50 @@ public class Preprocessed {
     }
 
     /**
+     * Stemmed the string.
+     * 
+     * @param val
+     * @return stemmed words.
+     */
+    public static String stem(String val) {
+        return Preprocessed.stemmed(Preprocessed.removeNumPuncAndStopWords(Preprocessed.setTextToLowerCase(val)));
+    }
+
+    /**
+     * Run preprocessed
+     */
+    public static void run(String fileName) throws Exception {
+        try {
+            debug.setFunctionName("main").print("Invoked");
+            readStopWordsListFile(null);
+
+            // Read the tokenized file.
+            debug.print("fileName: " + fileName);
+            LinkedList<Document> docs = Document.parse(Util.readFileWithNewLine(fileName), text -> {
+                return ((String) (text)).split("[ \t]+");
+            }, text -> {
+                return (Object) stem((String) text);
+            }, text -> {
+                return (Object) stem((String) text);
+            });
+
+            /// Output
+            String outString = "";
+            for (Document doc : docs)
+                outString += doc.toString();
+            Util.writeFile("../output/data.stemmed", outString);
+        } catch (Exception err) {
+            System.out.println("Something went wrong on parsing.");
+        }
+    }
+
+    /**
      * Main functions to run the program
      * 
      * @param args
      * @throws Exception
      */
     public static void main(String args[]) throws Exception {
-        debug.setFunctionName("main").print("Invoked");
-        readStopWordsListFile(null);
-
-        // Read the tokenized file.
-        String fileName = args[0];
-        debug.print("fileName: " + fileName);
-        LinkedList<Document> docs = Document.parse(Util.readFileWithNewLine(fileName), text -> {
-            return ((String) (text)).split("[ \t]+");
-        }, text -> {
-            return (Object) stemmed(removeNumPuncAndStopWords(setTextToLowerCase((String) text)));
-        }, text -> {
-            return (Object) stemmed(removeNumPuncAndStopWords(setTextToLowerCase((String) text)));
-        });
-
-        /// Output
-        String outString = "";
-        for (Document doc : docs)
-            outString += doc.toString();
-        Util.writeFile("../output/data.stemmed", outString);
+        Preprocessed.run(args[0]);
     }
 }
