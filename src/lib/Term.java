@@ -7,7 +7,7 @@ public class Term {
     private String token = "(NULL)";
     private int offset = 0;
     private int df = 0;
-    private int weight = 0;
+    private double weight = 0;
 
     /**
      * Object for creating the token
@@ -43,14 +43,14 @@ public class Term {
     /**
      * @param weight the weight to set
      */
-    public void setWeight(int weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
     }
 
     /**
      * @return the weight
      */
-    public int getWeight() {
+    public double getWeight() {
         return this.weight;
     }
 
