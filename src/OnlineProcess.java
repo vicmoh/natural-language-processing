@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.Collections;
 
 class DictionaryData {
     public String word;
@@ -105,6 +106,11 @@ class QueryResult {
     QueryResult(String docId, double rank) {
         this.docId = docId;
         this.rank = rank;
+    }
+
+    @Override
+    public String toString() {
+        return "DocId: " + this.docId + ", Cosine Similarity: " + this.rank;
     }
 }
 
@@ -347,7 +353,11 @@ public class OnlineProcess {
      * Calculate the q value which is the query Idf of the frequency term.
      */
     public double calcQueryIdf(String query) {
-        return Math.log((double) (this.docIdsList.size() / calcOffset(query)));
+        int df = calcOffset(query);
+        System.out.print(df);
+        if (df == 0)
+            return 0;
+        return Math.log((double) (this.docIdsList.size() / df));
     }
 
     /**
@@ -357,7 +367,7 @@ public class OnlineProcess {
      * @return Stemmed version of the query
      */
     public void runQueryString(String queryString) {
-        final boolean SHOW_PRINT = false;
+        final boolean SHOW_PRINT = true;
         PorterStemmer stemmer = new PorterStemmer();
         String[] toks = stem(queryString).split("[ ]");
         for (int x = 0; x < toks.length; x++)
@@ -375,6 +385,7 @@ public class OnlineProcess {
                 System.out.print(each + " ");
             System.out.println("");
         }
+        printQueryResult();
     }
 
     /**
@@ -384,6 +395,7 @@ public class OnlineProcess {
      */
     public void calcCosSim(String[] queries) {
         // Init
+        this.queryResults = new ArrayList<QueryResult>();
         double[][] matrix = weightMatrix;
         double[] sims = new double[matrix.length];
         for (int i = 0; i < sims.length; i++)
@@ -398,6 +410,22 @@ public class OnlineProcess {
                 }
                 this.queryResults.add(new QueryResult(this.docIdsList.get(y).docId, sims[y]));
             }
+        // Short query result
+        Collections.sort(this.queryResults, new Comparator<QueryResult>() {
+            @Override
+            public int compare(QueryResult a, QueryResult b) {
+                if (a.rank > b.rank)
+                    return -1;
+                else
+                    return 1;
+            }
+        });
+    }
+
+    public void printQueryResult() {
+        System.out.println("----------------- Query Result -----------------");
+        for (QueryResult res : this.queryResults)
+            System.out.println(res.toString());
     }
 
     /**
