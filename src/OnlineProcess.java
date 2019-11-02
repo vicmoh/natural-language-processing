@@ -280,10 +280,10 @@ public class OnlineProcess {
     /**
      * Calculate the matrix weights
      */
-    public void CalcMatrixWeight() {
+    public void calcMatrixWeight() {
         final boolean SHOW_PRINT = false;
         if (SHOW_PRINT)
-            System.out.println("--------------------------- CalcMatrixWeight() ---------------------------");
+            System.out.println("--------------------------- calcMatrixWeight() ---------------------------");
         weightMatrix = new double[docIdsList.size()][dictionaryList.size()];
         for (int y = 0; y < docIdsList.size(); y++) {
             if (SHOW_PRINT)
@@ -337,7 +337,7 @@ public class OnlineProcess {
      */
     public void run() {
         this.loadInvertedFile();
-        this.CalcMatrixWeight();
+        this.calcMatrixWeight();
     }
 
     /**
