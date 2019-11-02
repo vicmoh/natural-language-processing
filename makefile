@@ -3,7 +3,7 @@ JFLEX=./packages/jflex-1.7.0/bin/jflex
 SRC_PATH=./src/*.java ./src/lib/*.java ./src/flex/*.java
 INPUT=../assets/samples.txt
 
-all: flex compile sentencer tokenizer tagger analyzer pre_processed post_process
+all: flex compile sentencer tokenizer tagger analyzer pre_processed offline_process online_process
 
 compile_all: flex compile
 
@@ -32,8 +32,11 @@ analyzer:
 pre_processed:
 	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. Preprocessed ../output/data.tokenized
 
-post_process:
-	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. PostProcess ../output/data.stemmed
+offline_process:
+	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. OfflineProcess ../output/data.stemmed
+
+online_process:
+	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. OnlineProcess
 
 #-------------------------------------------------
 # Check commands

@@ -39,6 +39,11 @@ class DictionaryData {
         this.term = new Term(word);
         this.term.setDf(df);
     }
+
+    @Override
+    public String toString() {
+        return "DictionaryData -> word: " + this.word + ", df: " + this.df + ", term: " + this.term;
+    }
 }
 
 class PostingData {
@@ -74,9 +79,14 @@ class DocIdsData {
         this.lineNumber = lineNumber;
         this.title = title;
     }
+
+    @Override
+    public String toString() {
+        return "DocIdsData -> docId: " + this.docId + ", lineNumber: " + this.lineNumber + ", title: " + this.title;
+    }
 }
 
-public class PostProcess {
+public class OnlineProcess {
     /// This variables are used as file data of each lines.
     public static ArrayList<DocIdsData> docIdsList = new ArrayList<DocIdsData>();
     public static ArrayList<PostingData> postingList = new ArrayList<PostingData>();
@@ -87,6 +97,11 @@ public class PostProcess {
     /// This variables are used as temporary file data of each lines.
     public static double[][] weightMatrix = new double[0][0];
 
+    // File path
+    private static final String POSTING_PATH = "../output/posting.txt";
+    private static final String DICTIONARY_PATH = "../output/dictionary.txt";
+    private static final String DOC_IDS_PATH = "../output/docids.txt";
+
     /**
      * List of offsets in the dictionary for the online process of the inverted
      * files
@@ -94,131 +109,20 @@ public class PostProcess {
     public static ArrayList<Term> dictionaryOffsets = new ArrayList<Term>();
 
     /**
-     * The tree map for the dictionary. Key string is the doc and Integer is doc
-     * frequency
-     */
-    public TreeMap<String, Integer> dictionary = new TreeMap<String, Integer>();
-
-    /**
-     * The tree map for the posting. Key string is the term token.
-     * 
-     */
-    public TreeMap<String, LinkedList<Term>> posting = new TreeMap<String, LinkedList<Term>>();
-
-    /**
-     * Posting output path
-     */
-    private static final String POSTING_PATH = "../output/posting.txt";
-
-    /**
-     * Dictionary output path
-     */
-    private static final String DICTIONARY_PATH = "../output/dictionary.txt";
-
-    /**
-     * Document ids output path
-     */
-    private static final String DOC_IDS_PATH = "../output/docids.txt";
-
-    /**
-     * Temp variable for output string
-     */
-    private String outputString = "";
-
-    /**
-     * Counter for the total entries
-     */
-    private int totalEntries = 0;
-
-    /**
-     * Process the frequency of the terms
-     * 
-     * @param paragraph
-     * @param docId
-     */
-    public void processFrequency(String paragraph, String docId, int docNum) {
-        String temp = paragraph;
-        String[] lines = paragraph.split("[\n]|[\r\n]");
-        for (int i = 0; i < lines.length; i++) {
-            System.out.println("lines[i]: " + lines[i]);
-            String[] tokens = lines[i].split("[ ]");
-            for (String token : tokens) {
-                // filter out irrelevant lines
-                if (token.matches("\\([0-9]+\\)") || token.equals(""))
-                    continue;
-                // update relevant token on TreeMap
-                if (this.posting.containsKey(token)) {
-                    // Add frequency or add as new list
-                    Term term = this.posting.get(token).get(0);
-                    if (term != null && term.getDocId() == docId) {
-                        int curTotal = this.dictionary.get(token);
-                        this.dictionary.put(token, ++curTotal);
-                        this.posting.get(token).get(0).incrementFrequency();
-                    } else {
-                        int curTotal = this.dictionary.get(token);
-                        this.dictionary.put(token, ++curTotal);
-                        Term termToBeAdded = new Term(docId, token);
-                        termToBeAdded.setDid(docNum);
-                        this.posting.get(token).add(0, termToBeAdded);
-                    }
-                } else {
-                    // Add for Dictionary
-                    this.dictionary.put(token, 1);
-                    // Add for posting
-                    LinkedList<Term> terms = new LinkedList<Term>();
-                    Term termToBeAdded = new Term(docId, token);
-                    termToBeAdded.setDid(docNum);
-                    terms.add(termToBeAdded);
-                    this.posting.put(token, terms);
-                }
-            }
-        }
-    }
-
-    /**
-     * Print the process output
-     */
-    public void outputProcess(LinkedList<Document> docs) {
-        this.outputString = "";
-        try {
-            // Output for the entries
-            String totalEntriesStr = "";
-            this.totalEntries = 0;
-            this.posting.forEach((key, terms) -> {
-                for (Term term : terms) {
-                    this.outputString += term.getDid() + " " + term.toString() + "\n";
-                    this.totalEntries++;
-                }
-            });
-            totalEntriesStr += Integer.toString(this.totalEntries) + "\n";
-            this.outputString = totalEntriesStr + this.outputString;
-            Util.writeFile(POSTING_PATH, this.outputString);
-
-            // Output the dictionary file
-            this.outputString = "" + this.dictionary.size() + "\n";
-            this.dictionary.forEach((key, array) -> {
-                this.outputString += key + " " + this.posting.get(key).size() + "\n";
-            });
-            Util.writeFile(DICTIONARY_PATH, this.outputString);
-
-            // Output the doc ids
-            this.outputString = "" + docs.size() + "\n";
-            for (Document doc : docs)
-                this.outputString += doc.getID() + " " + Integer.toString(doc.getStartPos()) + " " + doc.getTitle()
-                        + "\n";
-            Util.writeFile(DOC_IDS_PATH, this.outputString);
-        } catch (Exception err) {
-            System.out.println("Exception: Could not write to a file: " + err.toString());
-        }
-    }
-
-    /**
-     * Print the content of the inverted dictionary from the
-     * PostProcess.dictionaryStem and PostProcess.dictionaryOffset
+     * Print the content of the inverted dictionary from the dictionary Stem and
+     * dictionaryOffset
      */
     public void printInvertedDictionary() {
-        for (Term each : PostProcess.dictionaryOffsets)
+        for (Term each : dictionaryOffsets)
             System.out.println("Word: " + each.getToken() + ", Offset: " + each.getOffset());
+    }
+
+    /**
+     * Print the docIdsList
+     */
+    public void printDocIdsList() {
+        for (DocIdsData each : docIdsList)
+            System.out.println(each.toString());
     }
 
     /**
@@ -253,7 +157,6 @@ public class PostProcess {
                 offsetCounter += df;
                 count++;
             }
-            printInvertedDictionary();
 
             // For the posting file --------------------------------------
             isFirst = true;
@@ -269,12 +172,28 @@ public class PostProcess {
                 postingList.add(new PostingData(data[0], tf));
             }
 
-            // For the docids file
+            // For the docids file --------------------------------------
             String docIdsData = Util.readFileWithNewLine(DOC_IDS_PATH);
             docIdsFileData = docIdsData.split(newLineRegex);
             docIdsFileData = docIdsData.split(newLineRegex);
+            isFirst = true;
             for (String line : docIdsFileData) {
-
+                String[] toks = line.split(newLineRegex);
+                String docId = toks[0];
+                int startLine = Integer.parseInt(toks[1]);
+                String title = "";
+                // Get the title
+                boolean isFirstTitleWord = true;
+                for (int x = 2; x < toks.length; x++) {
+                    if (isFirstTitleWord) {
+                        isFirstTitleWord = false;
+                        title = toks[x];
+                        continue;
+                    }
+                    title += " " + toks[x];
+                }
+                // Added tto the document
+                docIdsList.add(new DocIdsData(docId, startLine, title));
             }
         } catch (Exception err) {
             System.out.println("Exception: Could not read file: " + err.toString());
@@ -297,7 +216,7 @@ public class PostProcess {
      * Calculate the matrix weights
      */
     public void CalcMatrixWeight() {
-        PostProcess.weightMatrix = new double[PostProcess.dictionaryList.size()][PostProcess.postingList.size()];
+        weightMatrix = new double[dictionaryList.size()][postingList.size()];
         for (int y = 0; y < dictionaryList.size(); y++) {
             for (int x = 0; x < postingList.size(); x++) {
                 String word = dictionaryList.get(y).word;
@@ -312,35 +231,12 @@ public class PostProcess {
     }
 
     /**
-     * Function for processing the posting file.
-     * 
-     * @throws Exception
-     */
-    public void run() throws Exception {
-        final String path = "../output/data.stemmed";
-        LinkedList<Document> docs = Document.parse(Util.readFileWithNewLine(path),
-                text -> ((String) (text)).split("[ \t]+"), null, null);
-        LinkedList<Document> resDocs = new LinkedList<Document>();
-        int docNum = 0;
-        for (Document doc : docs) {
-            this.processFrequency(doc.getTitle(), doc.getID(), doc.getDocNum());
-            this.processFrequency(doc.getText(), doc.getID(), doc.getDocNum());
-            docNum++;
-        }
-        this.outputProcess(docs);
-        this.loadInvertedFile();
-        this.CalcMatrixWeight();
-    }
-
-    /**
-     * Main function to run the program
+     * Main function to run the program .
      * 
      * @param args
+     * @throws Exception
      */
-    public static void main(String args[]) {
-        try {
-            new PostProcess().run();
-        } catch (Exception err) {
-        }
+    public static void main(String[] args) throws Exception {
+        new OnlineProcess().loadInvertedFile();
     }
 }
