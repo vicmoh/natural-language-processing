@@ -3,6 +3,9 @@ import opennlp.tools.stemmer.PorterStemmer;
 import java.lang.Math;
 import java.util.HashMap;
 import java.util.TreeMap;
+
+import javax.management.Query;
+
 import java.util.Map;
 import java.util.Set;
 import java.util.Iterator;
@@ -89,6 +92,22 @@ class DocIdsData {
     }
 }
 
+class QueryResult {
+    public String docId;
+    public double rank;
+
+    /**
+     * Query result
+     * 
+     * @param docId
+     * @param rank
+     */
+    QueryResult(String docId, double rank) {
+        this.docId = docId;
+        this.rank = rank;
+    }
+}
+
 public class OnlineProcess {
     // File path
     private static final String POSTING_PATH = "../output/posting.txt";
@@ -102,6 +121,7 @@ public class OnlineProcess {
     public TreeMap<String, DictionaryData> dictionaryMap = new TreeMap<String, DictionaryData>();
     public TreeMap<String, Term> weightMap = new TreeMap<String, Term>();
     public TreeMap<String, Integer> queriesFrequencies = new TreeMap<String, Integer>();
+    public ArrayList<QueryResult> queryResults = new ArrayList<QueryResult>();
 
     /**
      * Used for the weight matrix for the vector model
@@ -314,20 +334,6 @@ public class OnlineProcess {
     }
 
     /**
-     * Get the dot product of two sets.
-     * 
-     * @param a set 1
-     * @param b set 2
-     * @return result
-     */
-    public static double dotProduct(double[] a, double[] b) {
-        double sum = 0;
-        for (int i = 0; i < a.length; i++)
-            sum += a[i] * b[i];
-        return sum;
-    }
-
-    /**
      * Stemmed the string.
      * 
      * @param val
@@ -347,21 +353,24 @@ public class OnlineProcess {
     /**
      * Load the query and create frequency table.
      * 
-     * @param query
+     * @param queryString
      * @return Stemmed version of the query
      */
-    public void loadQuery(String query) {
+    public void runQueryString(String queryString) {
         final boolean SHOW_PRINT = false;
         PorterStemmer stemmer = new PorterStemmer();
-        String[] toks = stem(query).split("[ ]");
+        String[] toks = stem(queryString).split("[ ]");
         for (int x = 0; x < toks.length; x++)
             if (this.queriesFrequencies.containsKey(toks[x])) {
                 int freq = this.queriesFrequencies.get(toks[x]);
                 this.queriesFrequencies.put(toks[x], ++freq);
             } else
                 this.queriesFrequencies.put(toks[x], 1);
+        // Calculate similarities
+        calcCosSim(toks);
         // Print the token
         if (SHOW_PRINT) {
+            System.out.print("Stemmed query: ");
             for (String each : toks)
                 System.out.print(each + " ");
             System.out.println("");
@@ -379,15 +388,16 @@ public class OnlineProcess {
         double[] sims = new double[matrix.length];
         for (int i = 0; i < sims.length; i++)
             sims[i] = 0;
-        // Calculate the similarity
-        for (int y = 0; y < matrix.length; y++) {
-            // Record the number of unique words
-            TreeMap<String, Boolean> uniqueWords = new TreeMap<String, Boolean>();
-            for (int x = 0; x < matrix[y].length; x++) {
-                String word = this.dictionaryList.get(x).word;
-                sims[y] += matrix[y][x] * this.calcQueryIdf(word);
+        // Go to each query
+        for (String query : queries)
+            // Calculate the similarity
+            for (int y = 0; y < matrix.length; y++) {
+                // Record the number of unique words
+                for (int x = 0; x < matrix[y].length; x++) {
+                    sims[y] += matrix[y][x] * this.calcQueryIdf(query);
+                }
+                this.queryResults.add(new QueryResult(this.docIdsList.get(y).docId, sims[y]));
             }
-        }
     }
 
     /**
@@ -396,6 +406,15 @@ public class OnlineProcess {
     public void run() {
         this.loadInvertedFile();
         this.calcMatrixWeight();
+
+        // Run command
+        String inputString = "";
+        while (!inputString.equalsIgnoreCase("q")) {
+            System.out.print("Enter a query: ");
+            Scanner scanner = new Scanner(System.in);
+            inputString = scanner.nextLine();
+            this.runQueryString(inputString);
+        }
     }
 
     /**
