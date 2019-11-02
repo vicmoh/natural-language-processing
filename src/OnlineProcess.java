@@ -89,26 +89,28 @@ class DocIdsData {
 }
 
 public class OnlineProcess {
-    /// This variables are used as file data of each lines.
-    public static ArrayList<DocIdsData> docIdsList = new ArrayList<DocIdsData>();
-    public static ArrayList<PostingData> postingList = new ArrayList<PostingData>();
-    public static ArrayList<DictionaryData> dictionaryList = new ArrayList<DictionaryData>();
-    public static TreeMap<String, DictionaryData> dictionaryMap = new TreeMap<String, DictionaryData>();
-    public static TreeMap<String, Term> weightMap = new TreeMap<String, Term>();
-
-    /// This variables are used as temporary file data of each lines.
-    public static double[][] weightMatrix = new double[0][0];
-
     // File path
     private static final String POSTING_PATH = "../output/posting.txt";
     private static final String DICTIONARY_PATH = "../output/dictionary.txt";
     private static final String DOC_IDS_PATH = "../output/docids.txt";
 
+    /// This variables are used as file data of each lines.
+    public ArrayList<DocIdsData> docIdsList = new ArrayList<DocIdsData>();
+    public ArrayList<PostingData> postingList = new ArrayList<PostingData>();
+    public ArrayList<DictionaryData> dictionaryList = new ArrayList<DictionaryData>();
+    public TreeMap<String, DictionaryData> dictionaryMap = new TreeMap<String, DictionaryData>();
+    public TreeMap<String, Term> weightMap = new TreeMap<String, Term>();
+
+    /**
+     * Used for the weight matrix for the vector model
+     */
+    public double[][] weightMatrix = new double[0][0];
+
     /**
      * List of offsets in the dictionary for the online process of the inverted
      * files
      */
-    public static ArrayList<Term> dictionaryOffsets = new ArrayList<Term>();
+    public ArrayList<Term> dictionaryOffsets = new ArrayList<Term>();
 
     /**
      * Print the content of the inverted dictionary from the dictionary Stem and
@@ -307,6 +309,27 @@ public class OnlineProcess {
                     System.out.println("word: " + word + ", weight: " + weight);
             }
         }
+    }
+
+    /**
+     * Get the dot product of two sets.
+     * 
+     * @param a set 1
+     * @param b set 2
+     * @return result
+     */
+    public static double dotProduct(double[] a, double[] b) {
+        double sum = 0;
+        for (int i = 0; i < a.length; i++)
+            sum += a[i] * b[i];
+        return sum;
+    }
+
+    /**
+     * Function to the string of the stemmed query
+     */
+    public void stemmedQuery() {
+
     }
 
     /**
