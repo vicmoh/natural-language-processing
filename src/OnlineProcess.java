@@ -216,21 +216,67 @@ public class OnlineProcess {
     }
 
     /**
+     * Get the word offset
+     * 
+     * @param word
+     * @return offset of the word
+     */
+    public int getWordOffset(String word) {
+        for (int x = 0; x < dictionaryList.size(); x++) {
+            if (dictionaryList.get(x).word.trim().equalsIgnoreCase(word.trim()))
+                return dictionaryOffsets.get(x).getOffset();
+        }
+        return 0;
+    }
+
+    /**
+     * calculate offset for the df.
+     * 
+     * @param word
+     * @return the df
+     */
+    public int calcOffset(String word) {
+        int df = 0;
+        int wordOffset = 0;
+        for (int x = 0; x < dictionaryList.size(); x++) {
+            if (dictionaryList.get(x).word.trim().equalsIgnoreCase(word.trim())) {
+                wordOffset = dictionaryOffsets.get(x).getOffset();
+                if (postingList.size() - 1 == wordOffset)
+                    df = postingList.size() - 1 - wordOffset;
+                else
+                    df = dictionaryOffsets.get(x + 1).getOffset() - wordOffset;
+                return df;
+            }
+        }
+        return df;
+    }
+
+    /**
      * Calculate the matrix weights
      */
     public void CalcMatrixWeight() {
-        weightMatrix = new double[dictionaryList.size()][postingList.size()];
-        for (int y = 0; y < dictionaryList.size(); y++) {
-            for (int x = 0; x < postingList.size(); x++) {
-                String word = dictionaryList.get(y).word;
-                int offset = dictionaryOffsets.get(y).getOffset();
-                int tf = postingList.get(offset).tf;
-                int df = dictionaryList.get(y).df;
+        System.out.println("--------------------------- CalcMatrixWeight() ---------------------------");
+        weightMatrix = new double[docIdsList.size()][dictionaryList.size()];
+        for (int y = 0; y < docIdsList.size(); y++) {
+            for (int x = 0; x < dictionaryList.size(); x++) {
+                String word = dictionaryList.get(x).word;
+                int wordOffset = getWordOffset(word);
+                int df = calcOffset(word);
+                int tf = postingList.get(wordOffset).tf;
                 // Set the weight
-                double weight = calcWeight(tf, df, dictionaryList.size());
+                double weight = calcWeight(tf, df, docIdsList.size());
                 dictionaryMap.get(word).term.setWeight(weight);
+                System.out.println("word: " + word + ", weight: " + weight);
             }
         }
+    }
+
+    /**
+     * Function to run the online process
+     */
+    public void run() {
+        this.loadInvertedFile();
+        this.CalcMatrixWeight();
     }
 
     /**
@@ -240,6 +286,6 @@ public class OnlineProcess {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        new OnlineProcess().loadInvertedFile();
+        new OnlineProcess().run();
     }
 }
