@@ -36,7 +36,7 @@ offline_process:
 	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. OfflineProcess ../output/data.stemmed
 
 online_process:
-	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. OnlineProcess
+	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. OnlineProcess > ../output/data.vector
 
 #-------------------------------------------------
 # Check commands

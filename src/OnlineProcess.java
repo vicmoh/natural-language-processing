@@ -22,10 +22,11 @@ import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 class DictionaryData {
     public String word;
-    public int df;
+    public int df = 0;
     public Term term;
 
     /**
@@ -48,8 +49,8 @@ class DictionaryData {
 }
 
 class PostingData {
-    public String did;
-    public int tf;
+    public int did = -1;
+    public int tf = 0;
 
     /**
      * Class for data on posting in each line
@@ -57,7 +58,7 @@ class PostingData {
      * @param did
      * @param tf
      */
-    PostingData(String did, int tf) {
+    PostingData(int did, int tf) {
         this.did = did;
         this.tf = tf;
     }
@@ -170,7 +171,8 @@ public class OnlineProcess {
             }
             String[] data = line.split("[ ]");
             int tf = Integer.parseInt(data[1].trim());
-            postingList.add(new PostingData(data[0], tf));
+            int did = Integer.parseInt(data[0]);
+            postingList.add(new PostingData(did, tf));
         }
 
         // For the docids file --------------------------------------
@@ -255,24 +257,55 @@ public class OnlineProcess {
     }
 
     /**
+     * Print weight matrix in a table format
+     */
+    public void printWeightMatrix() {
+        String offsetTab = "";
+        String terms = "\t\t";
+        String freq = "";
+        for (DictionaryData dicData : dictionaryList)
+            terms += String.format("%13s", dicData.word) + "\t" + offsetTab;
+        terms += "\n";
+        for (int y = 0; y < weightMatrix.length; y++) {
+            freq += "Doc[" + y + "]" + "\t" + offsetTab;
+            for (int x = 0; x < weightMatrix[y].length; x++)
+                freq += new DecimalFormat("        0.000").format(weightMatrix[y][x]) + "\t" + offsetTab;
+            freq += "\n";
+        }
+        System.out.println(terms + freq);
+    }
+
+    /**
      * Calculate the matrix weights
      */
     public void CalcMatrixWeight() {
-        System.out.println("--------------------------- CalcMatrixWeight() ---------------------------");
+        final boolean SHOW_PRINT = false;
+        if (SHOW_PRINT)
+            System.out.println("--------------------------- CalcMatrixWeight() ---------------------------");
         weightMatrix = new double[docIdsList.size()][dictionaryList.size()];
         for (int y = 0; y < docIdsList.size(); y++) {
-            System.out.println("---------------------------------- Doc#: " + y + " ----------------------------------");
+            if (SHOW_PRINT)
+                System.out.println(
+                        "---------------------------------- Doc#: " + y + " ----------------------------------");
+            // Go through the term
             for (int x = 0; x < dictionaryList.size(); x++) {
                 String word = dictionaryList.get(x).word;
                 int wordOffset = getWordOffset(word);
                 int df = calcOffset(word);
-                int tf = postingList.get(wordOffset).tf;
+                int tf = 0;
+                // Get the correct doc number
+                // Because the tf is based on the doc
+                for (int i = 0; i < wordOffset; i++)
+                    if (wordOffset + i < postingList.size())
+                        if (postingList.get(wordOffset + i).did == y)
+                            tf = postingList.get(wordOffset + i).tf;
+
                 // Set the weight
                 double weight = calcWeight(tf, df, docIdsList.size());
                 weightMatrix[y][x] = weight;
-                System.out.println("word: " + word + ", weight: " + weight);
+                if (SHOW_PRINT)
+                    System.out.println("word: " + word + ", weight: " + weight);
             }
-
         }
     }
 
