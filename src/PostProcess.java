@@ -1,4 +1,5 @@
 import lib.*;
+import java.lang.Math;
 import java.util.HashMap;
 import java.util.TreeMap;
 import java.util.Map;
@@ -21,7 +22,43 @@ import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+class DictionaryData {
+    public String word;
+    public int df;
+
+    /**
+     * Class for the data on dictionary in each line
+     * 
+     * @param word
+     * @param df
+     */
+    DictionaryData(String word, int df) {
+        this.word = word;
+        this.df = df;
+    }
+}
+
+class PostingData {
+    public String did;
+    public int tf;
+
+    /**
+     * Class for data on posting in each line
+     * 
+     * @param did
+     * @param tf
+     */
+    PostingData(String did, int tf) {
+        this.did = did;
+        this.tg = tf;
+    }
+}
+
 public class PostProcess {
+    /// This variables are used as temporary file data of each lines.
+    public static ArrayList<PostingData> postingList = new ArrayList<PostingData>();
+    public static ArrayList<DictionaryData> dictionaryList = new ArrayList<DictionaryData>();
+    public static TreeMap<String, Term> weightMap = new TreeMap<String, Term>();
     /// This variables are used as temporary file data of each lines.
     public static String[] postingFileData = new String[0];
     public static String[] dictionaryFileData = new String[0];
@@ -167,7 +204,7 @@ public class PostProcess {
     public void loadInvertedFile() {
         final String newLineRegex = "[\r\n]+|[\n]+";
         try {
-            // For the dictionary file
+            // For the dictionary file -------------------------------------
             String dictionaryData = Util.readFileWithNewLine(DICTIONARY_PATH);
             PostProcess.dictionaryFileData = dictionaryData.split(newLineRegex);
             Boolean isFirst = true;
@@ -179,18 +216,31 @@ public class PostProcess {
                     isFirst = false;
                     continue;
                 }
-                // Add the offsets
+                // Add to the list
                 String[] data = line.split("[ ]");
                 int df = Integer.parseInt(data[1].trim());
+                PostProcess.dictionaryList.add(new DictionaryData(data[0], df));
+
+                // Create offset for dictionary
                 PostProcess.dictionaryOffsets.add(new Term(data[0], offsetCounter));
                 offsetCounter += df;
                 count++;
             }
             printInvertedDictionary();
 
-            // For the posting file
+            // For the posting file --------------------------------------
+            isFirst = true;
             String postingData = Util.readFileWithNewLine(POSTING_PATH);
             PostProcess.postingFileData = postingData.split(newLineRegex);
+            for (String line : PostProcess.postingFileData) {
+                if (isFirst) {
+                    isFirst = false;
+                    continue;
+                }
+                String[] data = line.split("[ ]");
+                int tf = Integer.parseInt(data[1].trim());
+                PostProcess.postingList.add(new PostingData(data[0], tf));
+            }
 
             // For the docids file
             String docIdsData = Util.readFileWithNewLine(DOC_IDS_PATH);
@@ -198,6 +248,18 @@ public class PostProcess {
         } catch (Exception err) {
             System.out.println("Exception: Could not read file: " + err.toString());
         }
+    }
+
+    /**
+     * Function for calculating the weight.
+     * 
+     * @param tf
+     * @param df
+     * @param totalDoc
+     * @return
+     */
+    public double calculateWeight(int tf, int df, int totalDoc) {
+        return tf * Math.log(totalDoc / df);
     }
 
     /**
