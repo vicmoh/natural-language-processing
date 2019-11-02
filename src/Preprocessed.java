@@ -54,9 +54,6 @@ public class Preprocessed {
      * @return String of the removed data.
      */
     public static String removeNumPuncAndStopWords(String val) {
-        System.out.println("***********************");
-        System.out.println(val);
-        System.out.println("***********************");
         try {
             String regSkip = "([^'^\\s\\w])|[0-9]";
             String regPunc = "([^'^\\s\\w])|[0-9]";

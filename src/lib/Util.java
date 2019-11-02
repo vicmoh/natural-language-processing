@@ -23,7 +23,7 @@ public class Util {
      * @return String of the file
      * @throws Exception
      */
-    public static String readFileWithNewLine(String filePath) throws Exception {
+    public static String readFileWithNewLine(String filePath) {
         debug.setClassName("readLine");
         debug.print("File path = " + filePath);
         BufferedReader reader;

@@ -133,70 +133,73 @@ public class OnlineProcess {
         String[] dictionaryFileData = new String[0];
         String[] docIdsFileData = new String[0];
         final String newLineRegex = "[\r\n]+|[\n]+";
-        try {
-            // For the dictionary file -------------------------------------
-            String dictionaryData = Util.readFileWithNewLine(DICTIONARY_PATH);
-            dictionaryFileData = dictionaryData.split(newLineRegex);
-            Boolean isFirst = true;
-            int count = 0;
-            int offsetCounter = 0;
-            for (String line : dictionaryFileData) {
-                /// Init the array's
-                if (isFirst) {
-                    isFirst = false;
+
+        // For the dictionary file -------------------------------------
+        String dictionaryData = Util.readFileWithNewLine(DICTIONARY_PATH);
+        dictionaryFileData = dictionaryData.split(newLineRegex);
+        Boolean isFirst = true;
+        int count = 0;
+        int offsetCounter = 0;
+        for (String line : dictionaryFileData) {
+            /// Init the array's
+            if (isFirst) {
+                isFirst = false;
+                continue;
+            }
+            // Add to the lists
+            String[] data = line.split("[ ]");
+            int df = Integer.parseInt(data[1].trim());
+            DictionaryData dicData = new DictionaryData(data[0], df);
+            dictionaryList.add(dicData);
+            dictionaryMap.put(dicData.word, dicData);
+            // Create offset for dictionary
+            dictionaryOffsets.add(new Term(data[0], offsetCounter));
+            offsetCounter += df;
+            count++;
+        }
+
+        // For the posting file --------------------------------------
+        isFirst = true;
+        String postingData = Util.readFileWithNewLine(POSTING_PATH);
+        postingFileData = postingData.split(newLineRegex);
+        for (String line : postingFileData) {
+            if (isFirst) {
+                isFirst = false;
+                continue;
+            }
+            String[] data = line.split("[ ]");
+            int tf = Integer.parseInt(data[1].trim());
+            postingList.add(new PostingData(data[0], tf));
+        }
+
+        // For the docids file --------------------------------------
+        String docIdsData = Util.readFileWithNewLine(DOC_IDS_PATH);
+        docIdsFileData = docIdsData.split(newLineRegex);
+        docIdsFileData = docIdsData.split(newLineRegex);
+        isFirst = true;
+        for (String line : docIdsFileData) {
+            if (isFirst) {
+                isFirst = false;
+                continue;
+            }
+            // Init
+            System.out.println(line);
+            String[] toks = line.split("[ ]");
+            String docId = toks[0];
+            int startLine = Integer.parseInt(toks[1]);
+            String title = "";
+            // Get the title
+            boolean isFirstTitleWord = true;
+            for (int x = 2; x < toks.length; x++) {
+                if (isFirstTitleWord) {
+                    isFirstTitleWord = false;
+                    title = toks[x];
                     continue;
                 }
-                // Add to the lists
-                String[] data = line.split("[ ]");
-                int df = Integer.parseInt(data[1].trim());
-                DictionaryData dicData = new DictionaryData(data[0], df);
-                dictionaryList.add(dicData);
-                dictionaryMap.put(dicData.word, dicData);
-                // Create offset for dictionary
-                dictionaryOffsets.add(new Term(data[0], offsetCounter));
-                offsetCounter += df;
-                count++;
+                title += " " + toks[x];
             }
-
-            // For the posting file --------------------------------------
-            isFirst = true;
-            String postingData = Util.readFileWithNewLine(POSTING_PATH);
-            postingFileData = postingData.split(newLineRegex);
-            for (String line : postingFileData) {
-                if (isFirst) {
-                    isFirst = false;
-                    continue;
-                }
-                String[] data = line.split("[ ]");
-                int tf = Integer.parseInt(data[1].trim());
-                postingList.add(new PostingData(data[0], tf));
-            }
-
-            // For the docids file --------------------------------------
-            String docIdsData = Util.readFileWithNewLine(DOC_IDS_PATH);
-            docIdsFileData = docIdsData.split(newLineRegex);
-            docIdsFileData = docIdsData.split(newLineRegex);
-            isFirst = true;
-            for (String line : docIdsFileData) {
-                String[] toks = line.split(newLineRegex);
-                String docId = toks[0];
-                int startLine = Integer.parseInt(toks[1]);
-                String title = "";
-                // Get the title
-                boolean isFirstTitleWord = true;
-                for (int x = 2; x < toks.length; x++) {
-                    if (isFirstTitleWord) {
-                        isFirstTitleWord = false;
-                        title = toks[x];
-                        continue;
-                    }
-                    title += " " + toks[x];
-                }
-                // Added tto the document
-                docIdsList.add(new DocIdsData(docId, startLine, title));
-            }
-        } catch (Exception err) {
-            System.out.println("Exception: Could not read file: " + err.toString());
+            // Added tto the document
+            docIdsList.add(new DocIdsData(docId, startLine, title));
         }
     }
 
