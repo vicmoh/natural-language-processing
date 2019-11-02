@@ -212,6 +212,8 @@ public class OnlineProcess {
      * @return
      */
     public double calcWeight(int tf, int df, int totalDoc) {
+        if (df == 0)
+            return 0;
         return tf * Math.log(totalDoc / df);
     }
 
@@ -258,6 +260,7 @@ public class OnlineProcess {
         System.out.println("--------------------------- CalcMatrixWeight() ---------------------------");
         weightMatrix = new double[docIdsList.size()][dictionaryList.size()];
         for (int y = 0; y < docIdsList.size(); y++) {
+            System.out.println("---------------------------------- Doc#: " + y + " ----------------------------------");
             for (int x = 0; x < dictionaryList.size(); x++) {
                 String word = dictionaryList.get(x).word;
                 int wordOffset = getWordOffset(word);
@@ -265,9 +268,10 @@ public class OnlineProcess {
                 int tf = postingList.get(wordOffset).tf;
                 // Set the weight
                 double weight = calcWeight(tf, df, docIdsList.size());
-                dictionaryMap.get(word).term.setWeight(weight);
+                weightMatrix[y][x] = weight;
                 System.out.println("word: " + word + ", weight: " + weight);
             }
+
         }
     }
 
