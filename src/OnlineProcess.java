@@ -251,11 +251,11 @@ public class OnlineProcess {
     public double calcWeight(int tf, int df, int totalDoc) {
         if (df == 0)
             return 0;
-        double res = (double) (tf) * Math.log((double) (df) / (double) (totalDoc));
+        double res = (double) (tf) * Math.log((double) (totalDoc) / (double) (df));
         if (Double.isInfinite(res))
             return 0;
         else
-            return res;
+            return Math.abs(res);
     }
 
     /**
@@ -299,7 +299,6 @@ public class OnlineProcess {
                 return df;
             }
         }
-
         return df;
     }
 
@@ -330,16 +329,6 @@ public class OnlineProcess {
      * @return the frequency
      */
     public int getTermFreqFromOffset(int docNum, int wordOffset, String word) {
-        // int tf = 0;
-        // for (int i = 0; i < wordOffset; i++)
-        // if (wordOffset + i < this.postingList.size())
-        // if (this.postingList.get(wordOffset + i).did == docNum){
-        // tf = this.postingList.get(wordOffset + i).tf;
-        // System.out.println("tf ========================================== " + tf + ",
-        // offset: " + wordOffset);
-        // }
-        // return tf;
-
         int tf = 0;
         int df = dictionaryList.get(this.getIndexOfTerm(word)).df;
         for (int i = wordOffset; i < wordOffset + df; i++)
@@ -353,7 +342,7 @@ public class OnlineProcess {
         if (Double.isInfinite(tf))
             return 0;
         else
-            return tf;
+            return Math.abs(tf);
     }
 
     /**
@@ -457,7 +446,11 @@ public class OnlineProcess {
         // return frequency;
         // return this.queriesFrequencies.size() / df;
         // return df / this.queriesFrequencies.size();
-        return 1 * Math.log((double) (this.queriesFrequencies.size() / df));
+        double res = (1 * Math.log((double) (this.queriesFrequencies.size() / df)));
+        if (Double.isInfinite(res))
+            return 0;
+        else
+            return Math.abs(res);
     }
 
     /**
