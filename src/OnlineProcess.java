@@ -429,8 +429,8 @@ public class OnlineProcess {
         if (df == 0)
             return 0;
         System.out.println("size: " + this.queriesFrequencies.size() + " / " + df);
-        return this.queriesFrequencies.size() / df;
-        // return Math.log((double) (this.queriesFrequencies.size() / df));
+        // return this.queriesFrequencies.size() / df;
+        return Math.log((double) (this.queriesFrequencies.size() / df));
     }
 
     /**
