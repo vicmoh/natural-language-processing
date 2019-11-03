@@ -31,6 +31,10 @@ The `output/` after process will contain:
  * `data.tagged` - created from `Tagger.java`
  * `data.tokenized` - created from `Tokenizer.java`
 
+NOTE FOR A2: If you want to run from a file that has been tokenized such as `data.tokenized`
+without having to use default file that has never been processed. You can run by typing:
+ * Type `make A2 TOKEN_FILE=../output/data.tokenized` to run an already tokenized file.
+
 ## File and folder structure
 
 The program file directories is organized by:

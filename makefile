@@ -2,10 +2,15 @@ NLP=.:./packages/opennlp-tools-1.9.1.jar
 JFLEX=./packages/jflex-1.7.0/bin/jflex
 SRC_PATH=./src/*.java ./src/lib/*.java ./src/flex/*.java
 INPUT=../assets/samples.txt
+TOKEN_FILE=../output/data.tokenized
 
 all: flex compile sentencer tokenizer tagger analyzer pre_processed offline_process online_process
 
 compile_all: flex compile
+
+a1: flex compile sentencer tokenizer tagger analyzer
+
+a2: flex compile pre_processed offline_process online_process
 
 #-------------------------------------------------
 # Below are sub commands
@@ -30,7 +35,7 @@ analyzer:
 	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. Analyzer $(INPUT) > ../output/data.stats
 
 pre_processed:
-	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. Preprocessed ../output/data.tokenized
+	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. Preprocessed $(TOKEN_FILE)
 
 offline_process:
 	cd ./bin && java -classpath ./opennlp-tools-1.9.1.jar:. OfflineProcess ../output/data.stemmed

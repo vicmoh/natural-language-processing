@@ -1,4 +1,4 @@
-539
+534
 abus 1
 accept 1
 access 1
@@ -19,7 +19,6 @@ along 1
 alter 1
 altern 3
 although 1
-amaz 2
 ambiti 1
 america 1
 american 2
@@ -39,7 +38,6 @@ attornei 1
 author 1
 auto 1
 automobil 1
-awesom 2
 back 1
 badli 1
 baltimor 1
@@ -54,7 +52,6 @@ begin 1
 belief 1
 belt 1
 benefit 1
-best 2
 between 1
 beyond 1
 billion 1
@@ -292,7 +289,6 @@ messr 1
 mihai 1
 miracl 1
 mission 1
-mohammad 1
 monei 1
 monica 1
 monstros 1
@@ -517,7 +513,6 @@ user 2
 vain 1
 vallei 1
 valu 2
-vicki 2
 violat 1
 virtual 1
 vote 1
