@@ -391,7 +391,7 @@ public class OnlineProcess {
                 for (Map.Entry<String, Integer> entry : this.queriesFrequencies.entrySet())
                     if (entry.getKey().trim().equalsIgnoreCase(word.trim())) {
                         int freq = this.queryMatrixFrequency[y][x];
-                        this.queryMatrixFrequency[y][x] = this.getTermFreqFromOffset(y, this.getWordOffset(word));
+                        this.queryMatrixFrequency[y][x] = this.dictionaryMap.get(word.trim()).df;
                     }
                 if (SHOW_PRINT)
                     System.out.println("word: " + word + ", weight: " + weight);
@@ -419,7 +419,8 @@ public class OnlineProcess {
     public void runQueryString(String queryString) {
         final boolean SHOW_PRINT = true;
         PorterStemmer stemmer = new PorterStemmer();
-        String[] toks = queryString.split("[ ]");
+        String[] toks = Preprocessed.removeNumPuncAndStopWords(Preprocessed.setTextToLowerCase(queryString))
+                .split("[ ]");
         String[] queryTerms = new String[toks.length];
         for (int x = 0; x < toks.length; x++)
             queryTerms[x] = stemmer.stem(toks[x]);
@@ -469,7 +470,7 @@ public class OnlineProcess {
                 // Record the number of unique words
                 for (int x = 0; x < matrix[y].length; x++) {
                     int freq = this.queryMatrixFrequency[y][x];
-                    sims[y] += matrix[y][x] * freq;
+                    sims[y] += matrix[y][x] * this.calcQueryIdf(freq);
                     System.out.println("weight: " + matrix[y][x] + ", freq: " + freq);
                 }
                 uniqueRes.put(this.docIdsList.get(y).docId, new QueryResult(this.docIdsList.get(y).docId, sims[y]));
