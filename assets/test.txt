@@ -1,0 +1,20 @@
+$DOC LA010190-0001
+$TITLE
+Test 1
+$TEXT
+The best italian restaurant enjoy the best pasta
+$DOC LA010190-0002
+$TITLE
+Test 2
+$TEXT
+American restaurant enjoy the best hamburger
+$DOC LA010190-0003
+$TITLE
+Test 3
+$TEXT
+Korean restaurant enjoy the best bibimbap
+$DOC LA010190-0004
+$TITLE
+Test 4
+$TEXT
+The best the best American restaurant
