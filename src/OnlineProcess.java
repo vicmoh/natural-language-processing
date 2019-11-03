@@ -96,6 +96,7 @@ class DocIdsData {
 class QueryResult {
     public String docId;
     public double rank;
+    public String title;
 
     /**
      * Query result
@@ -103,14 +104,19 @@ class QueryResult {
      * @param docId
      * @param rank
      */
-    QueryResult(String docId, double rank) {
+    QueryResult(String docId, double rank, String title) {
         this.docId = docId;
         this.rank = rank;
+        this.title = title;
     }
 
     @Override
     public String toString() {
-        return "DocId: " + this.docId + ", Cosine Similarity: " + this.rank;
+        String docString = "Document ID: " + this.docId + "\n";
+        String titleString = "Title: " + this.title + "\n";
+        String rankString = "Similarity Value: " + Double.toString(this.rank) + "\n";
+        String divider = "----------------------------------------------------------";
+        return docString + titleString + rankString + divider;
     }
 }
 
@@ -471,7 +477,8 @@ public class OnlineProcess {
         // Get the frequency
         this.queriesFrequencies.clear();
         for (int x = 0; x < queryTerms.length; x++) {
-            System.out.println("tok: " + queryTerms[x]);
+            if (SHOW_PRINT)
+                System.out.println("tok: " + queryTerms[x]);
             if (this.queriesFrequencies.containsKey(queryTerms[x])) {
                 int freq = this.queriesFrequencies.get(queryTerms[x]);
                 this.queriesFrequencies.put(queryTerms[x], ++freq);
@@ -524,7 +531,8 @@ public class OnlineProcess {
                     System.out.println("weight: " + this.weightMatrix[y][x] + ", freq: " + freq + ", sim: " + sims[y]
                             + ", term: " + this.dictionaryList.get(x).word);
             }
-            uniqueRes.put(this.docIdsList.get(y).docId, new QueryResult(this.docIdsList.get(y).docId, sims[y]));
+            uniqueRes.put(this.docIdsList.get(y).docId,
+                    new QueryResult(this.docIdsList.get(y).docId, sims[y], this.docIdsList.get(y).title));
         }
         uniqueRes.forEach((docId, res) -> this.queryResults.add(res));
         // Short query result
@@ -543,7 +551,7 @@ public class OnlineProcess {
      * Print the query result
      */
     public void printQueryResult() {
-        System.out.println("\n----------------- Query Result -----------------");
+        System.out.println("---------------------- Query Result ----------------------");
         int count = 0;
         for (QueryResult res : this.queryResults) {
             System.out.println(res.toString());
@@ -565,6 +573,7 @@ public class OnlineProcess {
             System.out.print("\nEnter a query: ");
             Scanner scanner = new Scanner(System.in);
             inputString = scanner.nextLine();
+            System.out.println("");
             if (inputString.equalsIgnoreCase("q"))
                 break;
             this.runQueryString(inputString);
