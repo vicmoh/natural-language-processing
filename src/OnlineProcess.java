@@ -138,7 +138,7 @@ public class OnlineProcess {
     /**
      * The first is the document array and the second is the query term frequency
      */
-    public Integer[][] queryMatrixFrequency = new Integer[0][0];
+    public double[][] queryMatrixFrequency = new double[0][0];
 
     /**
      * List of offsets in the dictionary for the online process of the inverted
@@ -251,7 +251,11 @@ public class OnlineProcess {
     public double calcWeight(int tf, int df, int totalDoc) {
         if (df == 0)
             return 0;
-        return tf * Math.log(totalDoc / df);
+        double res = (double) (tf) * Math.log((double) (df) / (double) (totalDoc));
+        if (Double.isInfinite(res))
+            return 0;
+        else
+            return res;
     }
 
     /**
@@ -295,6 +299,7 @@ public class OnlineProcess {
                 return df;
             }
         }
+
         return df;
     }
 
@@ -324,13 +329,31 @@ public class OnlineProcess {
      * @param wordOffset you are looking for
      * @return the frequency
      */
-    public int getTermFreqFromOffset(int docNum, int wordOffset) {
+    public int getTermFreqFromOffset(int docNum, int wordOffset, String word) {
+        // int tf = 0;
+        // for (int i = 0; i < wordOffset; i++)
+        // if (wordOffset + i < this.postingList.size())
+        // if (this.postingList.get(wordOffset + i).did == docNum){
+        // tf = this.postingList.get(wordOffset + i).tf;
+        // System.out.println("tf ========================================== " + tf + ",
+        // offset: " + wordOffset);
+        // }
+        // return tf;
+
         int tf = 0;
-        for (int i = 0; i < wordOffset; i++)
-            if (wordOffset + i < this.postingList.size())
-                if (this.postingList.get(wordOffset + i).did == docNum)
-                    tf = this.postingList.get(wordOffset + i).tf;
-        return tf;
+        int df = dictionaryList.get(this.getIndexOfTerm(word)).df;
+        for (int i = wordOffset; i < wordOffset + df; i++)
+            if (i < this.postingList.size())
+                if (this.postingList.get(i).did == docNum) {
+                    tf = this.postingList.get(i).tf;
+                    System.out.println("df ========================================== " + df + ", offset: " + wordOffset
+                            + ", word: " + word);
+                    break;
+                }
+        if (Double.isInfinite(tf))
+            return 0;
+        else
+            return tf;
     }
 
     /**
@@ -341,7 +364,7 @@ public class OnlineProcess {
         final boolean SHOW_PRINT = false;
         if (SHOW_PRINT)
             System.out.println("--------------------------- calcMatrixWeight() ---------------------------");
-        weightMatrix = new double[docIdsList.size()][dictionaryList.size()];
+        this.weightMatrix = new double[docIdsList.size()][dictionaryList.size()];
         for (int y = 0; y < docIdsList.size(); y++) {
             if (SHOW_PRINT)
                 System.out.println(
@@ -351,11 +374,11 @@ public class OnlineProcess {
                 String word = dictionaryList.get(x).word;
                 int wordOffset = getWordOffset(word);
                 int df = calcOffset(word);
-                int tf = getTermFreqFromOffset(y, wordOffset);
+                int tf = getTermFreqFromOffset(y, wordOffset, word);
 
                 // Set the weight
                 double weight = calcWeight(tf, df, docIdsList.size());
-                weightMatrix[y][x] = weight;
+                this.weightMatrix[y][x] = weight;
                 if (SHOW_PRINT)
                     System.out.println("word: " + word + ", weight: " + weight);
             }
@@ -370,7 +393,7 @@ public class OnlineProcess {
      */
     public int getIndexOfTerm(String word) {
         for (int i = 0; i < this.dictionaryList.size(); i++)
-            if (this.dictionaryList.get(i).word.trim().equals(word.trim()))
+            if (this.dictionaryList.get(i).word.trim().equalsIgnoreCase(word.trim()))
                 return i;
         return -1;
     }
@@ -386,11 +409,13 @@ public class OnlineProcess {
             System.out.println("--------------------------- calcMatrixWeight() ---------------------------");
 
         // Init matrix
-        weightMatrix = new double[docIdsList.size()][dictionaryList.size()];
-        this.queryMatrixFrequency = new Integer[docIdsList.size()][dictionaryList.size()];
+        this.weightMatrix = new double[docIdsList.size()][dictionaryList.size()];
+        this.queryMatrixFrequency = new double[docIdsList.size()][dictionaryList.size()];
         for (int y = 0; y < this.queryMatrixFrequency.length; y++)
-            for (int x = 0; x < this.queryMatrixFrequency[y].length; x++)
+            for (int x = 0; x < this.queryMatrixFrequency[y].length; x++) {
                 this.queryMatrixFrequency[y][x] = 0;
+                this.weightMatrix[y][x] = 0;
+            }
 
         // Run the matrix
         for (int y = 0; y < docIdsList.size(); y++) {
@@ -402,19 +427,19 @@ public class OnlineProcess {
                 String word = dictionaryList.get(x).word;
                 int wordOffset = getWordOffset(word);
                 int df = calcOffset(word);
-                int tf = getTermFreqFromOffset(y, wordOffset);
+                int tf = getTermFreqFromOffset(y, wordOffset, word);
 
                 // Set the weight
                 double weight = calcWeight(tf, df, docIdsList.size());
-                this.weightMatrix[y][x] = weight;
+                if (Double.isInfinite(weight))
+                    this.weightMatrix[y][x] = 0;
+                else
+                    this.weightMatrix[y][x] = weight;
 
                 // Count the frequency using the
                 for (Map.Entry<String, Integer> entry : this.queriesFrequencies.entrySet())
-                    if (entry.getKey().trim().equalsIgnoreCase(word.trim())) {
-                        int dicDf = this.dictionaryMap.get(word.trim()).df;
-                        System.out.println("dicDf = " + dicDf + ", Term: " + word);
-                        this.queryMatrixFrequency[y][this.getIndexOfTerm(word)] = dicDf;
-                    }
+                    if (entry.getKey().trim().equalsIgnoreCase(word.trim()))
+                        this.queryMatrixFrequency[y][x] = tf;
                 if (SHOW_PRINT)
                     System.out.println("word: " + word + ", weight: " + weight);
             }
@@ -424,13 +449,15 @@ public class OnlineProcess {
     /**
      * s Calculate the q value which is the query Idf of the frequency term.
      */
-    public double calcQueryIdf(int frequency) {
-        int df = frequency;
+    public double calcQueryIdf(double frequency) {
+        double df = frequency;
         if (df == 0)
             return 0;
         System.out.println("size: " + this.queriesFrequencies.size() + " / " + df);
+        // return frequency;
         // return this.queriesFrequencies.size() / df;
-        return Math.log((double) (this.queriesFrequencies.size() / df));
+        // return df / this.queriesFrequencies.size();
+        return 1 * Math.log((double) (this.queriesFrequencies.size() / df));
     }
 
     /**
@@ -487,20 +514,19 @@ public class OnlineProcess {
     public void calcCosSim(String[] queries) {
         // Init
         this.queryResults.clear();
-        double[][] matrix = weightMatrix;
-        double[] sims = new double[matrix.length];
+        double[] sims = new double[this.weightMatrix.length];
         TreeMap<String, QueryResult> uniqueRes = new TreeMap<String, QueryResult>();
         for (int i = 0; i < sims.length; i++)
             sims[i] = 0;
         // Calculate the similarity
-        for (int y = 0; y < matrix.length; y++) {
+        for (int y = 0; y < this.weightMatrix.length; y++) {
             // Record the number of unique words
             System.out.println("Doc#: " + y + " ----------");
-            for (int x = 0; x < matrix[y].length; x++) {
-                int freq = this.queryMatrixFrequency[y][x];
-                sims[y] += (matrix[y][x] * this.calcQueryIdf(freq));
-                System.out.println("weight: " + matrix[y][x] + ", freq: " + freq + ", sim: " + sims[y] + ", term: "
-                        + this.dictionaryList.get(x).word);
+            for (int x = 0; x < this.weightMatrix[y].length; x++) {
+                double freq = this.queryMatrixFrequency[y][x];
+                sims[y] += this.weightMatrix[y][x] * this.calcQueryIdf(freq);
+                System.out.println("weight: " + this.weightMatrix[y][x] + ", freq: " + freq + ", sim: " + sims[y]
+                        + ", term: " + this.dictionaryList.get(x).word);
             }
             uniqueRes.put(this.docIdsList.get(y).docId, new QueryResult(this.docIdsList.get(y).docId, sims[y]));
         }
