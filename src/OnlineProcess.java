@@ -279,7 +279,7 @@ public class OnlineProcess {
      * @return the df
      */
     public int calcOffset(String word) {
-        final boolean SHOW_PRINT = true;
+        final boolean SHOW_PRINT = false;
         int df = 0;
         int wordOffset = 0;
         for (int x = 0; x < dictionaryList.size(); x++) {
@@ -335,8 +335,6 @@ public class OnlineProcess {
             if (i < this.postingList.size())
                 if (this.postingList.get(i).did == docNum) {
                     tf = this.postingList.get(i).tf;
-                    System.out.println("df ========================================== " + df + ", offset: " + wordOffset
-                            + ", word: " + word);
                     break;
                 }
         if (Double.isInfinite(tf))
@@ -439,10 +437,12 @@ public class OnlineProcess {
      * s Calculate the q value which is the query Idf of the frequency term.
      */
     public double calcQueryIdf(double frequency) {
+        final boolean SHOW_PRINT = false;
         double df = frequency;
         if (df == 0)
             return 0;
-        System.out.println("size: " + this.queriesFrequencies.size() + " / " + df);
+        if (SHOW_PRINT)
+            System.out.println("size: " + this.queriesFrequencies.size() + " / " + df);
         // return frequency;
         // return this.queriesFrequencies.size() / df;
         // return df / this.queriesFrequencies.size();
@@ -460,7 +460,7 @@ public class OnlineProcess {
      * @return Stemmed version of the query
      */
     public void runQueryString(String queryString) {
-        final boolean SHOW_PRINT = true;
+        final boolean SHOW_PRINT = false;
         PorterStemmer stemmer = new PorterStemmer();
         String[] toks = Preprocessed.removeNumPuncAndStopWords(Preprocessed.setTextToLowerCase(queryString))
                 .split("[ \n]+|[ \r\n]+");
@@ -505,6 +505,7 @@ public class OnlineProcess {
      * @param queries
      */
     public void calcCosSim(String[] queries) {
+        final boolean SHOW_PRINT = false;
         // Init
         this.queryResults.clear();
         double[] sims = new double[this.weightMatrix.length];
@@ -514,12 +515,14 @@ public class OnlineProcess {
         // Calculate the similarity
         for (int y = 0; y < this.weightMatrix.length; y++) {
             // Record the number of unique words
-            System.out.println("Doc#: " + y + " ----------");
+            if (SHOW_PRINT)
+                System.out.println("Doc#: " + y + " ----------");
             for (int x = 0; x < this.weightMatrix[y].length; x++) {
                 double freq = this.queryMatrixFrequency[y][x];
                 sims[y] += this.weightMatrix[y][x] * this.calcQueryIdf(freq);
-                System.out.println("weight: " + this.weightMatrix[y][x] + ", freq: " + freq + ", sim: " + sims[y]
-                        + ", term: " + this.dictionaryList.get(x).word);
+                if (SHOW_PRINT)
+                    System.out.println("weight: " + this.weightMatrix[y][x] + ", freq: " + freq + ", sim: " + sims[y]
+                            + ", term: " + this.dictionaryList.get(x).word);
             }
             uniqueRes.put(this.docIdsList.get(y).docId, new QueryResult(this.docIdsList.get(y).docId, sims[y]));
         }
