@@ -419,27 +419,30 @@ public class OnlineProcess {
     public void runQueryString(String queryString) {
         final boolean SHOW_PRINT = true;
         PorterStemmer stemmer = new PorterStemmer();
-        String[] toks = (Preprocessed.stem(queryString.trim())).split("[ ]");
+        String[] toks = queryString.split("[ ]");
+        String[] queryTerms = new String[toks.length];
+        for (int x = 0; x < toks.length; x++)
+            queryTerms[x] = stemmer.stem(toks[x]);
 
         // Get the frequency
         this.queriesFrequencies.clear();
-        for (int x = 0; x < toks.length; x++) {
-            System.out.println("tok: " + toks[x]);
-            if (this.queriesFrequencies.containsKey(toks[x])) {
-                int freq = this.queriesFrequencies.get(toks[x]);
-                this.queriesFrequencies.put(toks[x], ++freq);
+        for (int x = 0; x < queryTerms.length; x++) {
+            System.out.println("tok: " + queryTerms[x]);
+            if (this.queriesFrequencies.containsKey(queryTerms[x])) {
+                int freq = this.queriesFrequencies.get(queryTerms[x]);
+                this.queriesFrequencies.put(queryTerms[x], ++freq);
             } else
-                this.queriesFrequencies.put(toks[x], 1);
+                this.queriesFrequencies.put(queryTerms[x], 1);
         }
 
         // Calculate similarities
-        calcMatrixQueryFrequency(toks);
-        calcCosSim(toks);
+        calcMatrixQueryFrequency(queryTerms);
+        calcCosSim(queryTerms);
 
         // Print the token
         if (SHOW_PRINT) {
             System.out.print("Stemmed query: ");
-            for (String each : toks)
+            for (String each : queryTerms)
                 System.out.print(each + " ");
             System.out.println("");
         }
