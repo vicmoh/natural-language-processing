@@ -355,6 +355,19 @@ public class OnlineProcess {
     }
 
     /**
+     * Get the index of terms.
+     * 
+     * @param word to get the index of.
+     * @return of the index, if not found return -1.
+     */
+    public int getIndexOfTerm(String word) {
+        for (int i = 0; i < this.dictionaryList.size(); i++)
+            if (this.dictionaryList.get(i).word.trim().equals(word.trim()))
+                return i;
+        return -1;
+    }
+
+    /**
      * Calculate the query query frequency relative to the document
      * 
      * @param queries
@@ -390,8 +403,9 @@ public class OnlineProcess {
                 // Count the frequency using the
                 for (Map.Entry<String, Integer> entry : this.queriesFrequencies.entrySet())
                     if (entry.getKey().trim().equalsIgnoreCase(word.trim())) {
-                        int freq = this.queryMatrixFrequency[y][x];
-                        this.queryMatrixFrequency[y][x] = this.dictionaryMap.get(word.trim()).df;
+                        int dicDf = this.dictionaryMap.get(word.trim()).df;
+                        System.out.println("dicDf = " + dicDf);
+                        this.queryMatrixFrequency[y][this.getIndexOfTerm(word)] = dicDf;
                     }
                 if (SHOW_PRINT)
                     System.out.println("word: " + word + ", weight: " + weight);
@@ -406,8 +420,9 @@ public class OnlineProcess {
         int df = frequency;
         if (df == 0)
             return 0;
-        System.out.println("size: " + this.queryMatrixFrequency.length + " / " + df);
-        return Math.log((double) (this.queryMatrixFrequency.length / df));
+        System.out.println("size: " + this.queriesFrequencies.size() + " / " + df);
+        return this.queriesFrequencies.size() / df;
+        // return Math.log((double) (this.queriesFrequencies.size() / df));
     }
 
     /**
@@ -436,14 +451,20 @@ public class OnlineProcess {
                 this.queriesFrequencies.put(queryTerms[x], 1);
         }
 
+        // Prevent redundancy
+        String[] uniqueQuery = new String[this.queriesFrequencies.size()];
+        int count = 0;
+        for (Map.Entry<String, Integer> each : this.queriesFrequencies.entrySet())
+            uniqueQuery[count++] = each.getKey();
+
         // Calculate similarities
-        calcMatrixQueryFrequency(queryTerms);
-        calcCosSim(queryTerms);
+        calcMatrixQueryFrequency(uniqueQuery);
+        calcCosSim(uniqueQuery);
 
         // Print the token
         if (SHOW_PRINT) {
             System.out.print("Stemmed query: ");
-            for (String each : queryTerms)
+            for (String each : uniqueQuery)
                 System.out.print(each + " ");
             System.out.println("");
         }
@@ -463,18 +484,16 @@ public class OnlineProcess {
         TreeMap<String, QueryResult> uniqueRes = new TreeMap<String, QueryResult>();
         for (int i = 0; i < sims.length; i++)
             sims[i] = 0;
-        // Go to each query
-        for (String query : queries)
-            // Calculate the similarity
-            for (int y = 0; y < matrix.length; y++) {
-                // Record the number of unique words
-                for (int x = 0; x < matrix[y].length; x++) {
-                    int freq = this.queryMatrixFrequency[y][x];
-                    sims[y] += matrix[y][x] * this.calcQueryIdf(freq);
-                    System.out.println("weight: " + matrix[y][x] + ", freq: " + freq);
-                }
-                uniqueRes.put(this.docIdsList.get(y).docId, new QueryResult(this.docIdsList.get(y).docId, sims[y]));
+        // Calculate the similarity
+        for (int y = 0; y < matrix.length; y++) {
+            // Record the number of unique words
+            for (int x = 0; x < matrix[y].length; x++) {
+                int freq = this.queryMatrixFrequency[y][x];
+                sims[y] += (matrix[y][x] * this.calcQueryIdf(freq));
+                System.out.println("weight: " + matrix[y][x] + ", freq: " + freq);
             }
+            uniqueRes.put(this.docIdsList.get(y).docId, new QueryResult(this.docIdsList.get(y).docId, sims[y]));
+        }
         uniqueRes.forEach((docId, res) -> this.queryResults.add(res));
         // Short query result
         Collections.sort(this.queryResults, new Comparator<QueryResult>() {
