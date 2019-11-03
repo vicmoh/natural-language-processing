@@ -541,8 +541,13 @@ public class OnlineProcess {
      */
     public void printQueryResult() {
         System.out.println("\n----------------- Query Result -----------------");
-        for (QueryResult res : this.queryResults)
+        int count = 0;
+        for (QueryResult res : this.queryResults) {
             System.out.println(res.toString());
+            count++;
+            if (count >= 10)
+                break;
+        }
     }
 
     /**
