@@ -587,7 +587,7 @@ public class OnlineProcess {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        Preprocessed.run("../output/data.tokenized");
+        Preprocessed.run(args[0]);
         new OnlineProcess().run();
     }
 }
