@@ -179,6 +179,8 @@ public class Preprocessed {
      * @throws Exception
      */
     public static void main(String args[]) throws Exception {
+        if (args == null || args.length == 0)
+            throw new Exception("No files was passed on the argument.");
         Preprocessed.run(args[0]);
     }
 }
