@@ -56,3 +56,5 @@ The program file directories is organized by:
 Some assumptions:
  * The data analysis includes the `text` and `title`.
  * Number containing `comma` or `period` between them for example. `1,000,000` is count as one token.
+
+## Testing plan
