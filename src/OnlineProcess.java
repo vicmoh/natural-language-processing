@@ -574,7 +574,7 @@ public class OnlineProcess {
             Scanner scanner = new Scanner(System.in);
             inputString = scanner.nextLine();
             System.out.println("");
-            if (inputString.equalsIgnoreCase("q"))
+            if (inputString.equalsIgnoreCase("q") || inputString.equalsIgnoreCase("quit"))
                 break;
             this.runQueryString(inputString);
         }

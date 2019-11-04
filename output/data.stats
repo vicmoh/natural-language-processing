@@ -1,17 +1,18 @@
-File: ../assets/test.txt
-Number of documents: 4
-Min sentences: 2
-Max sentences: 2
-Avg sentences: 2.0
-Total sentences: 8.0
-Min tokens: 8
-Max tokens: 10
-Avg tokens: 8.5
-Total tokens: 34.0
+File: ../assets/samples.txt
+Number of documents: 5
+Min sentences: 6
+Max sentences: 23
+Avg sentences: 13.4
+Total sentences: 67.0
+Min tokens: 102
+Max tokens: 859
+Avg tokens: 338.0
+Total tokens: 1690.0
 
-Avg sentence lengths by the number of all tokens: 0.058823529411764705
+Avg sentence lengths by the number of all tokens: 0.007928994082840236
 --- Avg sentence lengths by the number of per doc tokens ---
-Doc-LA010190-0001: 0.2
-Doc-LA010190-0002: 0.25
-Doc-LA010190-0003: 0.25
-Doc-LA010190-0004: 0.25
+Doc-LA010190-0001: 0.058823529411764705
+Doc-LA010190-0002: 0.02677532013969732
+Doc-LA010190-0003: 0.055793991416309016
+Doc-LA010190-0004: 0.05642633228840126
+Doc-LA010190-0005: 0.03954802259887006
