@@ -58,3 +58,87 @@ Some assumptions:
  * Number containing `comma` or `period` between them for example. `1,000,000` is count as one token.
 
 ## Testing plan
+
+```
+
+Enter a query: The best italian restaurant enjoy the best pasta
+
+---------------------- Query Result ----------------------
+Document ID: LA010190-0001
+Title: test
+Similarity Value: 5.388322273422942
+----------------------------------------------------------
+Document ID: LA010190-0002
+Title: test
+Similarity Value: 0.9260128682630195
+----------------------------------------------------------
+Document ID: LA010190-0003
+Title: test
+Similarity Value: 0.9260128682630195
+----------------------------------------------------------
+Document ID: LA010190-0004
+Title: test
+Similarity Value: 0.0
+----------------------------------------------------------
+
+Enter a query: American restaurant enjoy the best hamburger
+
+---------------------- Query Result ----------------------
+Document ID: LA010190-0002
+Title: test
+Similarity Value: 2.0415902195530005
+----------------------------------------------------------
+Document ID: LA010190-0004
+Title: test
+Similarity Value: 1.1155773512899807
+----------------------------------------------------------
+Document ID: LA010190-0001
+Title: test
+Similarity Value: 0.9260128682630195
+----------------------------------------------------------
+Document ID: LA010190-0003
+Title: test
+Similarity Value: 0.9260128682630195
+----------------------------------------------------------
+
+Enter a query: Korean restaurant enjoy the best bibimbap
+
+---------------------- Query Result ----------------------
+Document ID: LA010190-0003
+Title: test
+Similarity Value: 5.388322273422942
+----------------------------------------------------------
+Document ID: LA010190-0001
+Title: test
+Similarity Value: 0.9260128682630195
+----------------------------------------------------------
+Document ID: LA010190-0002
+Title: test
+Similarity Value: 0.9260128682630195
+----------------------------------------------------------
+Document ID: LA010190-0004
+Title: test
+Similarity Value: 0.0
+----------------------------------------------------------
+
+Enter a query: The best the best American restaurant
+
+---------------------- Query Result ----------------------
+Document ID: LA010190-0002
+Title: test
+Similarity Value: 1.077551070443845
+----------------------------------------------------------
+Document ID: LA010190-0004
+Title: test
+Similarity Value: 0.761500010418809
+----------------------------------------------------------
+Document ID: LA010190-0001
+Title: test
+Similarity Value: 0.3160510600250359
+----------------------------------------------------------
+Document ID: LA010190-0003
+Title: test
+Similarity Value: 0.3160510600250359
+----------------------------------------------------------
+
+```

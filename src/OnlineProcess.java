@@ -494,7 +494,7 @@ public class OnlineProcess {
 
         // Calculate similarities
         calcMatrixQueryFrequency(uniqueQuery);
-        calcCosSim(uniqueQuery);
+        calcSimilarity(uniqueQuery);
 
         // Print the token
         if (SHOW_PRINT) {
@@ -511,7 +511,7 @@ public class OnlineProcess {
      * 
      * @param queries
      */
-    public void calcCosSim(String[] queries) {
+    public void calcSimilarity(String[] queries) {
         final boolean SHOW_PRINT = false;
         // Init
         this.queryResults.clear();
